@@ -1,7 +1,7 @@
 @extends('layouts.pages.dashboard')
 
 @section('content-page')
-<div class="content-page p-5">
+<div class="content-page p-1 m-1">
     <h2>Projetos</h2>
     <div class="card">
         <div class="card-body">
@@ -146,6 +146,7 @@
                                     <div class="modal-body">
                                         <form method="POST"  action="{{ route('projetos.update',$projeto->id) }}" enctype="multipart/form-data">
                                             @csrf
+                                            @method('put')
                                             <label for="anexo">Selecione seu arquivo</label>
                                             <input type="file" name="arquivo" accept=".pdf,.jpeg,.png" required="" />
                                             <input type="hidden" name="id" value="{{$projeto->id}}"/>

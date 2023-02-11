@@ -1,7 +1,7 @@
 @extends('layouts.pages.dashboard')
 
 @section('content-page')
-<div class="content-page p-5">
+<div class="content-page p-1 m-1">
     <h2>Temas</h2>
     <div class="card">
         <div class="card-body">
@@ -23,7 +23,7 @@
                                     <label for="nome">Nome</label>
                                     <input type="text" class="form-control" id="nome" name="nome">
                                     <label for="nome">Descrição</label>
-                                    <input type="text" class="form-control" id="nome" name="descricao">
+                                    <input type="text" class="form-control" id="descricao" name="descricao">
                                     <label for="nome" class="my-2">Área</label>
                                     <select class="form-control" name="fk_areas_id" aria-label="Default select example">
                                         <option selected>Selecione a Área</option>
@@ -31,7 +31,10 @@
                                             <option value="{{$area->id}}">{{$area->nome}}</option>
                                         @endforeach
                                     </select>
-                                    
+                                    <label for="nome">Link</label>
+                                    <input type="text" class="form-control" id="link" name="link">
+                                    <label for="nome" class="my-2">Arquivo</label>
+                                    <input type="file" class="form-control" accept=".png,.jpeg,.pdf" id="arquivo" multiple="multiple" name="arquivos">
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>

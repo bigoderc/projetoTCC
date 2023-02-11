@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTemaTable extends Migration
+class CreateAnexoTemasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateTemaTable extends Migration
      */
     public function up()
     {
-        Schema::create('tema', function (Blueprint $table) {
-            $table->smallInteger('id', true);
-            $table->string('nome', 60)->nullable();
-            $table->string('descricao', 100)->nullable();
-            $table->smallInteger('fk_areas_id')->nullable()->index('FK_tema_2');
+        Schema::create('anexo_temas', function (Blueprint $table) {
+            $table->id();
+            $table->string('arquivo')->nullable();
+            $table->smallInteger('fk_tema_id');
+            $table->foreign(['fk_tema_id'], 'FK_temas_2')->references(['id'])->on('temas')->onDelete('CASCADE');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateTemaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tema');
+        Schema::dropIfExists('anexo_temas');
     }
 }

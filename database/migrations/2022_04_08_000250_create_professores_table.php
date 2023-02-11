@@ -18,6 +18,7 @@ class CreateProfessoresTable extends Migration
             $table->string('nome', 60)->nullable();
             $table->string('matricula', 30)->nullable();
             $table->smallInteger('fk_areas_id')->nullable()->index('FK_professores_2');
+            $table->timestamps();
         });
     }
 

@@ -17,6 +17,7 @@ class CreateAlunosTable extends Migration
             $table->smallInteger('id', true);
             $table->string('nome', 60)->nullable();
             $table->string('matricula', 30)->nullable();
+            $table->timestamps();
         });
     }
 

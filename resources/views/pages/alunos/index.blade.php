@@ -1,7 +1,7 @@
 @extends('layouts.pages.dashboard')
 
 @section('content-page')
-<div class="content-page p-5">
+<div class="content-page p-1 m-1">
     <h2>Alunos</h2>
     <div class="card">
         <div class="card-body">

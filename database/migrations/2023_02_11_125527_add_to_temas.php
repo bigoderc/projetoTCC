@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAreasTable extends Migration
+class AddToTemas extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateAreasTable extends Migration
      */
     public function up()
     {
-        Schema::create('areas', function (Blueprint $table) {
-            $table->smallInteger('id', true);
-            $table->string('nome', 60)->nullable();
-            $table->text('descricao')->nullable();
-            $table->timestamps();
+        Schema::table('temas', function (Blueprint $table) {
+            //
+            $table->text('link')->nullable();
         });
     }
 
@@ -28,6 +26,9 @@ class CreateAreasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('areas');
+        Schema::table('temas', function (Blueprint $table) {
+            //
+            $table->dropColumn('link');
+        });
     }
 }
