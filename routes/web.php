@@ -19,6 +19,8 @@ use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProjetoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConfiguracaoController;
+use App\Http\Controllers\CursoController;
+use App\Http\Controllers\TurmaController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -36,9 +38,13 @@ Route::group(['middleware' => 'auth:web'], function () {
         'users' =>UserController::class,
         'alunos' =>AlunoController::class,
         'projetos'=>ProjetoController::class,
-        'configuracoes'=>ConfiguracaoController::class
+        'configuracoes'=>ConfiguracaoController::class,
+        'cursos'=>CursoController::class,
+        'turmas'=>TurmaController::class
     ]);
     Route::post('/areas/update', [AreaController::class, 'update'])->name('areas.update1');
+    Route::post('/cursos/update', [CursoController::class, 'update'])->name('cursos.update1');
+    Route::post('/turmas/update', [TurmaController::class, 'update'])->name('turmas.update1');
     Route::post('/areas/upload', [AreaController::class, 'upload'])->name('areas.upload');
     Route::get('areas/toView/{id}',[AreaController::class,'toView'])->name('areas.toView');
     Route::post('/alunos/update', [AlunoController::class, 'update'])->name('alunos.update1');

@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Aluno;
+use App\Models\Turma;
 use Illuminate\Http\Request;
 
-class AlunoController extends Controller
+class TurmaController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Aluno $alunos)
+    public function index()
     {
         //
-        return view('pages.alunos.index');
+        return view('pages.turmas.index');
     }
 
     /**
@@ -26,7 +26,6 @@ class AlunoController extends Controller
     public function create()
     {
         //
-
     }
 
     /**
@@ -38,33 +37,26 @@ class AlunoController extends Controller
     public function store(Request $request)
     {
         //
-        $dados['dados']=Aluno::create($request->all());
-        if(!empty($dados)){
-            $dados['success'] =true;
-        }
-        return json_encode($dados);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Aluno  $aluno
+     * @param  \App\Models\Turma  $turma
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(Turma $turma)
     {
         //
-        $teste =Aluno::all();
-        return response()->json($teste);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Aluno  $aluno
+     * @param  \App\Models\Turma  $turma
      * @return \Illuminate\Http\Response
      */
-    public function edit(Aluno $aluno)
+    public function edit(Turma $turma)
     {
         //
     }
@@ -73,24 +65,21 @@ class AlunoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Aluno  $aluno
+     * @param  \App\Models\Turma  $turma
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Aluno $aluno)
+    public function update(Request $request, Turma $turma)
     {
         //
-        
-        $aluno->update($request->all());
-        return redirect()->route('alunos.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Aluno  $aluno
+     * @param  \App\Models\Turma  $turma
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Aluno $aluno)
+    public function destroy(Turma $turma)
     {
         //
     }

@@ -20,7 +20,7 @@
                 </div>
             </li>
 
-            @if(Gate::check('usuario') || Gate::check('professor') || Gate::check('aluno') || Gate::check('areas')|| Gate::check('tema')|| Gate::check('projeto'))
+            @if(Gate::check('usuario') || Gate::check('professor') || Gate::check('aluno') || Gate::check('areas')|| Gate::check('tema')||Gate::check('projeto')||Gate::check('cursp'))
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
                 <div class="d-flex justify-content-center py-2" role="button">
                     <a class="text-decoration-none text-nowrap text-white" href="#">
@@ -38,10 +38,24 @@
                             </a>
                         </li>
                     @endcan
-                    @can('areas')
+                    @can('area')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('areas.index') }}">
                                 <span>{{ ('Áreas') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('curso')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('cursos.index') }}">
+                                <span>{{ ('Cursos') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('professor')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('professores.index') }}">
+                                <span>{{ ('Professores') }}</span>
                             </a>
                         </li>
                     @endcan
@@ -52,17 +66,17 @@
                         </a>
                     </li>
                     @endcan
-                    @can('professor')
-                        <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('professores.index') }}">
-                                <span>{{ ('Professores') }}</span>
-                            </a>
-                        </li>
-                    @endcan
                     @can('tema')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('temas.index') }}">
                                 <span>{{ ('Temas') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('turma')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('turmas.index') }}">
+                                <span>{{ ('Turmas') }}</span>
                             </a>
                         </li>
                     @endcan

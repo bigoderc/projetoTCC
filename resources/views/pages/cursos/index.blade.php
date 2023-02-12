@@ -5,7 +5,7 @@
     <div class="card-body">
         <div class="card">
             <div class="card-header card-title text-white bg-transparent border-0 m-3">
-                <span class="h4">Alunos</span>
+                <span class="h4">Cursos</span>
             </div>
             <div class="card-body">
                 <div id="toolbar">
@@ -25,44 +25,8 @@
                                     <div class="modal-body" class="my-2">
                                         <label for="nome">Nome</label>
                                         <input type="text" class="form-control" id="nome" name="nome">
-                                        <div class="row">
-                                            <div class="col">
-                                                <label for="nome">Mátricula</label>
-                                                <input type="text" class="form-control" id="nome" name="matricula">
-                                            </div>
-                                            <div class="col">
-                                                <label for="nome">Matriculado</label>
-                                                <select class="form-control" name="matriculado" aria-label="Default select example">
-                                                    <option value="S" selected>Sim</option>
-                                                    <option value="N">Não</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <label for="nome">Período</label>
-                                                <input type="text" class="form-control" maxlength="10" id="nome" name="periodo">
-                                            </div>
-                                            <div class="col">
-                                                <label for="nome">Ingresso</label>
-                                                <input type="text" class="form-control" id="nome" maxlength="10" name="ingresso">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <label for="nome">Turma</label>
-                                                <input type="text" class="form-control" maxlength="10" id="nome" name="turma">
-                                            </div>
-                                            <div class="col">
-                                                <label for="nome">Curso</label>
-                                                <input type="text" class="form-control" id="nome" maxlength="120" name="curso">
-                                            </div>
-
-                                        </div>
-                                        <label for="nome">Instituição</label>
-                                        <input type="text" class="form-control" id="nome" name="instituicao">
-                                        <label for="nome">Email</label>
-                                        <input type="text" class="form-control" id="nome" name="email">
+                                        <label for="nome">Descrição</label>
+                                        <input type="text" class="form-control" id="nome" name="descricao">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -73,19 +37,12 @@
                         </div>
                     </div>
                 </div>
-                <table id="my_table_id" class="text-center" data-toggle="table" data-editable="true" data-editable-pk="id"
-                    data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR" data-search="true"
-                    data-show-columns="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar"
-                    data-unique-id="id" data-id-field="id" data-page-size="25" data-page-list="[5, 10, 25, 50, 100, all]"
-                    data-pagination="true" data-search-accent-neutralise="true" data-editable-url="#" data-url="{{ route('alunos.show',1) }}">
+                <table id="my_table_id" class="text-center" data-toggle="table" data-editable="true" data-editable-pk="id" data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR" data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25" data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true" data-search-accent-neutralise="true" data-editable-url="{{ route('cursos.update1') }}" data-url="{{ route('cursos.show',1) }}">
                     <thead>
                         <tr>
                             <th data-field="id" class="col-1">ID</th>
                             <th data-field="nome" data-editable="true" class="col-3" aria-required="true">NOME</th>
-                            <th data-field="matricula" data-editable="true" class="col-3" aria-required="true">MÁTRICULA</th>
-                            <th data-field="matriculado" data-editable="true" class="col-3" aria-required="true">MATRICULADO</th>
-                            <th data-field="curso" data-editable="false" class="col-3" aria-required="true">CURSO</th>
-                            <th data-field="turma" data-editable="false" class="col-3" aria-required="true">TURMA</th>
+                            <th data-field="descricao" data-editable="true" class="col-3" aria-required="true">DESCRIÇÃO</th>
                             <th data-field="acao" class="col-1" data-formatter="acaoFormatter" data-events="acaoEvents">Ação</th>
                         </tr>
                     </thead>
@@ -111,7 +68,7 @@
             event.preventDefault();
 
             $.ajax({
-                url: "{{ route('alunos.store') }}",
+                url: "{{ route('cursos.store') }}",
                 type: "POST",
                 data: $(this).serialize(),
                 dataType: "json",
@@ -153,12 +110,12 @@
         }
     }
 
+    function setIdModal(id) {
+        document.getElementById('id').value = id;
+    }
     //Criar colunar ação
     function acaoFormatter(value, row, index) {
         return [
-            `<a class="text-info p-1" href="#" data-toggle="modal" title="Editar Registro" data-target="#edit${row.id}">`,
-            `<i class="fa fa-edit"></i>`,
-            `</a>`,
             '<a class="remove" href="javascript:void(0)" title="Remove">',
             '<i class="fa fa-trash"></i>',
             '</a>'

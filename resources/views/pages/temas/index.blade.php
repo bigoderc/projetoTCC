@@ -20,7 +20,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <form id="addLinha">
+                                <form id="addLinha" enctype='multipart/form-data'>
                                     @csrf
                                     <div class="modal-body" class="my-2">
                                         <label for="nome">Nome</label>
@@ -36,8 +36,6 @@
                                         </select>
                                         <label for="nome">Link</label>
                                         <input type="text" class="form-control" id="link" name="link">
-                                        <label for="nome" class="my-2">Arquivo</label>
-                                        <input type="file" class="form-control" accept=".png,.jpeg,.pdf" id="arquivo" multiple="multiple" name="arquivos">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -167,8 +165,11 @@
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             return [
-                `<a class="text-info p-1" href="#" data-toggle="modal" data-target="#edit${row.id}">`,
-                `<i class="fa fa-edit"></i>`,
+                `<a class="text-danger m-1" href="#" onclick="setIdModal(${row.id})" data-toggle="modal" title="Atualizar Anexo" data-target="#upload">`,
+                `<i class="fa fa-upload " aria-hidden="true"></i>`,
+                `</a>`,
+                `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="areas/toView/${row.id}"  target="_blank" >`,
+                `<i class="fa fa-search" aria-hidden="true"></i>`,
                 `</a>`,
                 '<a class="remove" href="javascript:void(0)" title="Remove">',
                 '<i class="fa fa-trash"></i>',
