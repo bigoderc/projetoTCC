@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Curso;
 use App\Models\Turma;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class TurmaController extends Controller
     public function index()
     {
         //
-        return view('pages.turmas.index');
+        return view('pages.turmas.index',['cursos'=>Curso::all()]);
     }
 
     /**
@@ -37,6 +38,7 @@ class TurmaController extends Controller
     public function store(Request $request)
     {
         //
+        return json_encode(Turma::create($request->all()));
     }
 
     /**
@@ -45,9 +47,10 @@ class TurmaController extends Controller
      * @param  \App\Models\Turma  $turma
      * @return \Illuminate\Http\Response
      */
-    public function show(Turma $turma)
+    public function show($id)
     {
         //
+        return response()->json(Turma::with('curso')->where('fk_curso_id',$id)->get());
     }
 
     /**
@@ -71,6 +74,10 @@ class TurmaController extends Controller
     public function update(Request $request, Turma $turma)
     {
         //
+        if($request->ajax()){
+            $turma->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
+            return response()->json(['success' => true]);
+        }
     }
 
     /**

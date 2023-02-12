@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AlunoStore;
 use App\Models\Aluno;
+use App\Models\Curso;
 use Illuminate\Http\Request;
 
 class AlunoController extends Controller
 {
+    protected $model;
+    public function __construct(Aluno $aluno)
+    {
+     $this->model = $aluno;   
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +23,7 @@ class AlunoController extends Controller
     public function index(Aluno $alunos)
     {
         //
-        return view('pages.alunos.index');
+        return view('pages.alunos.index',['cursos'=>Curso::all()]);
     }
 
     /**
@@ -35,14 +43,10 @@ class AlunoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AlunoStore $request)
     {
         //
-        $dados['dados']=Aluno::create($request->all());
-        if(!empty($dados)){
-            $dados['success'] =true;
-        }
-        return json_encode($dados);
+        return json_encode(Aluno::create($request->all()));
     }
 
     /**
@@ -54,8 +58,7 @@ class AlunoController extends Controller
     public function show()
     {
         //
-        $teste =Aluno::all();
-        return response()->json($teste);
+        return response()->json($this->model->with(['curso','turma'])->get());
     }
 
     /**

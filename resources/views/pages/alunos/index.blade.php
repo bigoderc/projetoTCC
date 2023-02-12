@@ -25,6 +25,25 @@
                                     <div class="modal-body" class="my-2">
                                         <label for="nome">Nome</label>
                                         <input type="text" class="form-control" id="nome" name="nome">
+                                        <label for="nome">Instituição</label>
+                                        <input type="text" class="form-control" id="nome" name="instituicao">
+                                        <label for="nome">Email</label>
+                                        <input type="text" class="form-control" id="nome" name="email">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="nome">Curso</label>
+                                                <select class="form-control" name="fk_curso_id" id="fk_curso_id" aria-label="Default select example">
+                                                    <option selected>Selecione o Curso</option>
+                                                    @foreach($cursos as $curso)
+                                                    <option value="{{$curso->id}}">{{$curso->nome}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col" id="turma">
+                                                <label for="nome">Turma</label>
+                                                
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col">
                                                 <label for="nome">Mátricula</label>
@@ -45,24 +64,9 @@
                                             </div>
                                             <div class="col">
                                                 <label for="nome">Ingresso</label>
-                                                <input type="text" class="form-control" id="nome" maxlength="10" name="ingresso">
+                                                <input type="month" class="form-control" id="nome" maxlength="10" name="ingresso">
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <label for="nome">Turma</label>
-                                                <input type="text" class="form-control" maxlength="10" id="nome" name="turma">
-                                            </div>
-                                            <div class="col">
-                                                <label for="nome">Curso</label>
-                                                <input type="text" class="form-control" id="nome" maxlength="120" name="curso">
-                                            </div>
-
-                                        </div>
-                                        <label for="nome">Instituição</label>
-                                        <input type="text" class="form-control" id="nome" name="instituicao">
-                                        <label for="nome">Email</label>
-                                        <input type="text" class="form-control" id="nome" name="email">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -84,8 +88,8 @@
                             <th data-field="nome" data-editable="true" class="col-3" aria-required="true">NOME</th>
                             <th data-field="matricula" data-editable="true" class="col-3" aria-required="true">MÁTRICULA</th>
                             <th data-field="matriculado" data-editable="true" class="col-3" aria-required="true">MATRICULADO</th>
-                            <th data-field="curso" data-editable="false" class="col-3" aria-required="true">CURSO</th>
-                            <th data-field="turma" data-editable="false" class="col-3" aria-required="true">TURMA</th>
+                            <th data-field="curso.nome" data-editable="false" class="col-3" aria-required="true">CURSO</th>
+                            <th data-field="turma.nome" data-editable="false" class="col-3" aria-required="true">TURMA</th>
                             <th data-field="acao" class="col-1" data-formatter="acaoFormatter" data-events="acaoEvents">Ação</th>
                         </tr>
                     </thead>
@@ -104,10 +108,13 @@
             'X-CSRF-TOKEN': '{{csrf_token()}}'
         }
     });
-
+    $('select').select2({
+        maximumInputLength: 20 // only allow terms up to 20 characters long
+    });
     //Adicionar uma nova linha e lançar via ajax
     $(document).ready(function() {
         $("#addLinha").submit(function(event) {
+            fullLoader();
             event.preventDefault();
 
             $.ajax({
@@ -116,14 +123,12 @@
                 data: $(this).serialize(),
                 dataType: "json",
                 success: function(response) {
-                    if (response.success === true) {
-
-                        $('#novalinha').modal('hide');
-                        $('#my_table_id').bootstrapTable('append', response.dados);
-
-                    } else {
-                        alert('erro');
-                    }
+                    $('#novalinha').modal('hide');
+                    $('#my_table_id').bootstrapTable('append', response);
+                    fullLoader(false);
+                },
+                error: function(result) {
+                    alert('erro');
                 }
             });
             $("input").val("");
@@ -164,5 +169,34 @@
             '</a>'
         ].join('');
     }
+    $("#fk_curso_id").change(function() {
+        fullLoader();
+        let id_curso = $(this).val();
+        $.ajax({
+            url:`{{ url('turmas/${id_curso}') }}`,
+            type: "GET",
+            success: function(response) {
+                let select = document.createElement("select");
+                select.setAttribute('id', "fk_turma_id");
+                select.setAttribute('name', "fk_turma_id");
+                select.setAttribute('required', true);
+
+                for (var i = 0; i < response.length; i++) {
+
+                    let option = document.createElement("option");
+                    option.setAttribute('value', response[i]['id']);
+                    option.innerText = response[i]['nome'];
+
+                    select.append(option);
+                }
+
+                document.getElementById("turma").append(select);
+                $("#fk_turma_id").select2();
+                fullLoader(false);
+            },
+            error: function(result) {
+            }
+        });
+    });
 </script>
 @endpush

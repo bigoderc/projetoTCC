@@ -15,6 +15,9 @@ class CreateTurmasTable extends Migration
     {
         Schema::create('turmas', function (Blueprint $table) {
             $table->id();
+            $table->string('nome', 60)->nullable();
+            $table->text('descricao')->nullable();
+            $table->foreignId('fk_curso_id')->constrained('cursos');
             $table->timestamps();
         });
     }

@@ -14,12 +14,17 @@ class Aluno extends Model
         'nome',
         'matricula',
         'instituicao',
-        'curso',
+        'fk_curso_id',
         'matriculado',
         'periodo',
-        'turma',
+        'fk_turma_id',
         'ingresso', 
         'email'
     ];
-    public $timestamps = false;
+    public function curso(){
+        return $this->hasOne(Curso::class,'id','fk_curso_id');
+    }
+    public function turma(){
+        return $this->hasOne(Turma::class,'id','fk_curso_id');
+    }
 }

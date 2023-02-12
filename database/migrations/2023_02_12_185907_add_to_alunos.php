@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnAlunos extends Migration
+class AddToAlunos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class AddColumnAlunos extends Migration
      */
     public function up()
     {
-        //
         Schema::table('alunos', function (Blueprint $table) {
-            $table->string('instituicao', 120)->nullable();
-            $table->char('matriculado', 1)->default('S')->nullable();
-            $table->string('periodo', 10)->nullable();
-            $table->string('ingresso', 10)->nullable();
-            $table->string('email')->nullable();
+            //
+            $table->foreignId('fk_curso_id')->nullable()->constrained('cursos');
+            $table->foreignId('fk_turma_id')->nullable()->constrained('turmas');
         });
     }
 
@@ -30,6 +27,8 @@ class AddColumnAlunos extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('alunos', function (Blueprint $table) {
+            //
+        });
     }
 }
