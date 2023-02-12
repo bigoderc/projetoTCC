@@ -1,101 +1,191 @@
-<div class="sidebar bg-primary">
-    <div class="logo-details">
-        <h1 class="logo_name text-white">{{ 'GRC' }}</h1>
-        <i class="fas fa-align-justify" id="btn" ></i>
+<div class="position-absolute bg-primary overflow-hidden sidebar p-2" style="
+    z-index: 1;">
+    <div class="d-flex justify-content-center align-items-center text-white my-3">
+        <div class="img" >
+			<img src="{{ asset('img/LSMais.svg') }}" alt="Logo da empresa" width="50" height="40">
+      	</div>
+      	<div class="proj-name pl-3 d-none">
+            <span class="h2">GRC</span>
+      	</div>
     </div>
-    <ul class="nav-list">
-        <li>
-            <a href="{{ route('painel') }}">
-                <i class="fas fa-home"></i>
-                <span class="links_name">{{ ('Inicio') }}</span>
-            </a>
-            <span class="tooltip">{{ ('Inicio') }}</span>
-        </li>
-        @can('usuario')
-            <li >
-                <a   href="{{ route('users.index') }}">
-                    <i class="fas fa-user-plus"></i>
-                    <span class="links_name" >{{('Usuário') }}</span>
-                </a>  
-                <span class="tooltip" >{{('Usuário') }}</span>    
+
+    <div>
+        <ul class="nav flex-column">
+            <li class="bg-gold border-gold rounded my-1 overflow-hidden">
+                <div class="d-flex justify-content-center py-2">
+                    <a class="text-decoration-none text-nowrap text-white" href="{{ route('home') }}">
+                        <i class="px-2 fa fa-solid fa-home fa-lg"></i>
+                        <span class="d-none">{{ ('Inicio') }}</span>
+                    </a>
+                </div>
             </li>
-        @endcan
-        @can('aluno')
-            <li >
-                <a href="{{ route('alunos.index') }}">
-                <i class="fas fa-user"></i>
-                    <span class="links_name" >{{('Aluno') }}</span>
-                </a>
-                <span class="tooltip" >{{('Aluno') }}</span>      
+
+            @if(Gate::check('usuario') || Gate::check('professor') || Gate::check('aluno') || Gate::check('areas')|| Gate::check('tema')|| Gate::check('projeto'))
+            <li class="bg-gold border-gold rounded my-1 overflow-hidden">
+                <div class="d-flex justify-content-center py-2" role="button">
+                    <a class="text-decoration-none text-nowrap text-white" href="#">
+                        <i class="lg nc-icon nc-single-copy-04 px-2"></i>
+                        <span class="d-none">Cadastro</span>
+
+                    </a>
+                </div>
+                <ul class="list-group text-left d-none">
+                    @can('aluno')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('alunos.index') }}">
+                                <span>{{ ('Alunos') }}</span>
+
+                            </a>
+                        </li>
+                    @endcan
+                    @can('areas')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('areas.index') }}">
+                                <span>{{ ('Áreas') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('projeto')
+                    <li class="list-group-item bg-white py-1">
+                        <a class="text-decoration-none text-dark" href="{{ route('projetos.index')}}">
+                            <span>{{('Projetos')}}</span>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('professor')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('professores.index') }}">
+                                <span>{{ ('Professores') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('tema')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('temas.index') }}">
+                                <span>{{ ('Temas') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('usuario')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('users.index') }}">
+                                <span>{{ ('Usuários') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
             </li>
-        @endcan
-        @can('professor')
-            <li >
-                <a href="{{ route('professores.index') }}">
-                <i class="fab fa-product-hunt"></i>
-                    <span class="links_name" >{{('Professor') }}</span>
-                </a> 
-                <span class="tooltip" >{{('Professor') }}</span>     
+            @endif
+            
+            @can('configuracoes')
+            <li class="bg-gold border-gold rounded my-1 overflow-hidden">
+                <div class="d-flex justify-content-center py-2">
+                    <a class="text-decoration-none text-nowrap text-white" href="{{ route('configuracoes.index') }}">
+                        <i class="px-2 fa fa-solid fa-lg fa-cog"></i>
+                        <span class="d-none">{{ ('Configurações') }}</span>
+                    </a>
+                </div>
             </li>
-        @endcan
-        @can('areas')
-            <li >
-                <a  href="{{ route('areas.index') }}">
-                <i class="fa fa-list-alt"></i>
-                    <span class="links_name" >{{('Áreas') }}</span>
-                </a> 
-                <span class="tooltip" >{{('Áreas') }}</span>     
+            @endcan
+            <li class="bg-gold border-gold rounded my-1 overflow-hidden">
+                <div class="d-flex justify-content-center py-2">
+                    <a class="text-decoration-none text-nowrap text-white" href="{{ route('login') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="px-2 fa fa-solid fa-lg fa-sign-out"></i>
+                        <span class="d-none">{{ ('Sair') }}</span>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
+                    </a>
+                </div>
             </li>
-        @endcan
-        @can('tema')
-            <li >
-                <a  href="{{ route('temas.index') }}">
-                <i class="fa fa-list-alt"></i>
-                    <span class="links_name" >{{('Temas') }}</span>
-                </a>
-                <span class="tooltip" >{{('Temas') }}</span>      
-            </li>
-        @endcan
-        @can('projeto')
-            <li >
-                <a  href="{{ route('projetos.index') }}">
-                <i class="fa fa-list-alt"></i>
-                    <span class="links_name" >{{('Projetos') }}</span>
-                </a>
-                <span class="tooltip" >{{('Projetos') }}</span>      
-            </li>
-        @endcan
-        @can('configuracoes')
-            <li>
-                <a href="{{ route('configuracoes.index') }}">
-                    <i class="fas fa-cog"></i>
-                    <span class="links_name">{{ ('Configurações') }}</span>
-                </a>
-                <span class="tooltip">{{ ('Configurações') }}</span>
-            </li>
-        @endcan
-        <li>
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="text-center">
-                <i class="fas fa-sign-out-alt"></i>
-                <span class="links_name">{{ ('Sair') }}</span>
-                
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
-            </a>
-            <span class="tooltip">{{ ('Sair') }}</span>
-        </li>
-          
-        <li class="profile">
-            <div class="profile-details">
-                <i class="fas fa-user"></i>
-            <div class="name_job">
-                <div class="name">{{ Auth::user()->name }}</div>
-                <div class="job">Administrador</div>
+        </ul>
+    </div>
+
+    <div class="bg-gold fixed-bottom position-absolute">
+        <div class="d-flex justify-content-center text-white  text-nowrap py-2">
+            <div class="user d-none ">
+                <div class="d-flex align-items-center user">
+                    <i class="fa fa-solid fa-user mr-2"></i>
+                    <div class="name">{{ Auth::user()->name }}</div>
+                    <div class="job">{{ Auth::user()->funcao }}</div>
+                </div>
             </div>
+            <div class="version">
+                <div class="d-flex align-items-center version">
+                    <i>v1.0.6</i>
+                </div>
             </div>
-            <i class='bx bx-log-out' id="log_out" >V1.0.1</i>
-        </li>
-    </ul>
+        </div>
+    </div>
 </div>
-  
+
+{{-- <div class="position-absolute sidebar-btn p-3">
+    <div role="button">
+        <i class="fa fa-solid fa-bars fa-lg"></i>
+    </div>
+</div> --}}
+
+@push('scripts')
+<script>
+    let $sidebar = $(".sidebar");
+    let $button = $(".sidebar > div > ul > li");
+    let $buttonDiv = $(".sidebar > div > ul > li > div");
+    let $buttonSpan = $(".sidebar > div > ul > li > div > a > span");
+    let $dropdown = $(".sidebar > div > ul > li > ul");
+
+    function hide(element) {
+        element.addClass("d-none");
+
+    }
+
+    function show(element) {
+        element.removeClass("d-none");
+    }
+
+    function open(){
+        $sidebar.addClass("extended");
+
+        $buttonDiv.removeClass("justify-content-center");
+        show($buttonSpan);
+        $dropdown.prev().children("a").addClass("dropdown-toggle")
+
+        show($(".proj-name"));
+        show($(".user"));
+        hide($(".version"));
+    }
+
+    function close(){
+        hide($dropdown);
+        $sidebar.removeClass("extended");
+
+        $buttonDiv.addClass("justify-content-center");
+        hide($buttonSpan);
+        $dropdown.prev().children("a").removeClass("dropdown-toggle")
+
+        hide($(".proj-name"));
+        hide($(".user"));
+        show($(".version"));
+    }
+
+    $( document ).ready(function() {
+
+        $sidebar.on("mouseover", function() {
+            open();
+        });
+
+        $sidebar.on("mouseleave", function() {
+            close()
+        });
+
+        $button.on("click", function() {
+
+            var $thisDropdown = $(this).children("ul");
+
+            if ($thisDropdown.css('display') == "none") {
+                hide($dropdown);
+                show($thisDropdown);
+            } else {
+                hide($thisDropdown);
+            }
+        });
+    });
+</script>
+@endpush

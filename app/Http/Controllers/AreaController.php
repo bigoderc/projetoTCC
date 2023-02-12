@@ -93,12 +93,49 @@ class AreaController extends Controller
     public function destroy(Area $area)
     {
         //
-        try{
-            TipoGasto::find($id)->delete();
-            return response()->json(['success' => true]);
-        }catch(Exception $e){
-            return response()->json(['success' => $e]);
-        }
-
     }
+     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Area  $area
+     * @return \Illuminate\Http\Response
+     */
+    public function upload(Area $area, Request $request)
+    {
+        //
+        //dd('merda');
+        if($request->hasFile('file')){
+            // Get filename with the extension
+            $filenameWithExt = $request->file('file')->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+           
+            $extension = $request->file('file')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore= $filename.'.'.$extension;
+            // Upload Image
+            $fileNameToStore = str_replace(" ", "",  $fileNameToStore);
+            $path = $request->file('file')->storeAs('anexos', $fileNameToStore,'public');
+            $request['arquivo'] = $fileNameToStore;
+        }
+        $area->find($request->id)->update($request->all());
+        return redirect()->route('areas.index');
+    }
+    
+    public function toView(Area $area,$id){
+        $area = $area->find($id);
+        $img = asset("storage/projeto/".$area->arquivo);
+        $pos = strpos($area->arquivo, '.pdf');
+        if ($pos === false) {
+            echo "<img src='{$img}'/>";
+        }else{
+            header('Content-type: application/pdf');
+            header('Content-Disposition: inline; filename="arquivo.pdf"');
+            header('Content-Transfer-Encoding; binary');
+            header('Accept-Ranges; bytes');
+            readfile($img);
+        }
+    }
+
 }

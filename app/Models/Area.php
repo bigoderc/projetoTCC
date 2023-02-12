@@ -10,9 +10,10 @@ class Area extends Model
     use HasFactory;
     protected $table = 'areas';
     protected $fillable = [
-        'id',
         'nome',
-        'descricao'
+        'descricao',
+        'link',
+        'arquivo'
     ];
 
     public $timestamps = false;

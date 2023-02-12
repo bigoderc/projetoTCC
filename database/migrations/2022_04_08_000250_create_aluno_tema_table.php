@@ -18,6 +18,7 @@ class CreateAlunoTemaTable extends Migration
             $table->smallInteger('fk_tema_id')->nullable()->index('FK_aluno_tema_2');
             $table->smallInteger('fk_professores_id')->nullable()->index('FK_aluno_tema_3');
             $table->smallInteger('fk_alunos_id')->nullable()->index('FK_aluno_tema_4');
+            $table->timestamps();
         });
     }
 

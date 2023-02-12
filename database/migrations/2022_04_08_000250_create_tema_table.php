@@ -18,6 +18,7 @@ class CreateTemaTable extends Migration
             $table->string('nome', 60)->nullable();
             $table->string('descricao', 100)->nullable();
             $table->smallInteger('fk_areas_id')->nullable()->index('FK_tema_2');
+            $table->timestamps();
         });
     }
 

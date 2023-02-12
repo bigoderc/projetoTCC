@@ -22,6 +22,7 @@ class Projeto extends Migration
             $table->date('apresentacao')->nullable();
             $table->smallInteger('fk_professores_id')->nullable();
             $table->foreign(['fk_professores_id'], 'FK_professores')->references(['id'])->on('professores');
+            $table->timestamps();
             
         });
     }

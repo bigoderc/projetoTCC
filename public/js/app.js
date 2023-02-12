@@ -1,41 +1,76 @@
+function fullLoader(status = true) {
+    if (!status){
+        swal.close();
+        return;
+    }
 
-$("#btn").click(function() {
-  $('.sidebar').toggleClass("open");
-  $('#btn').toggleClass("fa-align-justify fa-align-right");
-});
+    Swal.fire({
+        customClass: {
+            container: "bg-white content-page",
+            popup: "bg-white",
+            header: "...",
+            title: "...",
+            closeButton: "...",
+            icon: "...",
+            image: "...",
+            content: "...",
+            htmlContainer: "...",
+            input: "...",
+            inputLabel: "...",
+            validationMessage: "...",
+            actions: "...",
+            confirmButton: "...",
+            denyButton: "...",
+            cancelButton: "...",
+            loader: "...",
+            footer: "....",
+            timerProgressBar: "....",
+        },
+        allowOutsideClick: false,
+        showCancelButton: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        },
+        text: "Carregando...",
+    });
+}
 
-$(".content-page").click(function() {
-  $('.sidebar').removeClass("open");
-  $('#btn').removeClass("fa-align-right");
-  $('#btn').addClass("fa-align-justify");
-});
+function partialLoader(status = true) {
 
-const labels = [
-  'JAN',
-  'FEV',
-  'MAR',
-  'ABR',
-  'MAI',
-  'JUN',
-];
+    if (!status){
+        swal.close();
+        return;
+    }
 
-const data = {
-  labels: labels,
-  datasets: [{
-    label: 'Meus ganhos',
-    backgroundColor: '#ad9536',
-    borderColor: '#243147',
-    data: [0, 10, 5, 2, 2, 3, 5],
-  }]
-};
-
-const config = {
-  type: 'line',
-  data: data,
-  options: {}
-};
-
-var myChart = new Chart(
-  document.getElementById('myChart'),
-  config
-);
+    Swal.fire({
+        customClass: {
+            container: "content",
+            popup: "bg-white",
+            header: "...",
+            title: "...",
+            closeButton: "...",
+            icon: "...",
+            image: "...",
+            content: "...",
+            htmlContainer: "...",
+            input: "...",
+            inputLabel: "...",
+            validationMessage: "...",
+            actions: "...",
+            confirmButton: "...",
+            denyButton: "...",
+            cancelButton: "...",
+            loader: "...",
+            footer: "....",
+            timerProgressBar: "....",
+        },
+        allowOutsideClick: false,
+        showCancelButton: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        },
+        text: "Carregando...",
+    });
+}

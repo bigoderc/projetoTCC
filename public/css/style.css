@@ -1,9 +1,9 @@
 @import url(https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap);
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins" , sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -15,8 +15,8 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #243147; 
-    -webkit-transition: all 0.5s; 
+    background: #243147;
+    -webkit-transition: all 0.5s;
     transition: all 0.5s;
 }
 
@@ -24,289 +24,93 @@
     background: #ad9536;
 }
 
-.radius-main{
-  border-radius: 0.7rem;
+.radius-main {
+    border-radius: 0.7rem;
 }
 
-.img-panel-product, .card-panel-product{
-  min-height: 200px;
-  max-height: 200px;
-  height: 100%;
+.img-panel-product,
+.card-panel-product {
+    min-height: 200px;
+    max-height: 200px;
+    height: 100%;
 }
 
-.card-product-panel:hover{
-  text-decoration: none;
-  color: #ad9536;
+.card-product-panel:hover {
+    text-decoration: none;
+    color: #ad9536;
 }
 
-.card-product-panel{
-  transition: all 0.4s;
+.card-product-panel {
+    transition: all 0.4s;
 }
 
-.sidebar{
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 78px;
-  padding: 6px 14px;
-  z-index: 99;
-  transition: all 0.5s ease;
+.card-title {
+    background-image: url('../img/BarraSup.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
-.sidebar.open{
-  width: 250px;
+.sidebar {
+    height: 100vh;
+    width: 66px;
+    z-index: 1061;
+    transition: all 0.5s ease;
 }
 
-.sidebar .logo-details{
-  height: 60px;
-  display: flex;
-  align-items: center;
-  position: relative;
+.sidebar.extended {
+    width: 225px;
 }
 
-.sidebar .logo-details .icon, .sidebar .logo-details .logo_name{
-  opacity: 0;
-  transition: all 0.5s ease;
-  margin-bottom: 0 !important;
+.sidebar div>ul>li {
+    border: 4px solid;
 }
 
-.sidebar.open .logo-details .icon,
-.sidebar.open .logo-details .logo_name{
-  opacity: 1;
+.content-page {
+    margin-left: 66px;
+    height: 100vh;
+    overflow: auto;
 }
 
-.sidebar .logo-details #btn{
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  font-size: 22px;
-  transition: all 0.4s ease;
-  font-size: 23px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.5s ease;
+.icon-panel-menu {
+    font-size: 80pt;
 }
 
-.sidebar.open .logo-details #btn{
-  text-align: right;
+.toast-page {
+    z-index: 5;
+    right: 0;
+    bottom: 0;
 }
 
-.sidebar i{
-  color: #fff;
-  height: 60px;
-  min-width: 50px;
-  font-size: 28px;
-  text-align: center;
-  line-height: 60px;
+.editable-buttons,
+.editable-clear-x {
+    display: none;
 }
 
-.sidebar li{
-  position: relative;
-  margin: 8px 0;
-  list-style: none;
-}
-
-.sidebar li .tooltip{
-  position: absolute;
-  top: -20px;
-  left: calc(100% + 20px);
-  z-index: 3;
-  background: #fff;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 15px;
-  font-weight: 400;
-  opacity: 0;
-  white-space: nowrap;
-  pointer-events: none;
-  transition: 0s;
-}
-.sidebar li:hover .tooltip{
-  opacity: 1;
-  pointer-events: auto;
-  transition: all 0.4s ease;
-  top: 50%;
-  transform: translateY(-50%);
-}
-.sidebar.open li .tooltip{
-  display: none;
-}
-
-.sidebar li a{
-  display: flex;
-  height: 100%;
-  width: 100%;
-  border-radius: 12px;
-  align-items: center;
-  text-decoration: none;
-  transition: all 0.4s ease;
-  background: #ad9536;
-}
-.sidebar li a:hover{
-  background: #FFF;
-}
-.sidebar li a .links_name{
-  color: #fff;
-  font-size: 15px;
-  font-weight: 400;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.4s;
-}
-.sidebar.open li a .links_name{
-  opacity: 1;
-  pointer-events: auto;
-}
-.sidebar li a:hover .links_name,
-.sidebar li a:hover i{
-  transition: all 0.5s ease;
-  color: #ad9536;
-}
-.sidebar li i{
-  height: 30px;
-  line-height: 30px;
-  font-size: 18px;
-  border-radius: 12px;
-}
-.sidebar li.profile{
-  position: fixed;
-  height: 60px;
-  width: 78px;
-  left: 0;
-  bottom: -8px;
-  padding: 5px 14px;
-  background: #1d1b31;
-  transition: all 0.5s ease;
-  overflow: hidden;
-}
-.sidebar.open li.profile{
-  width: 250px;
-}
-.sidebar li .profile-details{
-  display: flex;
-  align-items: center;
-  flex-wrap: nowrap;
-}
-
-.sidebar li.profile .name,
-.sidebar li.profile .job{
-  font-size: 15px;
-  font-weight: 400;
-  color: #fff;
-  white-space: nowrap;
-}
-.sidebar li.profile .job{
-  font-size: 12px;
-}
-.sidebar .profile #log_out{
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  background: #ad9536;
-  width: 100%;
-  height: 60px;
-  line-height: 60px;
-  border-radius: 0px;
-  transition: all 0.5s ease;
-}
-.sidebar.open .profile #log_out{
-  width: 50px;
-  background: none;
-}
-
-.sidebar .nav-links li .sub-menu{
-  padding: 6px 6px 14px 80px;
-  margin-top: -10px;
-  background: #1d1b31;
-  display: none;
-}
-.sidebar .nav-links li.showMenu .sub-menu{
-  display: block;
-}
-.sidebar .nav-links li .sub-menu a{
-  color: #fff;
-  font-size: 15px;
-  padding: 5px 0;
-  white-space: nowrap;
-  opacity: 0.6;
-  transition: all 0.3s ease;
-}
-.sidebar .nav-links li .sub-menu a:hover{
-  opacity: 1;
-}
-.sidebar.close .nav-links li .sub-menu{
-  position: absolute;
-  left: 100%;
-  top: -10px;
-  margin-top: 0;
-  padding: 10px 20px;
-  border-radius: 0 6px 6px 0;
-  opacity: 0;
-  display: block;
-  pointer-events: none;
-  transition: 0s;
-}
-.sidebar.close .nav-links li:hover .sub-menu{
-  top: 0;
-  opacity: 1;
-  pointer-events: auto;
-  transition: all 0.4s ease;
-}
-.sidebar .nav-links li .sub-menu .link_name{
-  display: none;
-}
-.sidebar.close .nav-links li .sub-menu .link_name{
-  font-size: 18px;
-  opacity: 1;
-  display: block;
-}
-.sidebar .nav-links li .sub-menu.blank{
-  opacity: 1;
-  pointer-events: auto;
-  padding: 3px 20px 6px 16px;
-  opacity: 0;
-  pointer-events: none;
-}
-.sidebar .nav-links li:hover .sub-menu.blank{
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.content-page{
-  margin-left: 6rem !important;
-  min-height: 100vh;
-}
-
-.icon-panel-menu{
-  font-size: 80pt;
-}
-
-.toast-page{
-  z-index: 5; 
-  right: 0; 
-  bottom: 0;
-}
-
-.editable-buttons, .editable-clear-x{
-  display: none;
-}
-
-.editable-click, 
-a.editable-click, 
+.editable-click,
+a.editable-click,
 a.editable-click:hover {
     text-decoration: none;
     border-bottom: none;
 }
 
-@media (max-width: 420px) {
-  .sidebar li .tooltip{
-    display: none;
-  }
+
+
+
+.select2-container{
+    width: 100% !important
+}
+
+.select2-container .select2-selection {
+    height: 37px !important;
+    border: 1px solid #ced4da !important;
+}
+
+.select2-container .select2-selection__arrow {
+    height: 35px !important;
 }
 
 
+.select2-container .select2-selection > .select2-selection__rendered {
+    line-height: 37px !important;
+}
