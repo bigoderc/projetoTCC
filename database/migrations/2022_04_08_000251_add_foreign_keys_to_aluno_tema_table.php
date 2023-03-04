@@ -13,9 +13,9 @@ class AddForeignKeysToAlunoTemaTable extends Migration
      */
     public function up()
     {
-        Schema::table('aluno_tema', function (Blueprint $table) {
+        Schema::table('alunos_tema', function (Blueprint $table) {
             $table->foreign(['fk_professores_id'], 'FK_aluno_tema_3')->references(['id'])->on('professores')->onDelete('SET NULL');
-            $table->foreign(['fk_tema_id'], 'FK_aluno_tema_2')->references(['id'])->on('tema');
+            $table->foreign(['fk_tema_id'], 'FK_aluno_tema_2')->references(['id'])->on('temas');
             $table->foreign(['fk_alunos_id'], 'FK_aluno_tema_4')->references(['id'])->on('alunos');
         });
     }

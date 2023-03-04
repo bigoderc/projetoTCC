@@ -13,7 +13,7 @@ class CreateAlunoTemaTable extends Migration
      */
     public function up()
     {
-        Schema::create('aluno_tema', function (Blueprint $table) {
+        Schema::create('alunos_tema', function (Blueprint $table) {
             $table->smallInteger('id', true);
             $table->smallInteger('fk_tema_id')->nullable()->index('FK_aluno_tema_2');
             $table->smallInteger('fk_professores_id')->nullable()->index('FK_aluno_tema_3');
