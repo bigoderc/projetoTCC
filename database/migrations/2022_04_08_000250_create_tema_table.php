@@ -13,7 +13,7 @@ class CreateTemaTable extends Migration
      */
     public function up()
     {
-        Schema::create('tema', function (Blueprint $table) {
+        Schema::create('temas', function (Blueprint $table) {
             $table->smallInteger('id', true);
             $table->string('nome', 60)->nullable();
             $table->string('descricao', 100)->nullable();

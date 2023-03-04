@@ -13,7 +13,7 @@ class AddForeignKeysToTemaTable extends Migration
      */
     public function up()
     {
-        Schema::table('tema', function (Blueprint $table) {
+        Schema::table('temas', function (Blueprint $table) {
             $table->foreign(['fk_areas_id'], 'FK_tema_2')->references(['id'])->on('areas');
         });
     }
