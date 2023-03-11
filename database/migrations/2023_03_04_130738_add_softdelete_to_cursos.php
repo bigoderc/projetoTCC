@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTimestampToAlunos extends Migration
+class AddSoftdeleteToCursos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddTimestampToAlunos extends Migration
      */
     public function up()
     {
-        Schema::table('alunos', function (Blueprint $table) {
+        Schema::table('cursos', function (Blueprint $table) {
             //
-            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,7 +26,7 @@ class AddTimestampToAlunos extends Migration
      */
     public function down()
     {
-        Schema::table('alunos', function (Blueprint $table) {
+        Schema::table('cursos', function (Blueprint $table) {
             //
         });
     }

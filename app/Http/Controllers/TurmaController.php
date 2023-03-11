@@ -38,7 +38,8 @@ class TurmaController extends Controller
     public function store(Request $request)
     {
         //
-        return json_encode(Turma::create($request->all()));
+        $turma = Turma::create($request->all());
+        return json_encode(Turma::with('curso')->find($turma->id));
     }
 
     /**
@@ -86,8 +87,10 @@ class TurmaController extends Controller
      * @param  \App\Models\Turma  $turma
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Turma $turma)
+    public function destroy($id)
     {
         //
+        Turma::find($id)->delete();
+        return response()->json(['success' => true]);
     }
 }

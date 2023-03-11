@@ -47,7 +47,8 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::post('/turmas/update', [TurmaController::class, 'update'])->name('turmas.update1');
     Route::post('/areas/upload', [AreaController::class, 'upload'])->name('areas.upload');
     Route::get('areas/toView/{id}',[AreaController::class,'toView'])->name('areas.toView');
-    Route::post('/alunos/update', [AlunoController::class, 'update'])->name('alunos.update1');
+    Route::put('/alunos/update/{id}', [AlunoController::class, 'update'])->name('alunos.update');
+    Route::get('/alunos/findById/{id}', [AlunoController::class, 'findById'])->name('alunos.findById');
     Route::post('/configuracoes/permission', [ConfiguracaoController::class, 'permission'])->name('configuracoes.permission');
     Route::post('/configuracoes/update', [ConfiguracaoController::class, 'update'])->name('configuracoes.update1');
     

@@ -92,7 +92,7 @@
         'click .remove': function(e, value, row) {
             if (confirm("Deseja Excluir " + row.nome + "?")) {
                 $.ajax({
-                    url: "areas/" + row.id,
+                    url: "cursos/" + row.id,
                     type: "DELETE",
                     dataType: "json",
                     success: function(response) {
