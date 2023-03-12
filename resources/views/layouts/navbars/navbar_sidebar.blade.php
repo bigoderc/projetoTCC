@@ -47,8 +47,29 @@
                     @endcan
                     @can('curso')
                         <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('cargos.index') }}">
+                                <span>{{ ('Cargos') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('curso')
+                        <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('cursos.index') }}">
                                 <span>{{ ('Cursos') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('curso')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('especialidades.index') }}">
+                                <span>{{ ('Especialidades') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('curso')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('graus.index') }}">
+                                <span>{{ ('Graus') }}</span>
                             </a>
                         </li>
                     @endcan

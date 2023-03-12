@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnProfessores extends Migration
+class CreateGrausTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class AddColumnProfessores extends Migration
      */
     public function up()
     {
-        //
-        Schema::table('professores', function (Blueprint $table) {
-            $table->string('cargo', 120)->nullable();
-            $table->string('especialidade', 100)->nullable();
-            $table->string('grau', 100)->nullable();
+        Schema::create('graus', function (Blueprint $table) {
+            $table->id();
+            $table->string('nome', 60);
+            $table->text('descricao')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 
@@ -28,6 +30,6 @@ class AddColumnProfessores extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('graus');
     }
 }

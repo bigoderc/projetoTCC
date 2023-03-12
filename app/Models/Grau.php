@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Area extends Model
+class Grau extends Model
 {
+    use HasFactory;
     use SoftDeletes;
  
     /**
@@ -16,14 +17,8 @@ class Area extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-    use HasFactory;
-    protected $table = 'areas';
     protected $fillable = [
         'nome',
-        'descricao',
-        'link',
-        'arquivo'
+        'descricao'
     ];
-
-    public $timestamps = false;
 }

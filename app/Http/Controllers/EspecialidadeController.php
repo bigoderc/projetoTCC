@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Curso;
-use App\Models\Turma;
+use App\Models\Especialidade;
 use Illuminate\Http\Request;
 
-class TurmaController extends Controller
+class EspecialidadeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,7 @@ class TurmaController extends Controller
     public function index()
     {
         //
-        return view('pages.turmas.index',['cursos'=>Curso::all()]);
+        return view('pages.especialidades.index');
     }
 
     /**
@@ -38,29 +37,29 @@ class TurmaController extends Controller
     public function store(Request $request)
     {
         //
-        $turma = Turma::create($request->all());
-        return response()->json(Turma::with('curso')->find($turma->id));
+        $dados = Especialidade::create($request->all());
+        return response()->json($dados);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Turma  $turma
+     * @param  \App\Models\Especialidade  $especialidade
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Especialidade $especialidade)
     {
         //
-        return response()->json(Turma::with('curso')->where('fk_curso_id',$id)->get());
+        return response()->json(Especialidade::all());
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Turma  $turma
+     * @param  \App\Models\Especialidade  $especialidade
      * @return \Illuminate\Http\Response
      */
-    public function edit(Turma $turma)
+    public function edit(Especialidade $especialidade)
     {
         //
     }
@@ -69,14 +68,14 @@ class TurmaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Turma  $turma
+     * @param  \App\Models\Especialidade  $especialidade
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Turma $turma)
+    public function update(Request $request, Especialidade $especialidade)
     {
         //
         if($request->ajax()){
-            $turma->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
+            $especialidade->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
             return response()->json(['success' => true]);
         }
     }
@@ -84,13 +83,13 @@ class TurmaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Turma  $turma
+     * @param  \App\Models\Especialidade  $especialidade
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         //
-        Turma::find($id)->delete();
+        Especialidade::find($id)->delete();
         return response()->json(['success' => true]);
     }
 }

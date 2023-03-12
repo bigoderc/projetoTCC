@@ -37,11 +37,9 @@ class CursoController extends Controller
     public function store(Request $request)
     {
         //
-        $dados['dados']=Curso::create($request->all());
-        if(!empty($dados)){
-            $dados['success'] =true;
-        }
-        return json_encode($dados);
+        $dados =Curso::create($request->all());
+       
+        return response()->json($dados);
     }
 
     /**

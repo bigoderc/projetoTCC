@@ -11,7 +11,7 @@
                 <div id="toolbar">
                     <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i class="fa fa-plus"></i> Adicionar nova linha</button>
 
-                    <div class="modal fade" id="novalinha" tabindex="-1" aria-labelledby="novalinha" aria-hidden="true">
+                    <div class="modal fade" id="novalinha"  tabindex="-1" aria-labelledby="novalinha" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -20,17 +20,17 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <form id="addLinha">
+                                <form id="addLinha" name="addLinha" enctype="multipart/form-data" class="needs-validation" novalidate>
                                     @csrf
                                     <div class="modal-body" class="my-2">
                                         <label for="nome">Nome</label>
-                                        <input type="text" class="form-control" id="nome" name="nome">
+                                        <input type="text" class="form-control" id="nome" name="nome" required>
                                         <label for="nome">Descrição</label>
-                                        <input type="text" class="form-control" id="nome" name="descricao">
+                                        <input type="text" class="form-control" id="descricao" name="descricao" required>
                                         <label for="nome">Link</label>
-                                        <input type="text" class="form-control" id="link" name="lik">
+                                        <input type="text" class="form-control" id="link" name="link">
                                         <label for="nome" class="my-2">Arquivo</label>
-                                        <input type="file" class="form-control" accept=".png,.jpeg,.pdf" id="hospital" name="arquivo">
+                                        <input type="file" class="form-control" accept=".png,.jpeg,.pdf" id="file" name="file">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -62,9 +62,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" action="{{ route('areas.upload') }}" enctype="multipart/form-data">
-                                    @csrf
-                                    @method('post')
+                                <form id="addUpload" name="addUpload" enctype="multipart/form-data">
                                     <label for="anexo">Selecione seu arquivo</label>
                                     <input type="file" name="file" accept=".pdf,.jpeg,.png" required="" />
                                     <input type="hidden" name="id" id="id" value="" />
@@ -94,29 +92,58 @@
 
     //Adicionar uma nova linha e lançar via ajax
     $(document).ready(function() {
+        var forms = document.getElementsByClassName('needs-validation');
         $("#addLinha").submit(function(event) {
             event.preventDefault();
-
-            $.ajax({
-                url: "{{ route('areas.store') }}",
-                type: "POST",
-                data: $(this).serialize(),
-                dataType: "json",
-                success: function(response) {
-                    if (response.success === true) {
-
-                        $('#novalinha').modal('hide');
-                        $('#my_table_id').bootstrapTable('append', response.dados);
-
-                    } else {
-                        alert('erro');
-                    }
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                if (form.checkValidity() === false) {
+                    form.classList.add('was-validated');
+                    
+                }else{
+                    fullLoader();
+                    var formdata = new FormData($("form[name='addLinha']")[0]);
+                    $.ajax({
+                        url: "{{ route('areas.store') }}",
+                        type: "POST",
+                        data: formdata,
+                        dataType: "json",
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            $('#novalinha').modal('hide');
+                            $('#my_table_id').bootstrapTable('append', response);
+                            $("input").val("");
+                        },
+                        error: function(result) {
+                            console.log(result.matricula);
+                        }
+                    });
+                    fullLoader(false);
+                    $("input").val("");
                 }
             });
-            $("input").val("");
         });
     });
-
+    $("#addUpload").submit(function(event) {
+        event.preventDefault();
+        fullLoader();
+        var formdata = new FormData($("form[name='addUpload']")[0]);
+        $.ajax({
+            url: "{{ route('areas.upload') }}",
+            type: "POST",
+            data: formdata,
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $('#upload').modal('hide');
+            },
+            error: function(result) {
+                console.log(result.matricula);
+            }
+        });
+        fullLoader(false);
+    });
     //Excluir uma nova linha
     window.acaoEvents = {
         'click .remove': function(e, value, row) {
@@ -126,14 +153,13 @@
                     type: "DELETE",
                     dataType: "json",
                     success: function(response) {
-                        if (response.success === true) {
-                            $('#my_table_id').bootstrapTable('remove', {
-                                field: 'id',
-                                values: [row.id]
-                            });
-                        } else {
-                            alert('Impossível Excluir');
-                        }
+                        $('#my_table_id').bootstrapTable('remove', {
+                            field: 'id',
+                            values: [row.id]
+                        });
+                    },
+                    error: function(result) {
+                        console.log(result.matricula);
                     }
                 });
             }
@@ -149,7 +175,7 @@
             `<a class="text-danger m-1" href="#" onclick="setIdModal(${row.id})" data-toggle="modal" title="Atualizar Anexo" data-target="#upload">`,
             `<i class="fa fa-upload " aria-hidden="true"></i>`,
             `</a>`,
-            `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="areas/toView/${row.id}"  target="_blank" >`,
+            `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="{{ url('areas/toView/${row.id}') }}"  target="_blank" >`,
             `<i class="fa fa-search" aria-hidden="true"></i>`,
             `</a>`,
             '<a class="remove" href="javascript:void(0)" title="Remove">',

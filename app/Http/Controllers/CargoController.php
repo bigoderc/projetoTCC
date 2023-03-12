@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Curso;
-use App\Models\Turma;
+use App\Models\Cargo;
 use Illuminate\Http\Request;
 
-class TurmaController extends Controller
+class CargoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,7 @@ class TurmaController extends Controller
     public function index()
     {
         //
-        return view('pages.turmas.index',['cursos'=>Curso::all()]);
+        return view('pages.cargos.index');
     }
 
     /**
@@ -38,29 +37,29 @@ class TurmaController extends Controller
     public function store(Request $request)
     {
         //
-        $turma = Turma::create($request->all());
-        return response()->json(Turma::with('curso')->find($turma->id));
+        $dados = Cargo::create($request->all());
+        return response()->json($dados);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Turma  $turma
+     * @param  \App\Models\Cargo  $cargo
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
         //
-        return response()->json(Turma::with('curso')->where('fk_curso_id',$id)->get());
+        return response()->json(Cargo::all());
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Turma  $turma
+     * @param  \App\Models\Cargo  $cargo
      * @return \Illuminate\Http\Response
      */
-    public function edit(Turma $turma)
+    public function edit(Cargo $cargo)
     {
         //
     }
@@ -69,14 +68,14 @@ class TurmaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Turma  $turma
+     * @param  \App\Models\Cargo  $cargo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Turma $turma)
+    public function update(Request $request, Cargo $cargo)
     {
         //
         if($request->ajax()){
-            $turma->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
+            $cargo->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
             return response()->json(['success' => true]);
         }
     }
@@ -84,13 +83,13 @@ class TurmaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Turma  $turma
+     * @param  \App\Models\Cargo  $cargo
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         //
-        Turma::find($id)->delete();
+        Cargo::find($id)->delete();
         return response()->json(['success' => true]);
     }
 }

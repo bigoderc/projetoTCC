@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AreaController extends Controller
 {
@@ -37,11 +38,14 @@ class AreaController extends Controller
     public function store(Request $request)
     {
         //
-        $dados['dados']=Area::create($request->all());
-        if(!empty($dados)){
-            $dados['success'] =true;
+        if($request->hasFile('file')){
+            $value = $request->file('file');
+            $name = $request->nome.'-'.$value->getClientOriginalName();
+            Storage::disk('public')->putFileAs('areas',$value,$name);
+           $request['arquivo'] = $name;
         }
-        return json_encode($dados);
+        $dados=Area::create($request->all());
+        return response()->json($dados);
     }
 
     /**
@@ -53,8 +57,7 @@ class AreaController extends Controller
     public function show(Area $area)
     {
         //
-        $teste = $area->all();
-        return response()->json($teste);
+        return response()->json($area->all());
     }
 
     /**
@@ -90,9 +93,11 @@ class AreaController extends Controller
      * @param  \App\Models\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Area $area)
+    public function destroy($id)
     {
         //
+        Area::find($id)->delete();
+        return response()->json(['success' => true]);
     }
      /**
      * Display the specified resource.
@@ -105,36 +110,23 @@ class AreaController extends Controller
         //
         //dd('merda');
         if($request->hasFile('file')){
-            // Get filename with the extension
-            $filenameWithExt = $request->file('file')->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            // Get just ext
-           
-            $extension = $request->file('file')->getClientOriginalExtension();
-            // Filename to store
-            $fileNameToStore= $filename.'.'.$extension;
-            // Upload Image
-            $fileNameToStore = str_replace(" ", "",  $fileNameToStore);
-            $path = $request->file('file')->storeAs('anexos', $fileNameToStore,'public');
-            $request['arquivo'] = $fileNameToStore;
+            $value = $request->file('file');
+            $name = $request->nome.'-'.$value->getClientOriginalName();
+            Storage::disk('public')->putFileAs('areas',$value,$name);
+           $request['arquivo'] = $name;
         }
         $area->find($request->id)->update($request->all());
-        return redirect()->route('areas.index');
+        return response()->json(['success' => true]);
     }
     
     public function toView(Area $area,$id){
         $area = $area->find($id);
-        $img = asset("storage/projeto/".$area->arquivo);
+        $file =Storage::url("areas/".$area->arquivo);
         $pos = strpos($area->arquivo, '.pdf');
         if ($pos === false) {
-            echo "<img src='{$img}'/>";
-        }else{
-            header('Content-type: application/pdf');
-            header('Content-Disposition: inline; filename="arquivo.pdf"');
-            header('Content-Transfer-Encoding; binary');
-            header('Accept-Ranges; bytes');
-            readfile($img);
+            echo "<img src='{$file}'/>";
+        }else{  
+            echo "<iframe src='{$file}' width='100%' height='99%'></iframe>";
         }
     }
 
