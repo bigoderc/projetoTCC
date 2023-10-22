@@ -58,6 +58,10 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('areas/toView/{id}',[AreaController::class,'toView'])->name('areas.toView');
     Route::put('/alunos/update/{id}', [AlunoController::class, 'update'])->name('alunos.update');
     Route::get('/alunos/findById/{id}', [AlunoController::class, 'findById'])->name('alunos.findById');
+    Route::get('/temas/findById/{id}', [TemaController::class, 'findById'])->name('temas.findById');
+    Route::post('/temas/update/{id}', [TemaController::class, 'update'])->name('temas.update');
+    Route::get('/temas/toView/{id}',[TemaController::class,'toView'])->name('temas.toView');
+    Route::post('/temas/upload', [TemaController::class, 'upload'])->name('temas.upload');
     Route::post('/configuracoes/permission', [ConfiguracaoController::class, 'permission'])->name('configuracoes.permission');
     Route::post('/configuracoes/update', [ConfiguracaoController::class, 'update'])->name('configuracoes.update1');
     

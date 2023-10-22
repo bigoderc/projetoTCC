@@ -103,7 +103,6 @@
     }
     //Adicionar uma nova linha e lançar via ajax
     $(document).ready(function() {
-        fullLoader();
         form = ['nome','descricao'];
         $("#addLinha").submit(function(event) {
             event.preventDefault();
@@ -126,23 +125,7 @@
                 document.getElementById(`${elem}`).value = "";
             })
         });
-        let id_curso = `${document.getElementById('cursoSelect').value}`;
-        document.getElementById('fk_curso_id').value = id_curso;
-        $.ajax({
-            url:`{{ url('turmas/${id_curso}') }}`,
-            type: "GET",
-            success: function(response) {
-                if(response.length >0){
-                    $('#my_table_id').bootstrapTable('append', response);
-                }else{
-                    $('#my_table_id').bootstrapTable('removeAll');
-                }
-                fullLoader(false);
-            },
-            error: function(result) {
-                $('#my_table_id').bootstrapTable('removeAll');
-            }
-        });
+     
     });
 
     //Excluir uma nova linha

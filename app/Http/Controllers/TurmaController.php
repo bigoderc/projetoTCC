@@ -51,7 +51,7 @@ class TurmaController extends Controller
     public function show($id)
     {
         //
-        return response()->json(Turma::with('curso')->where('fk_curso_id',$id)->get());
+        
     }
 
     /**
