@@ -15,105 +15,78 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Adicionar nova linha</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <h5 class="modal-title" id="titulo">Adicionar Professor</h5>
+                                    <button type="button" class="close" onclick="fecharModal()" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <form id="addLinha">
+                                <form id="addLinha" class="needs-validation" novalidate>
                                     @csrf
                                     <div class="modal-body" class="my-2">
+                                        <input type="hidden" class="form-control" id="id" name="id">
                                         <label for="nome">Nome</label>
-                                        <input type="text" class="form-control" id="nome" name="nome">
-                                        <label for="nome">Siape</label>
-                                        <input type="text" maxlength="7" class="form-control" id="nome" name="matricula">
-                                        <label for="nome">Cargo</label>
-                                        <input type="text" class="form-control" id="matricula" name="cargo">
+                                        <input type="text" class="form-control" id="nome" name="nome" required>
+                                        <label for="siape">Siape</label>
+                                        <input type="text" maxlength="7" class="form-control" id="siape" name="siape" required>
+                                        <label for="email">Email</label>
+                                        <input type="email"  class="form-control" id="email" name="email" required>
+                                        <label for="cargo">Cargo</label>
+                                        <select class="form-control" name="fk_cargo_id" id="fk_cargo_id" aria-label="Default select example" required >
+                                            <option value="" selected>Selecione o Cargo</option>
+                                            @foreach($cargos as $cargo)
+                                            <option value="{{$cargo->id}}">{{$cargo->nome}}</option>
+                                            @endforeach
+                                        </select>
                                         <label for="nome" class="my-2">Área</label>
-                                        <select class="form-control" name="fk_areas_id" aria-label="Default select example">
-                                            <option selected>Selecione a Área</option>
+                                        <select class="form-control" name="fk_areas_id" id="fk_areas_id" aria-label="Default select example" required>
+                                            <option value="" selected>Selecione a Área</option>
                                             @foreach($areas as $area)
                                             <option value="{{$area->id}}">{{$area->nome}}</option>
                                             @endforeach
                                         </select>
-                                        <label for="nome">Especialidade</label>
-                                        <input type="text" class="form-control" id="matricula" name="especialidade">
-
-                                        <label for="nome">Grau</label>
-                                        <input type="text" class="form-control" id="matricula" name="grau">
-
+                                        <label for="especialidade">Especialidade</label>
+                                        <select class="form-control" name="fk_especialidade_id" id="fk_especialidade_id" aria-label="Default select example" required>
+                                            <option value="" selected>Selecione a Especialidade</option>
+                                            @foreach($especialidades as $especialidade)
+                                            <option value="{{$especialidade->id}}">{{$especialidade->nome}}</option>
+                                            @endforeach
+                                        </select>
+                                        <label for="grau">Grau</label>
+                                        <select class="form-control" name="fk_grau_id" id="fk_grau_id" aria-label="Default select example" required>
+                                            <option value="" selected>Selecione o Grau</option>
+                                            @foreach($graus as $grau)
+                                            <option value="{{$grau->id}}">{{$grau->nome}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                                        <button type="submit" class="btn btn-primary">Adicionar</button>
+                                        <button type="button" class="btn btn-secondary" onclick="fecharModal()">Fechar</button>
+                                        <button type="submit" id="salvar" class="btn btn-primary">Adicionar</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <table id="my_table_id" class="text-center" data-toggle="table" data-editable="true" data-editable-pk="id" data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR" data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25" data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true" data-search-accent-neutralise="true" data-editable-url="#">
+                <table id="my_table_id" class="text-center" data-toggle="table" data-editable="true" 
+                    data-editable-pk="id" data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR"
+                    data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true" 
+                    data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25" 
+                    data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true" 
+                    data-search-accent-neutralise="true" data-editable-url="#" data-url="{{ route('professores.show',1) }}">
                     <thead>
                         <tr>
                             <th data-field="id" class="col-1">ID</th>
                             <th data-field="nome" class="col-3" aria-required="true">NOME</th>
-                            <th data-field="descricao" class="col-3" aria-required="true">SIAPE</th>
-                            <th data-field="area" class="col-3" aria-required="true">ÁREA</th>
+                            <th data-field="siape" class="col-3" aria-required="true">SIAPE</th>
+                            <th data-field="areas.nome" class="col-3" aria-required="true">ÁREA</th>
+                            <th data-field="especialidade.nome" class="col-3" aria-required="true">ESPECIALIDADE</th>
+                            <th data-field="graus.nome" class="col-3" aria-required="true">GRAU</th>
+                            <th data-field="cargo.nome" class="col-3" aria-required="true">CARGO</th>
                             <th data-field="acao" class="col-1" data-formatter="acaoFormatter" data-events="acaoEvents">Ação</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($professores as $professor)
-                        <tr>
-                            <td>{{$professor->id}}</td>
-                            <td>{{$professor->nome}}</td>
-                            <td>{{$professor->matricula}}</td>
-                            <td>{{$professor->areas->nome}}</td>
-                            <td></td>
-                        </tr>
-                        <div class="modal fade" id="edit{{$professor->id}}" tabindex="-1" aria-labelledby="novalinha" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Editar {{$professor->nome}}</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <form action="{{ route('professores.update',$professor) }}" class="form" method="POST">
-                                        @method('PUT')
-                                        @csrf
-                                        <div class="modal-body" class="my-2">
-                                            <label for="nome">Nome</label>
-                                            <input type="text" class="form-control" id="nome" name="nome" value="{{ old('nome',$professor->nome) }}">
-                                            <label for="nome">Siape</label>
-                                            <input type="text" class="form-control" maxlength="7" id="matricula" name="matricula" value="{{ old('matricula',$professor->matricula) }}">
-                                            <label for="nome">Cargo</label>
-                                            <input type="text" class="form-control" id="matricula" name="cargo" value="{{ old('cargo',$professor->cargo) }}">
-                                            <label for="nome" class="my-2">area</label>
-                                            <select class="form-control" name="fk_area_id" aria-label="Default select example">
-                                                <option value="{{ old('nome',$professor->areas->id) }}" selected>{{ $professor->areas->nome}}</option>
-                                                @foreach($areas as $area)
-                                                <option value="{{$area->id}}">{{$area->nome}}</option>
-                                                @endforeach
-                                            </select>
-                                            <label for="nome">Especialidade</label>
-                                            <input type="text" class="form-control" id="matricula" name="especialidade" value="{{ old('especialidade',$professor->especialidade) }}">
-
-                                            <label for="nome">Grau</label>
-                                            <input type="text" class="form-control" id="matricula" name="grau" value="{{ old('grau',$professor->grau) }}">
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                                            <button type="submit" class="btn btn-primary">Salvar</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
-                    </tbody>
+                    
                 </table>
             </div>
         </div>
@@ -132,54 +105,124 @@
 
         //Adicionar uma nova linha e lançar via ajax
         $(document).ready(function() {
+            var forms = document.getElementsByClassName('needs-validation');
             $("#addLinha").submit(function(event) {
                 event.preventDefault();
-
-                $.ajax({
-                    url: "{{ route('professores.store') }}",
-                    type: "POST",
-                    data: $(this).serialize(),
-                    dataType: "json",
-                    success: function(response) {
-                        if (response.success === true) {
-                            $('#novalinha').modal('hide');
-                            $('#my_table_id').bootstrapTable('append', response.dados);
-                        } else {
-                            alert('erro');
-                        }
+                
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    if (form.checkValidity() === false) {
+                        form.classList.add('was-validated');
+                        
+                    }else{
+                        partialLoader();
+                        let id =document.getElementById('id').value;
+                        $.ajax({
+                            url: id > 0 ? `{{ url('professores/update/${id}') }}` : "{{ route('professores.store') }}",
+                            type: id >0 ? "PUT" : "POST",
+                            data: $("#addLinha").serialize(),
+                            dataType: "json",
+                            success: function(response) {
+                                
+                                fecharModal();
+                                
+                                id >0 ? $('#my_table_id').bootstrapTable('updateByUniqueId', {id:id, row: response,replace:false}):$('#my_table_id').bootstrapTable('prepend', response);
+                                partialLoader(false);
+                                $("input").val("");
+                                $("#tipo").val("default");
+                                successResponse();
+                            },
+                            error: function(result) {
+                                partialLoader(false);
+                            }
+                        });
+                        
                     }
-                });
-                $("input").val("");
+                    
+                })
             });
         });
 
         //Excluir uma nova linha
         window.acaoEvents = {
             'click .remove': function(e, value, row) {
-                if (confirm("Deseja Excluir " + row.nome + "?")) {
-                    $.ajax({
-                        url: "professores/" + row.id,
-                        type: "DELETE",
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success === true) {
+                deleteAlert().then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "professores/" + row.id,
+                            type: "DELETE",
+                            dataType: "json",
+                            success: function(response) {
                                 $('#my_table_id').bootstrapTable('remove', {
                                     field: 'id',
                                     values: [row.id]
                                 });
-                            } else {
-                                alert('Impossível Excluir');
+                                successResponse();
+                            },
+
+                            error: function(result) {
+                                // Lidar com o erro do Ajax, se necessário
                             }
-                        }
-                    });
-                }
+                        });
+                    }
+                });
             }
         }
+        function setIdModal(id) {
+            partialLoader();
+            document.getElementById('id').value = id;
+            $.ajax({
+                url: `{{ url('professores/findById/${id}') }}`,
+                type: "GET",
+                success: function(response) {
+                    $(`#titulo`).text(`Editar Professor ${response.nome}`);
+                    $(`#salvar`).text(`Salvar`);
+                    $(`#nome`).val(response.nome);
+                    $(`#siape`).val(response.siape);
+                    $(`#email`).val(response.user?.email);
+                    if(response.user){
+                        $(`#email`).prop('disabled',true);
+                    }
+                    $(`#fk_cargo_id option[value=${response.fk_cargo_id}]`).prop('selected','selected').change();
+                    $(`#fk_areas_id option[value=${response.fk_areas_id}]`).prop('selected','selected').change();
+                    $(`#fk_especialidade_id option[value=${response.fk_especialidade_id}]`).prop('selected','selected').change();
+                    $(`#fk_grau_id option[value=${response.fk_grau_id}]`).prop('selected','selected').change();
+                    $('#novalinha').modal('show');
+                    partialLoader(false);
 
+                },
+                error: function(result) {
+                    partialLoader(false);
+                    errorResponse('erro');
+                }
+            });
+            
+        }
+        function fecharModal() {
+
+            $(`#titulo`).text(`Adicionar Professor`);
+            $(`#salvar`).text(`Adicionar`);
+            // Por exemplo, você pode redefinir os campos de entrada do formulário dentro do modal
+            $("input").val("");
+            $("textarea").val("");
+            
+            $('#novalinha').modal('hide');
+            // Limpar o select de Área
+            $("#fk_areas_id").val("");
+            // Limpar o select de Cargo
+            $("#fk_cargo_id").val("");
+
+            // Limpar o select de Especialidade
+            $("#fk_especialidade_id").val("");
+
+            // Limpar o select de Grau
+            $("#fk_grau_id").val("");
+
+            
+        }
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             return [
-                `<a class="text-info p-1" href="#" data-toggle="modal" data-target="#edit${row.id}">`,
+                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
                 `<i class="fa fa-edit"></i>`,
                 `</a>`,
                 '<a class="remove" href="javascript:void(0)" title="Remove">',

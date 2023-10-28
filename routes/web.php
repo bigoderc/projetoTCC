@@ -24,6 +24,8 @@ use App\Http\Controllers\CursoController;
 use App\Http\Controllers\EspecialidadeController;
 use App\Http\Controllers\GrauController;
 use App\Http\Controllers\TurmaController;
+use App\Models\Professor;
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -58,6 +60,8 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('areas/toView/{id}',[AreaController::class,'toView'])->name('areas.toView');
     Route::put('/alunos/update/{id}', [AlunoController::class, 'update'])->name('alunos.update');
     Route::get('/alunos/findById/{id}', [AlunoController::class, 'findById'])->name('alunos.findById');
+    Route::get('/professores/findById/{id}', [ProfessorController::class, 'findById'])->name('professores.findById');
+    Route::put('/professores/update/{id}', [ProfessorController::class, 'update'])->name('professores.update');
     Route::get('/temas/findById/{id}', [TemaController::class, 'findById'])->name('temas.findById');
     Route::post('/temas/update/{id}', [TemaController::class, 'update'])->name('temas.update');
     Route::get('/temas/toView/{id}',[TemaController::class,'toView'])->name('temas.toView');

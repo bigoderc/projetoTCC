@@ -12,16 +12,30 @@ class Professor extends Model
     protected $fillable = [
         'id',
         'nome',
-        'matricula',
+        'siape',
         'fk_areas_id',
-        'grau',
-        'especialidade',
-        'cargo'
+        'fk_grau_id',
+        'fk_especialidade_id',
+        'fk_cargo_id',
+        'fk_user_id'
     ];
 
     public $timestamps = false;
-    protected $with = ['areas'];
+    
     public function areas(){
         return $this->hasOne(Area::class,'id','fk_areas_id');
     }
+    public function especialidade(){
+        return $this->hasOne(Especialidade::class,'id','fk_especialidade_id');
+    }
+    public function graus(){
+        return $this->hasOne(Grau::class,'id','fk_grau_id');
+    }
+    public function cargo(){
+        return $this->hasOne(Cargo::class,'id','fk_cargo_id');
+    }
+    public function user(){
+        return $this->hasOne(User::class,'id','fk_user_id');
+    }
+    
 }

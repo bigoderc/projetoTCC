@@ -120,21 +120,20 @@
                     form.classList.add('was-validated');
                     
                 }else{
+                    
                     fullLoader();
                     let id =document.getElementById('id').value;
                     $.ajax({
                         url: id > 0 ? `{{ url('alunos/update/${id}') }}` : "{{ route('alunos.store') }}",
                         type: id >0 ? "PUT" : "POST",
-                        data: $(this).serialize(),
+                        data: $(`#addLinha`).serialize(),
                         dataType: "json",
                         success: function(response) {
-                            console.log(id);
                             $('#novalinha').modal('hide');
                             id >0 ? $('#my_table_id').bootstrapTable('updateByUniqueId', {id:id, row: response,replace:false}):$('#my_table_id').bootstrapTable('append', response);
                             
                         },
                         error: function(result) {
-                            console.log(result.matricula);
                         }
                     });
                     fullLoader(false);
@@ -192,7 +191,6 @@
                 select.setAttribute('name', "fk_turma_id");
                 select.setAttribute('required', true);
                 select.setAttribute('class', 'form-control');
-
                 for (var i = 0; i < response.length; i++) {
 
                     let option = document.createElement("option");
@@ -201,7 +199,6 @@
 
                     select.append(option);
                 }
-
                 document.getElementById("turma").append(select);
                 fullLoader(false);
             },

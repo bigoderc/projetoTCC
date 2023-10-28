@@ -73,14 +73,11 @@
                 data: $(this).serialize(),
                 dataType: "json",
                 success: function(response) {
-                    if (response.success === true) {
-
-                        $('#novalinha').modal('hide');
-                        $('#my_table_id').bootstrapTable('append', response.dados);
-
-                    } else {
-                        alert('erro');
-                    }
+                    $('#novalinha').modal('hide');
+                    $('#my_table_id').bootstrapTable('append', response);
+                },
+                error: function(result) {
+                    console.log(result.matricula);
                 }
             });
             $("input").val("");

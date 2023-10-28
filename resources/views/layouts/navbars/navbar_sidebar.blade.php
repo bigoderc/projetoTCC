@@ -158,69 +158,94 @@
     </div>
 </div> --}}
 
+@push('css')
+    <style>
+        #navbar {
+            height: calc(100vh - 66px - 40px - 1rem);
+            overflow: auto;
+
+            -ms-overflow-style: none;
+            /* Internet Explorer 10+ */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        #navbar::-webkit-scrollbar {
+            display: none;
+            /* Safari and Chrome */
+        }
+
+        .rounded {
+            border-radius: 0.375rem !important;
+        }
+    </style>
+@endpush
+
 @push('scripts')
-<script>
-    let $sidebar = $(".sidebar");
-    let $button = $(".sidebar > div > ul > li");
-    let $buttonDiv = $(".sidebar > div > ul > li > div");
-    let $buttonSpan = $(".sidebar > div > ul > li > div > a > span");
-    let $dropdown = $(".sidebar > div > ul > li > ul");
+    <script>
+        let $sidebar = $(".sidebar");
+        let $button = $(".sidebar >  div > ul > li");
+        let $buttonDiv = $(".sidebar > div > ul > li > div");
+        let $buttonSpan = $(".sidebar > div > ul > li > div > a > span");
+        let $dropdown = $(".sidebar > div > ul > li > ul");
 
-    function hide(element) {
-        element.addClass("d-none");
+        function hide(element) {
+            element.addClass("d-none");
 
-    }
+        }
 
-    function show(element) {
-        element.removeClass("d-none");
-    }
+        function show(element) {
+            element.removeClass("d-none");
+        }
 
-    function open(){
-        $sidebar.addClass("extended");
+        function open() {
+            $sidebar.addClass("extended");
 
-        $buttonDiv.removeClass("justify-content-center");
-        show($buttonSpan);
-        $dropdown.prev().children("a").addClass("dropdown-toggle")
+            $buttonDiv.removeClass("justify-content-center");
+            show($buttonSpan);
+            $dropdown.prev().children("a").addClass("dropdown-toggle")
 
-        show($(".proj-name"));
-        show($(".user"));
-        hide($(".version"));
-    }
+            show($(".proj-name"));
+            show($(".user"));
+            hide($(".version"));
+            hide($(".img"));
+        }
 
-    function close(){
-        hide($dropdown);
-        $sidebar.removeClass("extended");
+        function close() {
+            hide($dropdown);
+            $sidebar.removeClass("extended");
 
-        $buttonDiv.addClass("justify-content-center");
-        hide($buttonSpan);
-        $dropdown.prev().children("a").removeClass("dropdown-toggle")
+            $buttonDiv.addClass("justify-content-center");
+            hide($buttonSpan);
+            $dropdown.prev().children("a").removeClass("dropdown-toggle")
 
-        hide($(".proj-name"));
-        hide($(".user"));
-        show($(".version"));
-    }
+            hide($(".proj-name"));
+            hide($(".user"));
+            show($(".version"));
+            show($(".img"));
+        }
 
-    $( document ).ready(function() {
+        $(document).ready(function() {
 
-        $sidebar.on("mouseover", function() {
-            open();
+            $sidebar.on("mouseover", function() {
+                open();
+            });
+
+            $sidebar.on("mouseleave", function() {
+                close()
+            });
+
+            $button.on("click", function() {
+
+                var $thisDropdown = $(this).children("ul");
+
+                if ($thisDropdown.css('display') == "none") {
+                    hide($dropdown);
+                    show($thisDropdown);
+                } else {
+                    hide($thisDropdown);
+                }
+            });
         });
-
-        $sidebar.on("mouseleave", function() {
-            close()
-        });
-
-        $button.on("click", function() {
-
-            var $thisDropdown = $(this).children("ul");
-
-            if ($thisDropdown.css('display') == "none") {
-                hide($dropdown);
-                show($thisDropdown);
-            } else {
-                hide($thisDropdown);
-            }
-        });
-    });
-</script>
+    </script>
 @endpush
