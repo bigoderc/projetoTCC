@@ -77,9 +77,7 @@
             'X-CSRF-TOKEN': '{{csrf_token()}}'
         }
     });
-    $('select').select2({
-        maximumInputLength: 20 // only allow terms up to 20 characters long
-    });
+    
 
     function getNewCurso() {
         fullLoader();
@@ -103,6 +101,7 @@
     }
     //Adicionar uma nova linha e lançar via ajax
     $(document).ready(function() {
+        getNewCurso();
         form = ['nome','descricao'];
         $("#addLinha").submit(function(event) {
             event.preventDefault();
@@ -113,12 +112,13 @@
                 data: $(this).serialize(),
                 dataType: "json",
                 success: function(response) {
+                    
                     $('#novalinha').modal('hide');
                     $('#my_table_id').bootstrapTable('append', response);
-                    
+                    successResponse();
                 },
                 error: function(result) {
-                    alert('erro');
+                    errorResponse('Erro inesperado');
                 }
             });
             form.map(function(elem) {
@@ -142,8 +142,9 @@
                                 field: 'id',
                                 values: [row.id]
                             });
+                            successResponse();
                         } else {
-                            alert('Impossível Excluir');
+                            errorResponse('Erro inesperado');
                         }
                     }
                 });
