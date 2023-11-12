@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProjetoRequest;
+use App\Models\Area;
 use App\Models\Professor;
 use App\Models\Projeto;
 use Illuminate\Http\Request;
@@ -13,11 +15,24 @@ class ProjetoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $professor,$model,$area;
+
+    public function __construct()
+    {
+        $this->professor = new Professor();
+        $this->model = new Projeto();
+        $this->area = new Area();
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Projeto $projetos)
     {
         //
         //dd($projetos->get());
-        return view('pages.projetos.index',['projetos'=>$projetos->get(),'professores'=>Professor::get()]);
+        return view('pages.projetos.index',['areas'=>$this->area->get(),'professores'=>$this->professor->get()]);
     }
 
     /**
@@ -36,7 +51,7 @@ class ProjetoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProjetoRequest $request)
     {
         //
         if($request->hasFile('arquivo')){
@@ -54,11 +69,9 @@ class ProjetoController extends Controller
             $path = $request->file('arquivo')->storeAs('projeto', $fileNameToStore,'public');
             $request['projeto'] = $fileNameToStore;
         }
-        $dados['dados']=Projeto::create($request->all());
-        if(!empty($dados)){
-            $dados['success'] =true;
-        }
-        return redirect()->route('projetos.index');
+        $dados=Projeto::create($request->all());
+       
+        return response()->json($this->model->with(['professor','area'])->find($dados->id));
     }
 
     /**
@@ -70,20 +83,19 @@ class ProjetoController extends Controller
     public function show(Projeto $projeto)
     {
         //
-        
-        $img = asset("storage/projeto/".$projeto->projeto);
-        $pos = strpos($projeto->projeto, '.pdf');
-        if ($pos === false) {
-            echo "<img src='{$img}'/>";
-        }else{
-            header('Content-type: application/pdf');
-            header('Content-Disposition: inline; filename="arquivo.pdf"');
-            header('Content-Transfer-Encoding; binary');
-            header('Accept-Ranges; bytes');
-            readfile($img);
-        }
+        return response()->json($this->model->with(['professor','area'])->get());
     }
-
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Projeto  $projeto
+     * @return \Illuminate\Http\Response
+     */
+    public function findById($id)
+    {
+        //
+        return response()->json($this->model->with(['professor','area'])->find($id));
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -102,7 +114,7 @@ class ProjetoController extends Controller
      * @param  \App\Models\Projeto  $projeto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Projeto $projeto)
+    public function update(StoreProjetoRequest $request, $id)
     {
         //
         if($request->hasFile('arquivo')){
@@ -120,8 +132,8 @@ class ProjetoController extends Controller
             $path = $request->file('arquivo')->storeAs('projeto', $fileNameToStore,'public');
             $request['projeto'] = $fileNameToStore;
         }
-        $projeto->update($request->all());
-        return redirect()->route('projetos.index');
+        $this->model->find($id)->update($request->all());
+        return response()->json($this->model->with(['professor','area'])->find($id));
     }
 
     /**
@@ -130,8 +142,10 @@ class ProjetoController extends Controller
      * @param  \App\Models\Projeto  $projeto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Projeto $projeto)
+    public function destroy($id)
     {
         //
+        $this->model->find($id)->delete();
+        return response()->json(true);
     }
 }

@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AlunoStoreRequest;
 use App\Models\Aluno;
 use App\Models\Curso;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AlunoController extends Controller
 {
-    protected $model;
-    public function __construct(Aluno $aluno)
+    protected $model,$user;
+    public function __construct(Aluno $aluno,User $user)
     {
-     $this->model = $aluno;   
+        $this->model = $aluno;   
+        $this->user = $user;   
     }
 
     /**
@@ -46,6 +49,14 @@ class AlunoController extends Controller
     public function store(AlunoStoreRequest $request)
     {
         //
+        $user = $this->user->create(
+            [
+                "name" =>$request->nome,
+                "email" =>$request->email,
+                "password" => Hash::make('alterar123'),
+            ]
+        );
+        $request['fk_user_id'] = $user->id;
         $dados=Aluno::create($request->all());
         return response()->json($this->model->with(['curso','turma'])->find($dados->id));
     }

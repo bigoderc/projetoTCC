@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreGrauRequest;
 use App\Models\Grau;
 use Illuminate\Http\Request;
 
@@ -34,7 +35,7 @@ class GrauController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreGrauRequest $request)
     {
         //
         $dados = Grau::create($request->all());

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCargoRequest;
 use App\Models\Cargo;
 use Illuminate\Http\Request;
 
@@ -34,7 +35,7 @@ class CargoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCargoRequest $request)
     {
         //
         $dados = Cargo::create($request->all());
@@ -90,6 +91,6 @@ class CargoController extends Controller
     {
         //
         Cargo::find($id)->delete();
-        return response()->json(['success' => true]);
+        return response()->json(true);
     }
 }

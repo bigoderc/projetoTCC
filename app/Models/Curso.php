@@ -22,4 +22,20 @@ class Curso extends Model
         'nome',
         'descricao'
     ];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (auth()->check()) {
+                $model->user_id_created = auth()->user()->id;
+            }
+        });
+
+        static::updating(function ($model) {
+            if (auth()->check()) {
+                $model->user_id_updated = auth()->user()->id;
+            }
+        });
+    }
 }

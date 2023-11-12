@@ -2,17 +2,17 @@
     z-index: 1;">
     <div class="d-flex justify-content-center align-items-center text-white my-3">
         <div class="img" >
-			<img src="{{ asset('img/LSMais.svg') }}" alt="Logo da empresa" width="50" height="40">
+			<span class="h2">GRC</span>
       	</div>
-      	<div class="proj-name pl-3 d-none">
-            <span class="h2">GRC</span>
+      	<div class="proj-name  d-none">
+            <img src="{{ asset('img/marca-if-baiano-horizontal.png') }}" alt="Logo da empresa" width="200" height="55">
       	</div>
     </div>
 
     <div>
         <ul class="nav flex-column">
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
-                <div class="d-flex justify-content-center py-2">
+                <div class="d-flex justify-content-center">
                     <a class="text-decoration-none text-nowrap text-white" href="{{ route('home') }}">
                         <i class="px-2 fa fa-solid fa-home fa-lg"></i>
                         <span class="d-none">{{ ('Inicio') }}</span>
@@ -22,7 +22,7 @@
 
             @if(Gate::check('usuario') || Gate::check('professor') || Gate::check('aluno') || Gate::check('areas')|| Gate::check('tema')||Gate::check('projeto')||Gate::check('cursp'))
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
-                <div class="d-flex justify-content-center py-2" role="button">
+                <div class="d-flex justify-content-center" role="button">
                     <a class="text-decoration-none text-nowrap text-white" href="#">
                         <i class="lg nc-icon nc-single-copy-04 px-2"></i>
                         <span class="d-none">Cadastro</span>
@@ -114,7 +114,7 @@
             
             @can('configuracoes')
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
-                <div class="d-flex justify-content-center py-2">
+                <div class="d-flex justify-content-center">
                     <a class="text-decoration-none text-nowrap text-white" href="{{ route('configuracoes.index') }}">
                         <i class="px-2 fa fa-solid fa-lg fa-cog"></i>
                         <span class="d-none">{{ ('Configurações') }}</span>
@@ -123,7 +123,7 @@
             </li>
             @endcan
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
-                <div class="d-flex justify-content-center py-2">
+                <div class="d-flex justify-content-center">
                     <a class="text-decoration-none text-nowrap text-white" href="{{ route('login') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="px-2 fa fa-solid fa-lg fa-sign-out"></i>
                         <span class="d-none">{{ ('Sair') }}</span>

@@ -67,9 +67,12 @@
 }
 
 .content-page {
-    margin-left: 66px;
     height: 100vh;
     overflow: auto;
+    max-width: calc(100vw - 66px);
+    margin-left: 66px;
+    padding: 1rem;
+    
 }
 
 .icon-panel-menu {

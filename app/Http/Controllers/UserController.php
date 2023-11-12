@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +12,11 @@ use App\Models\RoleUser;
 
 class UserController extends Controller
 {
+    protected $model;
+    public function __construct(User $user)
+    {
+     $this->model = $user;   
+    }
     /**
      * Display a listing of the resource.
      *
@@ -33,44 +39,34 @@ class UserController extends Controller
         //
     }
     /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-    }
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $data)
+    public function store(StoreUserRequest $data)
     {
         //
 
         $dados=User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => Hash::make('alterar123'),
         ]);
-        if($dados){
-            RoleUser::create([
-                'fk_roles_id'=> $data['fk_roles_id'],
-                'fk_users_id'=> $dados->id
-            ]);
+        $user = User::findOrFail($dados->id);
+         // Atualizar os papéis (roles) do usuário usando sync
+        $user->roles()->sync([$data->input('fk_roles_id')]);
+
+        // Recarregar o modelo com a relação 'roles'
+        $user = $user->load('roles');
+       
+        $data = $this->model->with('roles')->find($dados->id);
+
+        if ($data) {
+            $data->role = $data->roles->first();
         }
-        $teste['dados']= $dados;
-        $teste['success'] = true;
-        
-        return json_encode($teste);
+
+        return response()->json($data);
     }
 
     /**
@@ -82,8 +78,31 @@ class UserController extends Controller
     public function show($id)
     {
         //
-    }
+        $data = $this->model->with('roles')->get();
 
+        $data->each(function ($item) {
+            $item->role = $item->roles->first();
+        });
+
+        return response()->json($data);
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function findById($id)
+    {
+        //
+        $data = $this->model->with('roles')->find($id);
+
+        if ($data) {
+            $data->role = $data->roles->first();
+        }
+
+        return response()->json($data);
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -102,11 +121,30 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,User $user, $id)
+    public function update(StoreUserRequest $request,User $user, $id)
     {
         //
-        $user->find($id)->update($request->all());
-        return redirect()->route('users.index');
+        $user = User::findOrFail($id);
+
+        // Atualizar os dados do usuário
+        $user->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+        ]);
+    
+        // Atualizar os papéis (roles) do usuário usando sync
+        $user->roles()->sync([$request->input('fk_roles_id')]);
+    
+        // Recarregar o modelo com a relação 'roles'
+        $user = $user->load('roles');
+    
+        $data = $this->model->with('roles')->find($id);
+
+        if ($data) {
+            $data->role = $data->roles->first();
+        }
+
+        return response()->json($data);
     }
 
     /**
@@ -115,10 +153,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user,$id)
+    public function destroy($id)
     {
         //
-        $user->find($id)->delete();
-        return redirect()->route('users.index');
+        $this->model->find($id)->delete();
+        return response()->json(true);
     }
 }

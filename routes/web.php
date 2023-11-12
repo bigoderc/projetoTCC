@@ -66,7 +66,19 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::post('/temas/update/{id}', [TemaController::class, 'update'])->name('temas.update');
     Route::get('/temas/toView/{id}',[TemaController::class,'toView'])->name('temas.toView');
     Route::post('/temas/upload', [TemaController::class, 'upload'])->name('temas.upload');
-    Route::post('/configuracoes/permission', [ConfiguracaoController::class, 'permission'])->name('configuracoes.permission');
-    Route::post('/configuracoes/update', [ConfiguracaoController::class, 'update'])->name('configuracoes.update1');
+    Route::get('/projetos/findById/{id}', [ProjetoController::class, 'findById'])->name('projetos.findById');
+    Route::post('/projetos/update/{id}', [ProjetoController::class, 'update'])->name('projetos.update');
+    Route::get('/users/findById/{id}', [UserController::class, 'findById'])->name('users.findById');
+    Route::put('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
+    
+    //configuraçoes
+    Route::get('/configuracao', [ConfiguracaoController::class, 'index'])->name('configuracao');
+    Route::get('/configuracao/permission/{role}', [ConfiguracaoController::class, 'permission'])->name('configuracao.permission');
+    Route::get('/configuracao/getPermission/{role}', [ConfiguracaoController::class, 'getPermission'])->name('configuracao.getPermission');
+    Route::post('/configuracao/setPermission', [ConfiguracaoController::class, 'setPermission'])->name('configuracao.setPermission');
+    Route::any('/configuracao/show', [ConfiguracaoController::class, 'show'])->name('configuracao.show');
+    Route::post('/configuracao/store', [ConfiguracaoController::class, 'store'])->name('configuracao.store');
+    Route::post('/configuracao/setRole', [ConfiguracaoController::class, 'setRole'])->name('configuracao.setRole');
+    Route::post('/configuracao/update', [ConfiguracaoController::class, 'update'])->name('configuracao.update');
     
 });

@@ -15,8 +15,8 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="titulo">Adicionar Aluno</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <h5 class="modal-title" id="titulo">Adicionar</h5>
+                                    <button type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -53,7 +53,8 @@
                                             <div class="col">
                                                 <label for="nome">Matriculado</label>
                                                 <select class="form-control" name="matriculado" id="matriculado" aria-label="Default select example">
-                                                    <option value="S" selected>Sim</option>
+                                                    <option value="" selected>Selecione</option>
+                                                    <option value="S">Sim</option>
                                                     <option value="N">Não</option>
                                                 </select>
                                             </div>
@@ -70,7 +71,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                        <button type="button" class="btn btn-secondary" onclick="clearForm('addLinha','novalinha')">Fechar</button>
                                         <button type="submit" id="salvar" class="btn btn-primary">Adicionar</button>
                                     </div>
                                 </form>
@@ -121,7 +122,7 @@
                     
                 }else{
                     
-                    fullLoader();
+                    partialLoader();
                     let id =document.getElementById('id').value;
                     $.ajax({
                         url: id > 0 ? `{{ url('alunos/update/${id}') }}` : "{{ route('alunos.store') }}",
@@ -129,15 +130,19 @@
                         data: $(`#addLinha`).serialize(),
                         dataType: "json",
                         success: function(response) {
-                            $('#novalinha').modal('hide');
-                            id >0 ? $('#my_table_id').bootstrapTable('updateByUniqueId', {id:id, row: response,replace:false}):$('#my_table_id').bootstrapTable('append', response);
+                            partialLoader(false);
+                            clearForm('addLinha','novalinha');
                             
+                            
+                            id >0 ? $('#my_table_id').bootstrapTable('updateByUniqueId', {id:id, row: response,replace:false}):$('#my_table_id').bootstrapTable('append', response);
+                            successResponse();
                         },
-                        error: function(result) {
+                        error: function(xhr, status, error) {
+                            partialLoader(false);
+                            errorResponse(xhr.status,xhr.responseJSON.data,xhr.responseText);
                         }
                     });
-                    fullLoader(false);
-                    $("input").val("");
+                   
                 }
                 
             })
@@ -147,23 +152,28 @@
     //Excluir uma nova linha
     window.acaoEvents = {
         'click .remove': function(e, value, row) {
-            if (confirm("Deseja Excluir " + row.nome + "?")) {
-                $.ajax({
-                    url: "alunos/" + row.id,
-                    type: "DELETE",
-                    dataType: "json",
-                    success: function(response) {
-                        if (response.success === true) {
+            deleteAlert().then((result) => {
+                if (result.isConfirmed) {
+                    partialLoader();
+                    $.ajax({
+                        url: "alunos/" + row.id,
+                        type: "DELETE",
+                        dataType: "json",
+                        success: function(response) {
+                            partialLoader(false);
                             $('#my_table_id').bootstrapTable('remove', {
                                 field: 'id',
                                 values: [row.id]
                             });
-                        } else {
-                            alert('Impossível Excluir');
+                            successResponse();
+                        },
+                        error: function(xhr, status, error) {
+                            partialLoader(false);
+                            errorResponse(xhr.status,xhr.responseJSON.data,xhr.responseText);
                         }
-                    }
-                });
-            }
+                    });
+                }
+            })
         }
     }
 
@@ -179,7 +189,7 @@
         ].join('');
     }
     $("#fk_curso_id").change(function() {
-        fullLoader();
+        partialLoader();
         $("#turma").find("*").not("label").remove();
         let id_curso = $(this).val();
         $.ajax({
@@ -200,9 +210,11 @@
                     select.append(option);
                 }
                 document.getElementById("turma").append(select);
-                fullLoader(false);
+                partialLoader(false);
             },
-            error: function(result) {
+            error: function(xhr, status, error) {
+                partialLoader(false);
+                errorResponse(xhr.status,xhr.responseJSON.data,xhr.responseText);
             }
         });
     });
@@ -224,9 +236,11 @@
                     $(`#fk_curso_id option[value=${response.fk_curso_id}]`).prop('selected','selected').change();
                     $(`#fk_turma_id option[value=${response.fk_turma_id}]`).prop('selected','selected').change();
                     $('#novalinha').modal('show');
+                    partialLoader(false);
                 },
-                error: function(result) {
-                    alert('erro');
+                error: function(xhr, status, error) {
+                    partialLoader(false);
+                    errorResponse(xhr.status,xhr.responseJSON.data,xhr.responseText);
                 }
             });
         

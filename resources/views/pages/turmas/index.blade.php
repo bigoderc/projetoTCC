@@ -29,21 +29,21 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Adicionar nova linha</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <form id="addLinha">
+                                <form id="addLinha" class="needs-validation" novalidate>
                                     @csrf
                                     <div class="modal-body" class="my-2">
                                         <label for="nome">Nome</label>
-                                        <input type="text" class="form-control" id="nome" name="nome">
+                                        <input type="text" class="form-control" id="nome" name="nome" required>
                                         <label for="nome">Descrição</label>
                                         <input type="text" class="form-control" id="descricao" name="descricao">
                                         <input type="hidden" class="form-control" id="fk_curso_id" name="fk_curso_id">
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                        <button type="button" class="btn btn-secondary" onclick="clearForm('addLinha','novalinha')">Fechar</button>
                                         <button type="submit" class="btn btn-primary">Adicionar</button>
                                     </div>
                                 </form>
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-                <table id="my_table_id" class="text-center" data-toggle="table" data-editable="true" data-editable-pk="id" data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR" data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25" data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true" data-search-accent-neutralise="true" data-editable-url="{{ route('turmas.update1') }}" data-url="#">
+                <table id="my_table_id" class="text-center" data-toggle="table" data-editable="true" data-editable-pk="id" data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR" data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25" data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true" data-search-accent-neutralise="true" data-editable-url="{{ route('turmas.update1') }}">
                     <thead>
                         <tr>
                             <th data-field="id" class="col-1">ID</th>
@@ -80,7 +80,7 @@
     
 
     function getNewCurso() {
-        fullLoader();
+        partialLoader();
         let id_curso = `${document.getElementById('cursoSelect').value}`;
         document.getElementById('fk_curso_id').value = id_curso;
         $.ajax({
@@ -92,7 +92,7 @@
                 }else{
                     $('#my_table_id').bootstrapTable('removeAll');
                 }
-                fullLoader(false);
+                partialLoader(false);
             },
             error: function(result) {
                 $('#my_table_id').bootstrapTable('removeAll');
@@ -103,54 +103,66 @@
     $(document).ready(function() {
         getNewCurso();
         form = ['nome','descricao'];
+        var forms = document.getElementsByClassName('needs-validation');
         $("#addLinha").submit(function(event) {
             event.preventDefault();
+            var validation = Array.prototype.filter.call(forms, function(form) {
+            if (form.checkValidity() === false) {
+                form.classList.add('was-validated');
 
-            $.ajax({
-                url: "{{ route('turmas.store') }}",
-                type: "POST",
-                data: $(this).serialize(),
-                dataType: "json",
-                success: function(response) {
-                    
-                    $('#novalinha').modal('hide');
-                    $('#my_table_id').bootstrapTable('append', response);
-                    successResponse();
-                },
-                error: function(result) {
-                    errorResponse('Erro inesperado');
-                }
-            });
-            form.map(function(elem) {
-                document.getElementById(`${elem}`).value = "";
-            })
+            } else {
+                $.ajax({
+                    url: "{{ route('turmas.store') }}",
+                    type: "POST",
+                    data: $("#addLinha").serialize(),
+                    dataType: "json",
+                    success: function(response) {
+                        
+                        clearForm('addLinha', 'novalinha')
+                        partialLoader(false);
+                        $('#my_table_id').bootstrapTable('append', response);
+                        successResponse();
+                    },
+                    error: function(xhr, status, error) {
+                        partialLoader(false);
+                        errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                            .responseText);
+                    }
+                });
+            }
+        });
         });
      
     });
 
     //Excluir uma nova linha
     window.acaoEvents = {
-        'click .remove': function(e, value, row) {
-            if (confirm("Deseja Excluir " + row.nome + "?")) {
+    'click .remove': function(e, value, row) {
+        deleteAlert().then((result) => {
+            if (result.isConfirmed) {
+                partialLoader();
                 $.ajax({
                     url: "turmas/" + row.id,
                     type: "DELETE",
                     dataType: "json",
                     success: function(response) {
-                        if (response.success === true) {
-                            $('#my_table_id').bootstrapTable('remove', {
-                                field: 'id',
-                                values: [row.id]
-                            });
-                            successResponse();
-                        } else {
-                            errorResponse('Erro inesperado');
-                        }
+                        partialLoader(false);
+                        $('#my_table_id').bootstrapTable('remove', {
+                            field: 'id',
+                            values: [row.id]
+                        });
+                        successResponse();
+                    },
+                    error: function(xhr, status, error) {
+                        partialLoader(false);
+                        errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                            .responseText);
                     }
                 });
             }
-        }
+        })
     }
+}
 
     function setIdModal(id) {
         document.getElementById('id').value = id;

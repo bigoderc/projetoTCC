@@ -27,6 +27,22 @@ class Tema extends Model
     ];
     public $timestamps = false;
     public function area(){
-        return $this->hasOne(Area::class,'id','fk_areas_id');
+        return $this->hasOne(Area::class,'id','fk_areas_id')->withTrashed();
+    }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (auth()->check()) {
+                $model->user_id_created = auth()->user()->id;
+            }
+        });
+
+        static::updating(function ($model) {
+            if (auth()->check()) {
+                $model->user_id_updated = auth()->user()->id;
+            }
+        });
     }
 }

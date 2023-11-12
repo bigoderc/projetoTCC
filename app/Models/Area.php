@@ -24,6 +24,20 @@ class Area extends Model
         'link',
         'arquivo'
     ];
+    protected static function boot()
+    {
+        parent::boot();
 
-    public $timestamps = false;
+        static::creating(function ($model) {
+            if (auth()->check()) {
+                $model->user_id_created = auth()->user()->id;
+            }
+        });
+
+        static::updating(function ($model) {
+            if (auth()->check()) {
+                $model->user_id_updated = auth()->user()->id;
+            }
+        });
+    }
 }

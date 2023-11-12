@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProfessorRequest;
 use App\Models\Area;
 use App\Models\Cargo;
 use App\Models\Especialidade;
@@ -62,7 +63,7 @@ class ProfessorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProfessorRequest $request)
     {
         //
         $user = $this->user->create(
@@ -142,6 +143,6 @@ class ProfessorController extends Controller
     {
         //
         $this->professor->find($id)->delete();
-        return response()->json(['success' => true]);
+        return response()->json(true);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTurmaRequest;
 use App\Models\Curso;
 use App\Models\Turma;
 use Illuminate\Http\Request;
@@ -35,7 +36,7 @@ class TurmaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTurmaRequest $request)
     {
         //
         $turma = Turma::create($request->all());

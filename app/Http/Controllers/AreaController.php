@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAreaRequest;
 use App\Models\Area;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class AreaController extends Controller
 {
+    protected $model;
+    public function __construct(Area $area)
+    {
+     $this->model = $area;   
+    }
     /**
      * Display a listing of the resource.
      *
@@ -35,7 +41,7 @@ class AreaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreAreaRequest $request)
     {
         //
         if($request->hasFile('file')){
@@ -54,10 +60,10 @@ class AreaController extends Controller
      * @param  \App\Models\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function show(Area $area)
+    public function show()
     {
         //
-        return response()->json($area->all());
+        return response()->json($this->model->all());
     }
 
     /**

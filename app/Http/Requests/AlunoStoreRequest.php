@@ -33,8 +33,27 @@ class AlunoStoreRequest extends FormRequest
             'email' => ['required','max:255',Rule::unique('alunos')->ignore($this->id)],
         ];
     }
-    protected function failedValidation(Validator $validator)
+    public function messages()
     {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
+        return [
+            'matricula.required' => 'É obrigatorio a matriucula',
+            'matricula.unique' => 'Já existe essa matricula',
+            'email.required' => 'É obrigatorio o email',
+            'email.unique' => 'Já existe esse email',
+        ];
+    }
+    public function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors();
+        $formattedErrors = collect();
+        foreach ($errors->messages() as $field => $messages) {
+
+            $formattedErrors->put($field, $messages[0]);
+        }
+        throw new HttpResponseException(response()->json([
+            'success'   => false,
+            'message'   => 'Validation errors',
+            'data'      => $formattedErrors->toArray()
+        ],422));
     }
 }

@@ -24,6 +24,22 @@ class Turma extends Model
         'fk_curso_id'
     ];
     public function curso(){
-        return $this->hasOne(Curso::class,'id','fk_curso_id');
+        return $this->hasOne(Curso::class,'id','fk_curso_id')->withTrashed();
+    }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (auth()->check()) {
+                $model->user_id_created = auth()->user()->id;
+            }
+        });
+
+        static::updating(function ($model) {
+            if (auth()->check()) {
+                $model->user_id_updated = auth()->user()->id;
+            }
+        });
     }
 }

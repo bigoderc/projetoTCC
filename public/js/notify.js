@@ -73,7 +73,6 @@ async function toast(icon, title, text) {
     });
 }
 function successResponse() {
-    console.log('teste');
     const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -92,8 +91,52 @@ function successResponse() {
         title: 'Sucesso'
     });
 }
-function errorResponse(msg) {
-    
+function clearForm(formId,modalId) {
+    // Obtém o formulário pelo ID
+    var form = document.getElementById(formId);
+
+    // Limpa todos os campos do formulário
+    for (var i = 0; i < form.elements.length; i++) {
+        var element = form.elements[i];
+
+        // Limpa apenas os campos de input, textarea e select
+        if (element.type !== 'button' && element.type !== 'submit' && element.type !== 'reset') {
+            element.value = '';
+        }
+    }
+    $(`#${modalId}`).modal('hide');
+    $(`#titulo`).text(`Adicionar`);
+    $(`#salvar`).text(`Adicionar`);
+}
+
+function errorResponse(status,data,text) {
+    var msg = '';
+    switch (status) {
+        
+        case 422:
+            var data = data;
+            
+            // Verificando se há propriedades no objeto "data"
+            if (data) {
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                    var value = data[key];
+                    msg += key + ": " + value
+                    }
+                }
+            }
+            
+            // Trate o erro de validação conforme necessário
+            break;
+        case 500:
+            msg = 'Erro interno do servidor';
+            // Trate o erro interno do servidor conforme necessário
+            break;
+        default:
+            msg = 'Erro desconhecido';
+            
+            break;
+    }
     const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',

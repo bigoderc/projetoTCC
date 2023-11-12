@@ -1,4 +1,4 @@
-function fullLoader(status = true) {
+function partialLoader2(status = true) {
     if (!status){
         swal.close();
         return;

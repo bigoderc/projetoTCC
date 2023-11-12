@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEspecialidadeRequest;
+use App\Http\Requests\StoreEspecialidadesRequest;
 use App\Models\Especialidade;
 use Illuminate\Http\Request;
 
@@ -34,7 +36,7 @@ class EspecialidadeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEspecialidadeRequest $request)
     {
         //
         $dados = Especialidade::create($request->all());
