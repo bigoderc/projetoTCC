@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Area;
 use App\Models\Tema;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TemaController extends Controller
 {
@@ -17,7 +18,7 @@ class TemaController extends Controller
     {
         //
         $areas = Area::all();
-        return view('pages.temas.index',['temas'=>$tema->all(),'areas'=>$areas]);
+        return view('pages.temas.index',['areas'=>$areas]);
     }
 
     /**
@@ -39,11 +40,14 @@ class TemaController extends Controller
     public function store(Request $request)
     {
         //
-        $dados['dados']=Tema::create($request->all());
-        if(!empty($dados)){
-            $dados['success'] =true;
+        if($request->hasFile('file')){
+            $value = $request->file('file');
+            $name = $request->nome.'-'.$value->getClientOriginalName();
+            Storage::disk('public')->putFileAs('temas',$value,$name);
+           $request['arquivo'] = $name;
         }
-        return json_encode($dados);
+        $dados =Tema::create($request->all());
+        return response()->json(Tema::with(['area'])->find($dados->id));
     }
 
     /**
@@ -55,6 +59,7 @@ class TemaController extends Controller
     public function show(Tema $tema)
     {
         //
+        return response()->json(Tema::with(['area'])->get());
     }
 
     /**
@@ -75,11 +80,17 @@ class TemaController extends Controller
      * @param  \App\Models\Tema  $tema
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tema $tema)
+    public function update(Request $request, Tema $tema,$id)
     {
         //
-        $tema->update($request->all());
-        return redirect()->route('temas.index');
+        if($request->hasFile('file')){
+            $value = $request->file('file');
+            $name = $request->nome.'-'.$value->getClientOriginalName();
+            Storage::disk('public')->putFileAs('temas',$value,$name);
+            $request['arquivo'] = $name;
+        }
+        $tema->find($id)->update($request->all());
+        return response()->json($tema->with(['area'])->find($id));
     }
 
     /**
@@ -88,10 +99,48 @@ class TemaController extends Controller
      * @param  \App\Models\Tema  $tema
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tema $tema)
+    public function destroy($id)
     {
         //
-        $tema->delete();
-        return redirect()->route('temas.index');
+        Tema::find($id)->delete();
+        return response()->json(['success' => true]);
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Aluno  $aluno
+     * @return \Illuminate\Http\Response
+     */
+    public function findById($id){
+        return response()->json(Tema::with(['area'])->find($id));
+    }
+    public function toView(Tema $tema,$id){
+        $tema = $tema->find($id);
+        $file =Storage::url("temas/".$tema->arquivo);
+        $pos = strpos($tema->arquivo, '.pdf');
+        if ($pos === false) {
+            echo "<img src='{$file}'/>";
+        }else{  
+            echo "<iframe src='{$file}' width='100%' height='99%'></iframe>";
+        }
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Tema  $tema
+     * @return \Illuminate\Http\Response
+     */
+    public function upload(Tema $tema, Request $request)
+    {
+        //
+        //dd('merda');
+        if($request->hasFile('file')){
+            $value = $request->file('file');
+            $name = $request->nome.'-'.$value->getClientOriginalName();
+            Storage::disk('public')->putFileAs('temas',$value,$name);
+           $request['arquivo'] = $name;
+        }
+        $tema->find($request->id)->update($request->all());
+        return response()->json(['success' => true]);
     }
 }

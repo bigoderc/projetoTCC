@@ -2,11 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AlunoStoreRequest;
 use App\Models\Aluno;
+use App\Models\Curso;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AlunoController extends Controller
 {
+    protected $model,$user;
+    public function __construct(Aluno $aluno,User $user)
+    {
+        $this->model = $aluno;   
+        $this->user = $user;   
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +26,7 @@ class AlunoController extends Controller
     public function index(Aluno $alunos)
     {
         //
-        return view('pages.alunos.index',['alunos'=>$alunos->get()]);
+        return view('pages.alunos.index',['cursos'=>Curso::all()]);
     }
 
     /**
@@ -35,14 +46,19 @@ class AlunoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AlunoStoreRequest $request)
     {
         //
-        $dados['dados']=Aluno::create($request->all());
-        if(!empty($dados)){
-            $dados['success'] =true;
-        }
-        return json_encode($dados);
+        $user = $this->user->create(
+            [
+                "name" =>$request->nome,
+                "email" =>$request->email,
+                "password" => Hash::make('alterar123'),
+            ]
+        );
+        $request['fk_user_id'] = $user->id;
+        $dados=Aluno::create($request->all());
+        return response()->json($this->model->with(['curso','turma'])->find($dados->id));
     }
 
     /**
@@ -54,8 +70,7 @@ class AlunoController extends Controller
     public function show()
     {
         //
-        $teste =Aluno::all();
-        return response()->json($teste);
+        return response()->json($this->model->with(['curso','turma'])->get());
     }
 
     /**
@@ -76,12 +91,12 @@ class AlunoController extends Controller
      * @param  \App\Models\Aluno  $aluno
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Aluno $aluno)
+    public function update(AlunoStoreRequest $request, Aluno $aluno,$id)
     {
         //
         
-        $aluno->update($request->all());
-        return redirect()->route('alunos.index');
+        $aluno->find($id)->update($request->all());
+        return response()->json($aluno->with(['curso','turma'])->find($id));
     }
 
     /**
@@ -90,8 +105,19 @@ class AlunoController extends Controller
      * @param  \App\Models\Aluno  $aluno
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Aluno $aluno)
+    public function destroy($id)
     {
         //
+        Aluno::find($id)->delete();
+        return response()->json(['success' => true]);
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Aluno  $aluno
+     * @return \Illuminate\Http\Response
+     */
+    public function findById($id){
+        return response()->json($this->model->with(['curso','turma'])->find($id));
     }
 }

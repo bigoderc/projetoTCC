@@ -16,7 +16,7 @@ class CreateProfessoresTable extends Migration
         Schema::create('professores', function (Blueprint $table) {
             $table->smallInteger('id', true);
             $table->string('nome', 60)->nullable();
-            $table->string('matricula', 30)->nullable();
+            $table->string('siape', 30)->nullable();
             $table->smallInteger('fk_areas_id')->nullable()->index('FK_professores_2');
             $table->timestamps();
         });

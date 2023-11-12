@@ -2,12 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProfessorRequest;
 use App\Models\Area;
+use App\Models\Cargo;
+use App\Models\Especialidade;
+use App\Models\Grau;
 use App\Models\Professor;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ProfessorController extends Controller
 {
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    protected $professor,$area,$cargo,$especialidade,$grau,$user;
+
+    public function __construct()
+    {
+        $this->area = new Area();
+        $this->cargo = new Cargo();
+        $this->especialidade = new Especialidade();
+        $this->grau = new Grau();
+        $this->professor = new Professor();
+        $this->user = new User();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +39,12 @@ class ProfessorController extends Controller
     public function index(Professor $professor)
     {
         //
-        return view('pages.professores.index',['professores'=>$professor->get(),'areas'=>Area::get()]);
+        return view('pages.professores.index',[
+            'areas'=>$this->area->get(),
+            'cargos'=>$this->cargo->get(),
+            'especialidades'=>$this->especialidade->get(),
+            'graus'=>$this->grau->get()
+        ]);
     }
 
     /**
@@ -35,14 +63,19 @@ class ProfessorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProfessorRequest $request)
     {
         //
-        $dados['dados']=Professor::create($request->all());
-        if(!empty($dados)){
-            $dados['success'] =true;
-        }
-        return json_encode($dados);
+        $user = $this->user->create(
+            [
+                "name" =>$request->nome,
+                "email" =>$request->email,
+                "password" => Hash::make('alterar123'),
+            ]
+        );
+        $request['fk_user_id'] = $user->id;
+        $dados = Professor::create($request->all());
+        return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->find($dados->id));
     }
 
     /**
@@ -54,6 +87,19 @@ class ProfessorController extends Controller
     public function show(Professor $professor)
     {
         //
+        return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->get());
+    }
+    
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Professor  $professor
+     * @return \Illuminate\Http\Response
+     */
+    public function findById($id)
+    {
+        //
+        return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->find($id));
     }
 
     /**
@@ -78,7 +124,7 @@ class ProfessorController extends Controller
     {
         //
         $professor->find($id)->update($request->all());
-        return redirect()->route('professores.index');
+        return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->find($id));
     }
 
     /**
@@ -87,11 +133,16 @@ class ProfessorController extends Controller
      * @param  \App\Models\Professor  $professor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Professor $professor,$id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Area  $area
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
     {
         //
-       
-        $professor->find($id)->delete();
-        return redirect()->route('professores.index');
+        $this->professor->find($id)->delete();
+        return response()->json(true);
     }
 }

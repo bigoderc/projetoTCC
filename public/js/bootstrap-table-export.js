@@ -1912,7 +1912,8 @@
     showExport: false,
     exportDataType: 'basic',
     // basic, all, selected
-    exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'],
+    // exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'],
+    exportTypes: ['txt','excel','pdf'],
     exportOptions: {
       onCellHtmlData: function onCellHtmlData(cell, rowIndex, colIndex, htmlData) {
         if (cell.is('th')) {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -12,6 +13,14 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    use SoftDeletes;
+ 
+    /**
+     * Opcional, informar a coluna deleted_at como um Mutator de data
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
     /**
      * The attributes that are mass assignable.
      *
@@ -58,5 +67,22 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(\App\Models\Role::class,'role_users', 'fk_users_id', 'fk_roles_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (auth()->check()) {
+                $model->user_id_created = auth()->user()->id;
+            }
+        });
+
+        static::updating(function ($model) {
+            if (auth()->check()) {
+                $model->user_id_updated = auth()->user()->id;
+            }
+        });
     }
 }

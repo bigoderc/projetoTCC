@@ -16,10 +16,8 @@ class AddColumnAlunos extends Migration
         //
         Schema::table('alunos', function (Blueprint $table) {
             $table->string('instituicao', 120)->nullable();
-            $table->string('curso', 100)->nullable();
             $table->char('matriculado', 1)->default('S')->nullable();
             $table->string('periodo', 10)->nullable();
-            $table->string('turma', 100)->nullable();
             $table->string('ingresso', 10)->nullable();
             $table->string('email')->nullable();
         });
