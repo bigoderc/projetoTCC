@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid d-flex align-items-center justify-content-center">
     <div class="col-lg-3  rounded text-center p-3" style="background-color: rgba(255, 255, 255, 0.6);">
-        <img class="mr-1 mb-2" src="{{ asset('img/marca-if-baiano-horizontal.png') }}" alt="logo da empresa" width="100">
+        <img class="mr-1 mb-2" src="#" alt="logo da empresa" width="100">
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
@@ -56,7 +56,7 @@
 @push('css')
 <style>
     .container-fluid {
-        background-image: url('img/P_20170718_171219.jpg');
+        background-color:rgb(12, 160, 79);
         background-repeat: no-repeat;
         background-size: cover;
         width: 100vw;

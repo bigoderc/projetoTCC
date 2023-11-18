@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AlunoStoreRequest;
 use App\Models\Aluno;
+use App\Models\AlunoTema;
 use App\Models\Curso;
+use App\Models\Tema;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AlunoController extends Controller
 {
-    protected $model,$user;
-    public function __construct(Aluno $aluno,User $user)
+    protected $model,$user,$aluno_tema;
+    public function __construct(Aluno $aluno,User $user,AlunoTema $aluno_tema)
     {
         $this->model = $aluno;   
         $this->user = $user;   
+        $this->aluno_tema = $aluno_tema;   
     }
 
     /**
@@ -119,5 +122,28 @@ class AlunoController extends Controller
      */
     public function findById($id){
         return response()->json($this->model->with(['curso','turma'])->find($id));
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function linkTheme(Request $request)
+    {
+        //
+        $aluno = auth()->user()->aluno;
+        $user = $this->aluno_tema->create(
+            [
+                'fk_alunos_id'=>$aluno->id,
+                'fk_tema_id'=>$request->tema_id,
+            ]
+        );
+        $aluno = auth()->user()->aluno;
+        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
+            $query->where('fk_alunos_id',$aluno->id);
+        })->get();
+        return response()->json($dados);
+            
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,7 +26,6 @@ class Tema extends Model
         'link',
         'arquivo'
     ];
-    public $timestamps = false;
     public function area(){
         return $this->hasOne(Area::class,'id','fk_areas_id')->withTrashed();
     }
@@ -44,5 +44,17 @@ class Tema extends Model
                 $model->user_id_updated = auth()->user()->id;
             }
         });
+    }
+    public function criado(){
+        return $this->hasOne(User::class,'id','user_id_created')->withTrashed();
+    }
+    public function temaAluno(){
+        return $this->hasOne(AlunoTema::class,'fk_tema_id','id');
+    }
+    public function getCreatedAtAttribute()
+    {
+        $created = Carbon::parse($this->attributes['created_at']);
+        $created->setTimezone('America/Sao_Paulo');
+        return $created->format('d/m/Y');
     }
 }

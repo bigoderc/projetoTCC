@@ -5,7 +5,7 @@
 			<span class="h2">GRC</span>
       	</div>
       	<div class="proj-name  d-none">
-            <img src="{{ asset('img/marca-if-baiano-horizontal.png') }}" alt="Logo da empresa" width="200" height="55">
+            <img src="#" alt="Logo da empresa" width="200" height="55">
       	</div>
     </div>
 

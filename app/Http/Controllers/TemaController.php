@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 use App\Models\Tema;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -59,9 +60,21 @@ class TemaController extends Controller
     public function show(Tema $tema)
     {
         //
-        return response()->json(Tema::with(['area'])->get());
+        $user = request()->user();
+        $data = User::with('roles')->find($user->id);
+
+        if ($data) {
+            $data->role = $data->roles->first();
+        }
+        if($data->role->nome =='aluno'){
+            return response()->json(Tema::with(['area','criado'])->where('user_id_created',$user->id)->get());
+        }else{
+            return response()->json(Tema::with(['area','criado'])->get());
+        }
+        
     }
 
+    
     /**
      * Show the form for editing the specified resource.
      *

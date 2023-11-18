@@ -85,4 +85,7 @@ class User extends Authenticatable
             }
         });
     }
+    public function aluno(){
+        return $this->hasOne(Aluno::class,'fk_user_id','id')->withTrashed();
+    }
 }

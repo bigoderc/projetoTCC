@@ -21,6 +21,7 @@ use App\Http\Controllers\ProjetoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConfiguracaoController;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\DashboardAlunoController;
 use App\Http\Controllers\EspecialidadeController;
 use App\Http\Controllers\GrauController;
 use App\Http\Controllers\TurmaController;
@@ -80,5 +81,12 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::post('/configuracao/store', [ConfiguracaoController::class, 'store'])->name('configuracao.store');
     Route::post('/configuracao/setRole', [ConfiguracaoController::class, 'setRole'])->name('configuracao.setRole');
     Route::post('/configuracao/update', [ConfiguracaoController::class, 'update'])->name('configuracao.update');
+    Route::prefix('dashboardAluno')->group(function () {
+        Route::get('/index', [DashboardAlunoController::class, 'index'])->name('dashboardAluno.index');
+        Route::get('/findById/{id}', [DashboardAlunoController::class, 'findById'])->name('dashboardAluno.findById');
+        Route::post('/store', [DashboardAlunoController::class, 'store'])->name('dashboardAluno.store');
+        Route::post('/linkTheme', [AlunoController::class, 'linkTheme'])->name('dashboardAluno.linkTheme');
+        Route::get('/linkThemeCheck', [DashboardAlunoController::class, 'linkThemeCheck'])->name('dashboardAluno.linkThemeCheck');
     
+    });
 });
