@@ -22,6 +22,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConfiguracaoController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\DashboardAlunoController;
+use App\Http\Controllers\DashboardProfessorController;
 use App\Http\Controllers\EspecialidadeController;
 use App\Http\Controllers\GrauController;
 use App\Http\Controllers\TurmaController;
@@ -34,6 +35,7 @@ use App\Models\Professor;
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home.inicio');
 Route::group(['middleware' => 'auth:web'], function () {
     // Sitema de teste
    
@@ -85,8 +87,17 @@ Route::group(['middleware' => 'auth:web'], function () {
         Route::get('/index', [DashboardAlunoController::class, 'index'])->name('dashboardAluno.index');
         Route::get('/findById/{id}', [DashboardAlunoController::class, 'findById'])->name('dashboardAluno.findById');
         Route::post('/store', [DashboardAlunoController::class, 'store'])->name('dashboardAluno.store');
+        Route::post('/search', [DashboardAlunoController::class, 'search'])->name('dashboardAluno.search');
         Route::post('/linkTheme', [AlunoController::class, 'linkTheme'])->name('dashboardAluno.linkTheme');
         Route::get('/linkThemeCheck', [DashboardAlunoController::class, 'linkThemeCheck'])->name('dashboardAluno.linkThemeCheck');
+    
+    });
+    Route::prefix('dashboardProfessor')->group(function () {
+        Route::get('/index', [DashboardProfessorController::class, 'index'])->name('dashboardProfessor.index');
+        Route::get('/findById/{id}', [DashboardProfessorController::class, 'findById'])->name('dashboardProfessor.findById');
+        Route::post('/store', [DashboardProfessorController::class, 'store'])->name('dashboardProfessor.store');
+        Route::post('/search', [DashboardProfessorController::class, 'search'])->name('dashboardProfessor.search');
+        Route::get('/linkThemeCheck', [DashboardProfessorController::class, 'linkThemeCheck'])->name('dashboardProfessor.linkThemeCheck');
     
     });
 });

@@ -2,12 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aluno;
 use App\Models\AlunoTema;
+use App\Models\Area;
+use App\Models\Professor;
 use App\Models\Tema;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardAlunoController extends Controller
 {
+    protected $model,$user,$professor,$area,$tema;
+    public function __construct(Aluno $aluno,User $user,Professor $professor,Area $area,Tema $tema)
+    {
+        $this->model = $aluno;   
+        $this->user = $user;   
+        $this->professor = $professor;
+        $this->area = $area;
+        $this->tema = $tema;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +29,7 @@ class DashboardAlunoController extends Controller
     public function index()
     {
         //
-        return view('pages.dashboard-aluno.index');
+        return view('pages.dashboard-aluno.index',['areas'=>$this->area->all(),'professores'=>$this->professor->all()]);
     }
 
     /**
@@ -44,6 +57,37 @@ class DashboardAlunoController extends Controller
         return response()->json($dados);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        //
+        $query = $this->tema->query();
+        $query->with(['area','criado','temaAluno','temaAluno.professor']);
+        $query->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$request->data_inicio, $request->data_fim]);
+        if (!empty($request->area_id)) {
+            $query->where('fk_areas_id',$request->area_id);
+        } 
+        if (!empty($request->professor_id)) {
+            $query->where('user_id_created',$request->professor_id);
+        }        
+        $data = $query->orderBy('id','desc')->get();
+        $aluno = auth()->user()->aluno;
+        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
+            $query->where('fk_alunos_id',$aluno->id);
+        })->get();
+        
+        if(count($dados)>0){
+            return response()->json($dados);
+        }else{
+            return response()->json($data);
+        }
+        
+    }
     /**
      * Display the specified resource.
      *

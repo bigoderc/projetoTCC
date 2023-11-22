@@ -71,11 +71,11 @@ class RouteServiceProvider extends ServiceProvider
         }
         switch ($data->role->nome) {
             case  'admin':
-                return redirect()->route('home');
+                return redirect()->route('home.inicio');
             case  'aluno':
                 return redirect()->route('dashboardAluno.index');
             case  'professor':
-                return redirect()->route('dashboardAluno.index');    
+                return redirect()->route('dashboardProfessor.index');    
         }
     }
 }

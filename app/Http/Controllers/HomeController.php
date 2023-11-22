@@ -26,4 +26,13 @@ class HomeController extends Controller
     {
         return RouteServiceProvider::redirectTo();
     }
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function home()
+    {
+        return view('home');
+    }
 }

@@ -7,8 +7,8 @@
         'id' =>'filter_dashboard_aluno', // Define a rota para submissão do formulário
         'table' => 'my_table_id', // Define a rota para submissão do formulário
         'name' => 'Valor Padrão do Nome', // Defina aqui o valor padrão para o campo "name"
-        'areas' =>$areas, // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
-        'professores' =>$professores, // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
+        'areas' =>[], // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
+        'professores' =>[], // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
     ])
     @endcomponent
     <div class="content-page">
@@ -109,7 +109,7 @@
         function getAll() {
             partialLoader();
             $.ajax({
-                url: `{{ route('dashboardAluno.linkThemeCheck') }}`,
+                url: `{{ route('dashboardProfessor.linkThemeCheck') }}`,
                 type: "GET",
                 dataType: "json",
                 success: function(response) {
@@ -175,20 +175,6 @@
                             <span class="small fw-semibold">Lançado em: </span>
                             <span class="small">${item.created_at ?? ''}</span>
                         </div>
-                        
-                        ${item.tema_aluno?.fk_professores_id ? `
-                            <div>
-                                <span class="small fw-semibold">Orientado por: </span>
-                                <span class="small">${item.tema_aluno.professor.nome ?? ''}</span>
-                            </div>` : ''}
-                        <div class="mt-3 mb-3">
-                            ${item.tema_aluno ? ``:`<button type="button" title="Selecionar tema" class="btn btn-primary btn-sm mb-3" onclick="changeStatus(${item.id},'selecionar')">
-                                <i class="fa fa-check-square"></i>
-                            </button>`}
-                            ${item.tema_aluno?.fk_professores_id ? ``:`
-                            <button type="button" title="Selecionar orientador" class="btn btn-primary btn-sm mb-3" onclick="changeOrientador(${item.id})">
-                                <i class="fa fa-user"></i> 
-                            </button>`}
                             
                             <button type="button" title="Exibir detalhes" class="btn btn-primary btn-sm mb-3" onclick="showDetails(${item.id})">
                                 <i class="fa fa-info"></i>
