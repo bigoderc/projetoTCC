@@ -46,25 +46,28 @@
             </div>
         </div>
     </div>
+    @include('pages.dashboard-aluno.parts.trabalhos')
 </div>
 @push('scripts')
     <script>
         function setprofessor(params) {
             $(`#orientador_id`).val(params);
-            init();
+            init1();
             $('#professor').modal('show');
         }
         function acaoFormattercheck2(value, row, index) {
             return [
                 `<input type="radio" class="orientador-radio" name="orientador" id="orientador-${row.id}" value="${row.id}">`,
-                `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Trabalhos" href="temas/toView/${row.id}"  target="_blank" >`,
+                `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Trabalhos"  onclick="showTrabalhos(${row.id})">`,
                 `<i class="fa fa-search" aria-hidden="true"></i>`,
                 `</a>`,
             ].join('');
             //return `<input type="radio" class="orientador-radio" name="orientador" id="orientador-${row.id}" value="${row.id}">`;
         }
-
-        function init() {
+        function showTrabalhos(params) {
+            getTrabalhos(params)
+        }
+        function init1() {
             $.ajax({
                 url: `{{ route('professores.show',1) }}`,
                 type: "GET",
@@ -107,11 +110,7 @@
                     partialLoader(false);
                     successResponse();
                     fecharModalprofessor();
-                    $('#my_table_id').bootstrapTable('updateByUniqueId', {
-                        id: id,
-                        row: response,
-                        replace: false
-                    })
+                    renderizarCards(response);
                 },
                 error: function(xhr, status, error) {
                     partialLoader(false);

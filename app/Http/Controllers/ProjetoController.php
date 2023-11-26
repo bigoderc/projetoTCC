@@ -7,6 +7,7 @@ use App\Models\Area;
 use App\Models\Professor;
 use App\Models\Projeto;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Uuid;
 
 class ProjetoController extends Controller
 {
@@ -55,19 +56,12 @@ class ProjetoController extends Controller
     {
         //
         if($request->hasFile('arquivo')){
-            // Get filename with the extension
-            $filenameWithExt = $request->file('arquivo')->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            // Get just ext
-           
-            $extension = $request->file('arquivo')->getClientOriginalExtension();
-            // Filename to store
-            $fileNameToStore= $filename.'.'.$extension;
-            // Upload Image
-            $fileNameToStore = str_replace(" ", "",  $fileNameToStore);
-            $path = $request->file('arquivo')->storeAs('projeto', $fileNameToStore,'public');
-            $request['projeto'] = $fileNameToStore;
+            $file = $request->file('arquivo');
+            $imageUuid = Uuid::uuid4()->toString();
+            $extension = $file->getClientOriginalExtension();
+            $path = $imageUuid.'.'.$extension;
+            $file->storeAs('projetos', strtolower($path), 'public');
+            $request['projeto'] = strtolower($path);
         }
         $dados=Projeto::create($request->all());
        
@@ -97,6 +91,17 @@ class ProjetoController extends Controller
         return response()->json($this->model->with(['professor','area'])->find($id));
     }
     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Projeto  $projeto
+     * @return \Illuminate\Http\Response
+     */
+    public function findByProfessor($id)
+    {
+        //
+        return response()->json($this->model->with(['professor','area'])->where('fk_professores_id',$id)->get());
+    }
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Projeto  $projeto
@@ -118,19 +123,12 @@ class ProjetoController extends Controller
     {
         //
         if($request->hasFile('arquivo')){
-            // Get filename with the extension
-            $filenameWithExt = $request->file('arquivo')->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            // Get just ext
-           
-            $extension = $request->file('arquivo')->getClientOriginalExtension();
-            // Filename to store
-            $fileNameToStore= $filename.'.'.$extension;
-            // Upload Image
-            $fileNameToStore = str_replace(" ", "",  $fileNameToStore);
-            $path = $request->file('arquivo')->storeAs('projeto', $fileNameToStore,'public');
-            $request['projeto'] = $fileNameToStore;
+            $file = $request->file('arquivo');
+            $imageUuid = Uuid::uuid4()->toString();
+            $extension = $file->getClientOriginalExtension();
+            $path = $imageUuid.'.'.$extension;
+            $file->storeAs('projetos', strtolower($path), 'public');
+            $request['projeto'] = strtolower($path);
         }
         $this->model->find($id)->update($request->all());
         return response()->json($this->model->with(['professor','area'])->find($id));

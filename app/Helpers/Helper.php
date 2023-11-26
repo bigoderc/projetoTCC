@@ -22,7 +22,7 @@ class Helper extends Controller
             $protocolo = 'https://'; //Atribui o valor https
         }
         $dominio = $_SERVER['HTTP_HOST'];
-        $url = $protocolo . $dominio . $_SERVER['REQUEST_URI'];
+        $url = $protocolo . $dominio;
         $partes = explode("/api", $url);
         return $partes[0] . '/storage/' . $string . '/';
     }

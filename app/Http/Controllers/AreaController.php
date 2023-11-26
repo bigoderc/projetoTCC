@@ -6,6 +6,7 @@ use App\Http\Requests\StoreAreaRequest;
 use App\Models\Area;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
 
 class AreaController extends Controller
 {
@@ -45,11 +46,14 @@ class AreaController extends Controller
     {
         //
         if($request->hasFile('file')){
-            $value = $request->file('file');
-            $name = $request->nome.'-'.$value->getClientOriginalName();
-            Storage::disk('public')->putFileAs('areas',$value,$name);
-           $request['arquivo'] = $name;
+            $file = $request->file('file');
+            $imageUuid = Uuid::uuid4()->toString();
+            $extension = $file->getClientOriginalExtension();
+            $path = $imageUuid.'.'.$extension;
+            $file->storeAs('areas', strtolower($path), 'public');
+            $request['arquivo'] = strtolower($path);
         }
+        
         $dados=Area::create($request->all());
         return response()->json($dados);
     }
@@ -116,10 +120,12 @@ class AreaController extends Controller
         //
         //dd('merda');
         if($request->hasFile('file')){
-            $value = $request->file('file');
-            $name = $request->nome.'-'.$value->getClientOriginalName();
-            Storage::disk('public')->putFileAs('areas',$value,$name);
-           $request['arquivo'] = $name;
+            $file = $request->file('file');
+            $imageUuid = Uuid::uuid4()->toString();
+            $extension = $file->getClientOriginalExtension();
+            $path = $imageUuid.'.'.$extension;
+            $file->storeAs('areas', strtolower($path), 'public');
+            $request['arquivo'] = strtolower($path);
         }
         $area->find($request->id)->update($request->all());
         return response()->json(['success' => true]);

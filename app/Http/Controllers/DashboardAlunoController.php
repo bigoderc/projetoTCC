@@ -58,6 +58,23 @@ class DashboardAlunoController extends Controller
     }
 
     /**
+     * Confirmed a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function confirmed(Request $request)
+    {
+        //
+        AlunoTema::where('fk_tema_id',$request->tema_id)->update([
+            'justificativa'=>null,
+            'deferido'=>null,
+            'fk_professores_id'=>null
+        ]);
+        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->where('id',$request->tema_id)->get();
+        return response()->json($dados);
+    }
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

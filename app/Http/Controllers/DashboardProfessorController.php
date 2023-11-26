@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AlunoTema;
 use App\Models\Tema;
 use Illuminate\Http\Request;
 
@@ -38,6 +39,30 @@ class DashboardProfessorController extends Controller
     {
         //
     }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function deferir(Request $request)
+    {
+        //
+        AlunoTema::where('fk_tema_id',$request->tema_id)->update([
+            'justificativa'=>$request->justificativa,
+            'deferido'=>$request->deferido =='false'? false:true,
+            'fk_professores_id'=>null
+        ]);
+        $professor = auth()->user()->professor;
+        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($professor){
+            $query->where('fk_professores_id',$professor->id);
+            $query->where(function ($query) {
+                $query->where('deferido', '<>', false)
+                    ->orWhereNull('deferido');
+            });
+        })->get();
+        return response()->json($dados);
+    }
 
     /**
      * Display the specified resource.
@@ -61,6 +86,10 @@ class DashboardProfessorController extends Controller
         $professor = auth()->user()->professor;
         $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($professor){
             $query->where('fk_professores_id',$professor->id);
+            $query->where(function ($query) {
+                $query->where('deferido', '<>', false)
+                    ->orWhereNull('deferido');
+            });
         })->get();
         return response()->json($dados);
                

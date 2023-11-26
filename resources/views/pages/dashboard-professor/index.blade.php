@@ -82,8 +82,8 @@
                 </div>
             </div>
         </div>
-        @include('pages.dashboard-aluno.parts.professor')
-        @include('pages.dashboard-aluno.parts.info')
+        @include('pages.dashboard-professor.parts.info')
+        @include('pages.dashboard-professor.parts.deferido')
     </div>
 @endsection
 
@@ -182,6 +182,11 @@
                             <a href="mailto:${item.criado?.email}" title="Enviar e-mail" class="btn btn-success btn-sm mb-3">
                                 <i class="fa fa-envelope"></i>
                             </a>
+                            ${item.tema_aluno?.deferido !=false ? ``:`
+                                <button type="button" title=Aceitar tema" class="btn btn-warning btn-sm mb-3" onclick="showDeferido(${item.id})">
+                                <i class="fa fa-check-square"></i>
+                            </button>`}
+                            
                         </div>
 
                     </div>
@@ -216,6 +221,9 @@
         }
         function changeOrientador(params) {
             setprofessor(params);
+        }
+        function showDeferido(params) {
+            setDeferido(params);
         }
         function showDetails(params) {
             setInfo(params)

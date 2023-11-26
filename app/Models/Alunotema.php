@@ -13,7 +13,9 @@ class AlunoTema extends Model
     protected $fillable = [
         'fk_alunos_id',
         'fk_tema_id',
-        'fk_professores_id'
+        'fk_professores_id',
+        'deferido',
+        'justificativa'
     ];
     protected static function boot()
     {

@@ -21,7 +21,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="descricao">Descrição</label>
-                                        <input type="text" class="form-control" id="descricao" name="descricao">
+                                        <textarea class="form-control" name="descricao" id="descricao" rows="3"></textarea>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -31,11 +31,11 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="link_tema"></span>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
-                                    <div class="col d-none">
-                                        <canvas id="pdfViewer" style="border: 1px solid black;"></canvas>
+                                    <div class="col">
+                                        <div class="embed-responsive embed-responsive-16by9" id="pdfViewerTema"></div>
                                     </div>
                                 </div>
                                 <hr class="my-4">
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="descricao_area">Descrição</label>
-                                        <input type="text" class="form-control" id="descricao_area" name="descricao_area">
+                                        <textarea class="form-control" name="descricao_area" id="descricao_area" rows="3"></textarea>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -55,13 +55,12 @@
                                         <label for="link_area">Mais informações em</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text" id="link_area"></span>
+                                                <span class="input-group-text w-25" id="link_area"></span>
                                             </div>
-                                            
                                         </div>
                                     </div>
-                                    <div class="col d-none">
-                                        <canvas id="pdfViewer" style="border: 1px solid black;"></canvas>
+                                    <div class="col">
+                                        <div class="embed-responsive embed-responsive-16by9" id="pdfViewerArea"></div>
                                     </div>
                                 </div>
                             </div>
@@ -80,22 +79,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
     <script>
         function setInfo(params) {
-            init(params);
+            initInfo(params);
             $('#info').modal('show');
         }
 
-        function init(params) {
+        function initInfo(params) {
+            partialLoader();
             $.ajax({
                 url: `{{ url('dashboardAluno/findById/${params}') }}`,
                 type: "GET",
                 success: function(response) {
-                    //viewPDF()
+
+                    viewPDFArea(response.area?.storage);
+                    viewPDFTema(response.storage);
+                    partialLoader(false);
                     $(`#tema`).val(response.nome);
                     $(`#descricao`).val(response.descricao);
-                    $(`#link_tema`).text(response.link); 
-                    $(`#area`).val(response.area.nome);
+                    $(`#link_tema`).text(response.link);
+                    $(`#area`).val(response.area?.nome);
                     $(`#descricao_area`).val(response.area.descricao);
-                    $(`#link_area`).text(response.area.link); 
+                    $(`#link_area`).text(response.area.link);
                 },
                 error: function(xhr, status, error) {
                     partialLoader(false);
@@ -103,26 +106,41 @@
                 }
             });
         }
+
         function fecharModalinfo(params) {
             $("input[type='radio']").prop('checked', false);
             $('#info').modal('hide');
         }
-        function viewPDF(params) {
-            const urlParams = new URLSearchParams(window.location.search);
-            const pdfFile = `D:/projetos/tcc/storage/app/public/projeto/Documentodeequipe(1).pdf`;
 
-            pdfjsLib.getDocument(pdfFile).then(pdf => {
-                pdf.getPage(1).then(page => {
-                    const canvas = document.getElementById('pdfViewer');
-                    const context = canvas.getContext('2d');
-                    const viewport = page.getViewport({ scale: 1.5 });
+        function viewPDFTema(params) {
+            const pdfFile = `${params}`;
+            // Crie um elemento iframe
+            const iframe = document.createElement('iframe');
 
-                    canvas.width = viewport.width;
-                    canvas.height = viewport.height;
+            // Defina a largura e altura desejadas para o iframe
+            iframe.width = '550';
+            iframe.height = '300';
 
-                    page.render({ canvasContext: context, viewport: viewport });
-                });
-            });
+            // Defina o atributo src do iframe para o arquivo PDF
+            iframe.src = pdfFile;
+
+            // Adicione o iframe ao elemento com id 'pdfViewer' (ou substitua conforme necessário)
+            document.getElementById('pdfViewerTema').appendChild(iframe);
+        }
+        function viewPDFArea(params) {
+            const pdfFile = `${params}`;
+            // Crie um elemento iframe
+            const iframe = document.createElement('iframe');
+
+            // Defina a largura e altura desejadas para o iframe
+            iframe.width = '550';
+            iframe.height = '300';
+
+            // Defina o atributo src do iframe para o arquivo PDF
+            iframe.src = pdfFile;
+
+            // Adicione o iframe ao elemento com id 'pdfViewer' (ou substitua conforme necessário)
+            document.getElementById('pdfViewerArea').appendChild(iframe);
         }
     </script>
 @endpush

@@ -7,6 +7,8 @@ use App\Models\Tema;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Guid\Guid;
+use Ramsey\Uuid\Uuid;
 
 class TemaController extends Controller
 {
@@ -42,10 +44,12 @@ class TemaController extends Controller
     {
         //
         if($request->hasFile('file')){
-            $value = $request->file('file');
-            $name = $request->nome.'-'.$value->getClientOriginalName();
-            Storage::disk('public')->putFileAs('temas',$value,$name);
-           $request['arquivo'] = $name;
+            $file = $request->file('file');
+            $imageUuid = Uuid::uuid4()->toString();
+            $extension = $file->getClientOriginalExtension();
+            $path = $imageUuid.'.'.$extension;
+            $file->storeAs('temas', strtolower($path), 'public');
+            $request['arquivo'] = strtolower($path);
         }
         $dados =Tema::create($request->all());
         return response()->json(Tema::with(['area'])->find($dados->id));
@@ -97,10 +101,12 @@ class TemaController extends Controller
     {
         //
         if($request->hasFile('file')){
-            $value = $request->file('file');
-            $name = $request->nome.'-'.$value->getClientOriginalName();
-            Storage::disk('public')->putFileAs('temas',$value,$name);
-            $request['arquivo'] = $name;
+            $file = $request->file('file');
+            $imageUuid = Uuid::uuid4()->toString();
+            $extension = $file->getClientOriginalExtension();
+            $path = $imageUuid.'.'.$extension;
+            $file->storeAs('temas', strtolower($path), 'public');
+            $request['arquivo'] = strtolower($path);
         }
         $tema->find($id)->update($request->all());
         return response()->json($tema->with(['area'])->find($id));

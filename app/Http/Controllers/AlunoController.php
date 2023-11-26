@@ -6,6 +6,8 @@ use App\Http\Requests\AlunoStoreRequest;
 use App\Models\Aluno;
 use App\Models\AlunoTema;
 use App\Models\Curso;
+use App\Models\Role;
+use App\Models\RoleUser;
 use App\Models\Tema;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -59,6 +61,11 @@ class AlunoController extends Controller
                 "password" => Hash::make('alterar123'),
             ]
         );
+        $role = Role::where('nome','aluno')->first();
+        RoleUser::create([
+            'fk_roles_id'=>$role->id,
+            'fk_users_id'=>$user->id
+        ]);
         $request['fk_user_id'] = $user->id;
         $dados=Aluno::create($request->all());
         return response()->json($this->model->with(['curso','turma'])->find($dados->id));
@@ -133,12 +140,26 @@ class AlunoController extends Controller
     {
         //
         $aluno = auth()->user()->aluno;
-        $user = $this->aluno_tema->create(
-            [
-                'fk_alunos_id'=>$aluno->id,
-                'fk_tema_id'=>$request->tema_id,
-            ]
-        );
+        $tema = Tema::find($request->tema_id);
+        $user = User::with('professor')->find($tema->user_id_created);
+        if(empty($user->professor)){
+            $this->aluno_tema->create(
+                [
+                    'fk_alunos_id'=>$aluno->id,
+                    'fk_tema_id'=>$request->tema_id,
+                ]
+            );
+        }else{
+            $this->aluno_tema->create(
+                [
+                    'fk_alunos_id'=>$aluno->id,
+                    'fk_tema_id'=>$request->tema_id,
+                    'fk_professores_id'=>$user->professor->id,
+                    'deferido'=>true
+                ]
+            );
+        }
+        
         $aluno = auth()->user()->aluno;
         $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
             $query->where('fk_alunos_id',$aluno->id);

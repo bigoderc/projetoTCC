@@ -56,7 +56,7 @@
 @push('css')
 <style>
     .container-fluid {
-        background-color:rgb(12, 160, 79);
+        background-color:#243147;
         background-repeat: no-repeat;
         background-size: cover;
         width: 100vw;

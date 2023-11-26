@@ -8,6 +8,8 @@ use App\Models\Cargo;
 use App\Models\Especialidade;
 use App\Models\Grau;
 use App\Models\Professor;
+use App\Models\Role;
+use App\Models\RoleUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -73,6 +75,11 @@ class ProfessorController extends Controller
                 "password" => Hash::make('alterar123'),
             ]
         );
+        $role = Role::where('nome','professor')->first();
+        RoleUser::create([
+            'fk_roles_id'=>$role->id,
+            'fk_users_id'=>$user->id
+        ]);
         $request['fk_user_id'] = $user->id;
         $dados = Professor::create($request->all());
         return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->find($dados->id));

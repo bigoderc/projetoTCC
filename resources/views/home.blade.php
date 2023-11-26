@@ -45,7 +45,7 @@
                 </ul>
             </div>
             <div class="col-md-6 my-1">
-                <h2>Grafícos</h2>
+                <h2>Gráficos</h2>
                 <div class="card">
                     <div class="card-body">
                         <canvas id="myChart"></canvas>

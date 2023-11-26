@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/temas/toView/{id}',[TemaController::class,'toView'])->name('temas.toView');
     Route::post('/temas/upload', [TemaController::class, 'upload'])->name('temas.upload');
     Route::get('/projetos/findById/{id}', [ProjetoController::class, 'findById'])->name('projetos.findById');
+    Route::get('/projetos/findByProfessor/{id}', [ProjetoController::class, 'findByProfessor'])->name('projetos.findByProfessor');
     Route::post('/projetos/update/{id}', [ProjetoController::class, 'update'])->name('projetos.update');
     Route::get('/users/findById/{id}', [UserController::class, 'findById'])->name('users.findById');
     Route::put('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
@@ -87,6 +88,7 @@ Route::group(['middleware' => 'auth:web'], function () {
         Route::get('/index', [DashboardAlunoController::class, 'index'])->name('dashboardAluno.index');
         Route::get('/findById/{id}', [DashboardAlunoController::class, 'findById'])->name('dashboardAluno.findById');
         Route::post('/store', [DashboardAlunoController::class, 'store'])->name('dashboardAluno.store');
+        Route::post('/confirmed', [DashboardAlunoController::class, 'confirmed'])->name('dashboardAluno.confirmed');
         Route::post('/search', [DashboardAlunoController::class, 'search'])->name('dashboardAluno.search');
         Route::post('/linkTheme', [AlunoController::class, 'linkTheme'])->name('dashboardAluno.linkTheme');
         Route::get('/linkThemeCheck', [DashboardAlunoController::class, 'linkThemeCheck'])->name('dashboardAluno.linkThemeCheck');
@@ -96,6 +98,7 @@ Route::group(['middleware' => 'auth:web'], function () {
         Route::get('/index', [DashboardProfessorController::class, 'index'])->name('dashboardProfessor.index');
         Route::get('/findById/{id}', [DashboardProfessorController::class, 'findById'])->name('dashboardProfessor.findById');
         Route::post('/store', [DashboardProfessorController::class, 'store'])->name('dashboardProfessor.store');
+        Route::post('/deferir', [DashboardProfessorController::class, 'deferir'])->name('dashboardProfessor.deferir');
         Route::post('/search', [DashboardProfessorController::class, 'search'])->name('dashboardProfessor.search');
         Route::get('/linkThemeCheck', [DashboardProfessorController::class, 'linkThemeCheck'])->name('dashboardProfessor.linkThemeCheck');
     

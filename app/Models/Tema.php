@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Helper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -57,4 +58,18 @@ class Tema extends Model
         $created->setTimezone('America/Sao_Paulo');
         return $created->format('d/m/Y');
     }
+    /**
+     * Determine if the user is an administrator.
+     *
+     * @return bool
+     */
+    public function getStorageAttribute()
+    {
+        $caminho = Helper::url('temas');
+        $path = $this->attributes['arquivo'];
+
+        // Use $path se estiver definido e não vazio, caso contrário, use $name
+        return $this->attributes['storage'] = $caminho . $path;
+    }
+    protected $appends = ['storage'];
 }

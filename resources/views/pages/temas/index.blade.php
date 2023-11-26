@@ -258,7 +258,7 @@
                 `<a class="text-danger m-1" href="#" onclick="setIdUpload(${row.id})" data-toggle="modal" title="Atualizar Anexo" data-target="#upload">`,
                 `<i class="fa fa-upload " aria-hidden="true"></i>`,
                 `</a>`,
-                `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="temas/toView/${row.id}"  target="_blank" >`,
+                `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="${row.storage}"  target="_blank" >`,
                 `<i class="fa fa-search" aria-hidden="true"></i>`,
                 `</a>`,
                 '<a class="remove" href="javascript:void(0)" title="Remove">',
