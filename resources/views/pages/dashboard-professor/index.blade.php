@@ -182,10 +182,12 @@
                             <a href="mailto:${item.criado?.email}" title="Enviar e-mail" class="btn btn-success btn-sm mb-3">
                                 <i class="fa fa-envelope"></i>
                             </a>
-                            ${item.tema_aluno?.deferido !=false ? ``:`
-                                <button type="button" title=Aceitar tema" class="btn btn-warning btn-sm mb-3" onclick="showDeferido(${item.id})">
-                                <i class="fa fa-check-square"></i>
-                            </button>`}
+                            
+                            ${item.tema_aluno?.deferido !=false ? `
+                                    <button type="button" title=Aceitar tema" class="btn btn-warning btn-sm mb-3" onclick="showDeferido(${item.id})">
+                                        <i class="fa fa-check-square"></i>
+                                    </button>`:`
+                                `}
                             
                         </div>
 

@@ -1,12 +1,10 @@
-<div class="position-absolute bg-primary overflow-hidden sidebar p-2" style="
+<div class="position-absolute bg-primary extended sidebar p-2" style="
     z-index: 1;">
     <div class="d-flex justify-content-center align-items-center text-white my-3">
         <div class="img" >
 			<span class="h2">GRC</span>
       	</div>
-      	<div class="proj-name  d-none">
-            <img src="#" alt="Logo da empresa" width="200" height="55">
-      	</div>
+      
     </div>
 
     <div>
@@ -20,7 +18,7 @@
                 </div>
             </li>
 
-            @if(Gate::check('usuario') || Gate::check('professor') || Gate::check('aluno') || Gate::check('areas')|| Gate::check('tema')||Gate::check('projeto')||Gate::check('cursp'))
+            @if(Gate::check('usuario') || Gate::check('professor') || Gate::check('aluno') || Gate::check('areas')|| Gate::check('tema')||Gate::check('projeto')||Gate::check('curso'))
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
                 <div class="d-flex justify-content-center" role="button">
                     <a class="text-decoration-none text-nowrap text-white" href="#">
@@ -33,7 +31,7 @@
                     @can('aluno')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('alunos.index') }}">
-                                <span>{{ ('Alunos') }}</span>
+                                <span>{{ ('Discente') }}</span>
 
                             </a>
                         </li>
@@ -41,70 +39,70 @@
                     @can('area')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('areas.index') }}">
-                                <span>{{ ('Áreas') }}</span>
-                            </a>
-                        </li>
-                    @endcan
-                    @can('curso')
-                        <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('cargos.index') }}">
-                                <span>{{ ('Cargos') }}</span>
+                                <span>{{ ('Área') }}</span>
                             </a>
                         </li>
                     @endcan
                     @can('curso')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('cursos.index') }}">
-                                <span>{{ ('Cursos') }}</span>
+                                <span>{{ ('Curso') }}</span>
                             </a>
                         </li>
                     @endcan
                     @can('curso')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('especialidades.index') }}">
-                                <span>{{ ('Especialidades') }}</span>
+                                <span>{{ ('Especialidade') }}</span>
                             </a>
                         </li>
                     @endcan
                     @can('curso')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('graus.index') }}">
-                                <span>{{ ('Graus') }}</span>
+                                <span>{{ ('Grau') }}</span>
                             </a>
                         </li>
                     @endcan
                     @can('professor')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('professores.index') }}">
-                                <span>{{ ('Professores') }}</span>
+                                <span>{{ ('Professor') }}</span>
                             </a>
                         </li>
                     @endcan
-                    @can('projeto')
+                    @can('pre-tcc')
+                    <li class="list-group-item bg-white py-1">
+                        <a class="text-decoration-none text-dark" href="{{ route('projetos-pre-tcc.index')}}">
+                            <span>{{('Pré-TCC')}}</span>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('tcc')
                     <li class="list-group-item bg-white py-1">
                         <a class="text-decoration-none text-dark" href="{{ route('projetos.index')}}">
-                            <span>{{('Projetos')}}</span>
+                            <span>{{('TCC')}}</span>
                         </a>
                     </li>
                     @endcan
                     @can('tema')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('temas.index') }}">
-                                <span>{{ ('Temas') }}</span>
+                                <span>{{ ('Tema') }}</span>
                             </a>
                         </li>
                     @endcan
                     @can('turma')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('turmas.index') }}">
-                                <span>{{ ('Turmas') }}</span>
+                                <span>{{ ('Turma') }}</span>
                             </a>
                         </li>
                     @endcan
                     @can('usuario')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('users.index') }}">
-                                <span>{{ ('Usuários') }}</span>
+                                <span>{{ ('Usuário') }}</span>
                             </a>
                         </li>
                     @endcan
@@ -117,11 +115,19 @@
                 <div class="d-flex justify-content-center">
                     <a class="text-decoration-none text-nowrap text-white" href="{{ route('configuracoes.index') }}">
                         <i class="px-2 fa fa-solid fa-lg fa-cog"></i>
-                        <span class="d-none">{{ ('Configurações') }}</span>
+                        <span class="d-none">{{ ('Configuração') }}</span>
                     </a>
                 </div>
             </li>
             @endcan
+            <li class="bg-gold border-gold rounded my-1 overflow-hidden">
+                <div class="d-flex justify-content-center">
+                    <a class="text-decoration-none text-nowrap text-white" href="{{ route('profile.index') }}">
+                        <i class="px-2 fa fa-solid fa-lg fa-user"></i>
+                        <span class="d-none">{{ 'Perfil' }}</span>
+                    </a>
+                </div>
+            </li>
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
                 <div class="d-flex justify-content-center">
                     <a class="text-decoration-none text-nowrap text-white" href="{{ route('login') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -184,7 +190,7 @@
 @push('scripts')
     <script>
         let $sidebar = $(".sidebar");
-        let $button = $(".sidebar >  div > ul > li");
+        let $button = $(".sidebar > div > ul > li");
         let $buttonDiv = $(".sidebar > div > ul > li > div");
         let $buttonSpan = $(".sidebar > div > ul > li > div > a > span");
         let $dropdown = $(".sidebar > div > ul > li > ul");
@@ -208,33 +214,9 @@
             show($(".proj-name"));
             show($(".user"));
             hide($(".version"));
-            hide($(".img"));
         }
-
-        function close() {
-            hide($dropdown);
-            $sidebar.removeClass("extended");
-
-            $buttonDiv.addClass("justify-content-center");
-            hide($buttonSpan);
-            $dropdown.prev().children("a").removeClass("dropdown-toggle")
-
-            hide($(".proj-name"));
-            hide($(".user"));
-            show($(".version"));
-            show($(".img"));
-        }
-
         $(document).ready(function() {
-
-            $sidebar.on("mouseover", function() {
-                open();
-            });
-
-            $sidebar.on("mouseleave", function() {
-                close()
-            });
-
+            open();
             $button.on("click", function() {
 
                 var $thisDropdown = $(this).children("ul");

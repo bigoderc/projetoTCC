@@ -25,7 +25,8 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" onclick="fecharModalprofessor()">Fechar</button>
-                        <button type="button" id="salvar" onclick="confirmed()" class="btn btn-primary">Confirmar</button>
+                        <button type="button" id="salvar" onclick="confirmed()" class="btn btn-primary">Outro orientador</button>
+                        <button type="button" id="salvar" onclick="setTema()" class="btn btn-primary">Outro tema</button>
                     </div>
                 </form>
 
@@ -63,6 +64,29 @@
             partialLoader();
             $.ajax({
                 url: "{{ route('dashboardAluno.confirmed') }}",
+                type: "POST",
+                data:  $('#formDeferido').serialize(),
+                dataType: "json",
+                success: function(response) {
+                    $('#indeferido').modal('hide');
+
+                    partialLoader(false);
+                    successResponse();
+                    fecharModalprofessor();
+                    renderizarCards(response);
+                },
+                error: function(xhr, status, error) {
+                    partialLoader(false);
+                    errorResponse(xhr);
+                }
+            })
+        }
+        function setTema(params) {
+
+            
+            partialLoader();
+            $.ajax({
+                url: "{{ route('dashboardAluno.setTema') }}",
                 type: "POST",
                 data:  $('#formDeferido').serialize(),
                 dataType: "json",

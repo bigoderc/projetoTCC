@@ -50,12 +50,16 @@
     background-position: center;
     background-size: cover;
 }
-
+.custom-swal {
+    width: 150px;
+    height: 75px;
+  }
 .sidebar {
-    height: 100vh;
-    width: 66px;
-    z-index: 1061;
-    transition: all 0.5s ease;
+    position: fixed;
+  left: 0;
+  top: 0;
+  width: 250px; /* Defina a largura fixa da barra lateral */
+  height: 100vh;
 }
 
 .sidebar.extended {
@@ -65,15 +69,43 @@
 .sidebar div>ul>li {
     border: 4px solid;
 }
-
-.content-page {
-    height: 100vh;
-    overflow: auto;
-    max-width: calc(100vw - 66px);
-    margin-left: 66px;
-    padding: 1rem;
+/* Estilos para o menu */
+.sidebar {
+    display: block; /* Por padrão, a sidebar é exibida */
+}
+.sidebar-mobile {
+    display: none; /* Por padrão, a sidebar é exibida */
+}
+/* Media query para dispositivos com largura menor ou igual a 768 pixels (ou o tamanho desejado para dispositivos móveis) */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none; /* Oculta a sidebar quando a tela for menor ou igual a 768 pixels */
+    }
+    .sidebar-mobile {
+        display: block; /* Por padrão, a sidebar é exibida */
+    }
     
 }
+.content-page {
+    position: absolute;
+    left: 225px; /* Igual à largura da barra lateral */
+    top: 0;
+    right: 0;
+    height: 100vh;
+    overflow: auto;
+}
+
+@media (max-width: 768px) { /* Defina a resolução na qual o conteúdo não se afastará */
+    .content-page {
+        margin-left: 0; /* Remove a margem à esquerda */
+        position: static; /* Remove a posição absoluta */
+        height: auto; /* Ajusta a altura conforme o conteúdo */
+        overflow: visible; /* Permite o overflow do conteúdo caso necessário */
+    }
+}
+.swal2-cancel {
+    margin-left: 10px; /* Ajuste conforme necessário */
+  }
 
 .icon-panel-menu {
     font-size: 80pt;

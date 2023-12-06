@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProfessorRequest;
 use App\Models\Area;
-use App\Models\Cargo;
+
 use App\Models\Especialidade;
 use App\Models\Grau;
 use App\Models\Professor;
@@ -12,6 +12,7 @@ use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class ProfessorController extends Controller
@@ -22,12 +23,11 @@ class ProfessorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected $professor,$area,$cargo,$especialidade,$grau,$user;
+    protected $professor,$area,$especialidade,$grau,$user;
 
     public function __construct()
     {
         $this->area = new Area();
-        $this->cargo = new Cargo();
         $this->especialidade = new Especialidade();
         $this->grau = new Grau();
         $this->professor = new Professor();
@@ -41,9 +41,9 @@ class ProfessorController extends Controller
     public function index(Professor $professor)
     {
         //
+        Gate::authorize('professor');
         return view('pages.professores.index',[
             'areas'=>$this->area->get(),
-            'cargos'=>$this->cargo->get(),
             'especialidades'=>$this->especialidade->get(),
             'graus'=>$this->grau->get()
         ]);
@@ -82,7 +82,7 @@ class ProfessorController extends Controller
         ]);
         $request['fk_user_id'] = $user->id;
         $dados = Professor::create($request->all());
-        return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->find($dados->id));
+        return response()->json($this->professor->with(['areas','especialidade','graus','user'])->find($dados->id));
     }
 
     /**
@@ -94,7 +94,7 @@ class ProfessorController extends Controller
     public function show(Professor $professor)
     {
         //
-        return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->get());
+        return response()->json($this->professor->with(['areas','especialidade','graus','user'])->get());
     }
     
     /**
@@ -106,7 +106,7 @@ class ProfessorController extends Controller
     public function findById($id)
     {
         //
-        return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->find($id));
+        return response()->json($this->professor->with(['areas','especialidade','graus','user'])->find($id));
     }
 
     /**
@@ -131,7 +131,7 @@ class ProfessorController extends Controller
     {
         //
         $professor->find($id)->update($request->all());
-        return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->find($id));
+        return response()->json($this->professor->with(['areas','especialidade','graus','user'])->find($id));
     }
 
     /**

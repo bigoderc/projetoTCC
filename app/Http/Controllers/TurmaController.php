@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTurmaRequest;
 use App\Models\Curso;
 use App\Models\Turma;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class TurmaController extends Controller
 {
@@ -17,6 +18,7 @@ class TurmaController extends Controller
     public function index()
     {
         //
+        Gate::authorize('turma');
         return view('pages.turmas.index',['cursos'=>Curso::all()]);
     }
 

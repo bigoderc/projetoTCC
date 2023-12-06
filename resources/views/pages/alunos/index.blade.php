@@ -5,7 +5,7 @@
     <div class="card-body">
         <div class="card">
             <div class="card-header card-title text-white bg-transparent border-0 m-3">
-                <span class="h4">Alunos</span>
+                <span class="h4">Discente</span>
             </div>
             <div class="card-body">
                 <div id="toolbar">
@@ -224,7 +224,7 @@
                 url: `{{ url('alunos/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
-                    $(`#titulo`).text(`Editar Aluno ${response.nome}`);
+                    $(`#titulo`).text(`Editar Discente ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
                     $(`#email`).val(response.email);

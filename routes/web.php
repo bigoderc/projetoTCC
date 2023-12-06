@@ -25,6 +25,8 @@ use App\Http\Controllers\DashboardAlunoController;
 use App\Http\Controllers\DashboardProfessorController;
 use App\Http\Controllers\EspecialidadeController;
 use App\Http\Controllers\GrauController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjetoPreTccController;
 use App\Http\Controllers\TurmaController;
 use App\Models\Professor;
 
@@ -46,19 +48,18 @@ Route::group(['middleware' => 'auth:web'], function () {
         'users' =>UserController::class,
         'alunos' =>AlunoController::class,
         'projetos'=>ProjetoController::class,
+        'projetos-pre-tcc'=>ProjetoPreTccController::class,
         'configuracoes'=>ConfiguracaoController::class,
         'cursos'=>CursoController::class,
         'turmas'=>TurmaController::class,
         'especialidades'=>EspecialidadeController::class,
         'graus'=>GrauController::class,
-        'cargos'=>CargoController::class
     ]);
     Route::post('/areas/update', [AreaController::class, 'update'])->name('areas.update1');
     Route::post('/cursos/update', [CursoController::class, 'update'])->name('cursos.update1');
     Route::post('/turmas/update', [TurmaController::class, 'update'])->name('turmas.update1');
     Route::post('/especialidades/update', [EspecialidadeController::class, 'update'])->name('especialidades.update1');
     Route::post('/graus/update', [GrauController::class, 'update'])->name('graus.update1');
-    Route::post('/cargos/update', [CargoController::class, 'update'])->name('cargos.update1');
     Route::post('/areas/upload', [AreaController::class, 'upload'])->name('areas.upload');
     Route::get('areas/toView/{id}',[AreaController::class,'toView'])->name('areas.toView');
     Route::put('/alunos/update/{id}', [AlunoController::class, 'update'])->name('alunos.update');
@@ -72,7 +73,12 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/projetos/findById/{id}', [ProjetoController::class, 'findById'])->name('projetos.findById');
     Route::get('/projetos/findByProfessor/{id}', [ProjetoController::class, 'findByProfessor'])->name('projetos.findByProfessor');
     Route::post('/projetos/update/{id}', [ProjetoController::class, 'update'])->name('projetos.update');
+    Route::get('/projetos-pretcc/findById/{id}', [ProjetoPreTccController::class, 'findById'])->name('projetos-pre-tcc.findById');
+    Route::get('/projetos-pretcc/findByProfessor/{id}', [ProjetoPreTccController::class, 'findByProfessor'])->name('projetos-pre-tcc.findByProfessor');
+    Route::post('/projetos-pretcc/update/{id}', [ProjetoPreTccController::class, 'update'])->name('projetos-pre-tcc.update');
+    
     Route::get('/users/findById/{id}', [UserController::class, 'findById'])->name('users.findById');
+    
     Route::put('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
     
     //configuraçoes
@@ -89,6 +95,7 @@ Route::group(['middleware' => 'auth:web'], function () {
         Route::get('/findById/{id}', [DashboardAlunoController::class, 'findById'])->name('dashboardAluno.findById');
         Route::post('/store', [DashboardAlunoController::class, 'store'])->name('dashboardAluno.store');
         Route::post('/confirmed', [DashboardAlunoController::class, 'confirmed'])->name('dashboardAluno.confirmed');
+        Route::post('/setTema', [DashboardAlunoController::class, 'setTema'])->name('dashboardAluno.setTema');
         Route::post('/search', [DashboardAlunoController::class, 'search'])->name('dashboardAluno.search');
         Route::post('/linkTheme', [AlunoController::class, 'linkTheme'])->name('dashboardAluno.linkTheme');
         Route::get('/linkThemeCheck', [DashboardAlunoController::class, 'linkThemeCheck'])->name('dashboardAluno.linkThemeCheck');
@@ -102,5 +109,13 @@ Route::group(['middleware' => 'auth:web'], function () {
         Route::post('/search', [DashboardProfessorController::class, 'search'])->name('dashboardProfessor.search');
         Route::get('/linkThemeCheck', [DashboardProfessorController::class, 'linkThemeCheck'])->name('dashboardProfessor.linkThemeCheck');
     
+    });
+    Route::prefix('profile')->group(function () {
+        Route::get('/indes', [ProfileController::class, 'index'])->name('profile.index');
+        Route::get('/show', [ProfileController::class, 'show'])->name('profile.show');
+        Route::put('/passwordRequest/{id}', [ProfileController::class, 'passwordRequest'])->name('profile.passwordRequest');
+        Route::get('/resetPassword/{id}', [ProfileController::class, 'resetPassword'])->name('profile.resetPassword');
+        Route::put('/update/{id}', [ProfileController::class, 'update'])->name('profile.update');
+        Route::post('/delete/{id}', [ProfileController::class, 'destroy'])->name('profile.delete');
     });
 });

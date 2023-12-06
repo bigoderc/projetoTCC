@@ -6,6 +6,7 @@ use App\Models\Area;
 use App\Models\Tema;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Guid\Guid;
 use Ramsey\Uuid\Uuid;
@@ -20,6 +21,7 @@ class TemaController extends Controller
     public function index(Tema $tema)
     {
         //
+        Gate::authorize('tema');
         $areas = Area::all();
         return view('pages.temas.index',['areas'=>$areas]);
     }

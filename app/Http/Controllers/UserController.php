@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Role;
 use App\Models\RoleUser;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -25,6 +26,7 @@ class UserController extends Controller
     public function index(User $users)
     {
         //
+        Gate::authorize('usuario');
         $roles = Role::get();
         return view('pages.users.index',['users'=>$users->get(),'roles'=>$roles]);
     }

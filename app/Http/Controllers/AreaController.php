@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAreaRequest;
 use App\Models\Area;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
 
@@ -23,6 +24,7 @@ class AreaController extends Controller
     public function index()
     {
         //
+        Gate::authorize('area');
         return view('pages.areas.index');
     }
 

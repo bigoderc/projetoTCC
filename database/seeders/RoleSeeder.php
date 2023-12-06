@@ -51,11 +51,6 @@ class RoleSeeder extends Seeder
         $tema_all->name = 'tema';
         $tema_all->acao = 'Cadastro de Temas';
         $tema_all->save();
-        // Cadastrar no banco a permission Centro de projeto
-        $projeto_all = new Permission();
-        $projeto_all->name = 'projeto';
-        $projeto_all->acao = 'Cadasrto de projeto';
-        $projeto_all->save();
         // Cadastrar no banco a permission Usuario
         $usuario_all = new Permission();
         $usuario_all->name = 'usuario';

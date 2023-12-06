@@ -25,7 +25,6 @@ class Professor extends Model
         'fk_areas_id',
         'fk_grau_id',
         'fk_especialidade_id',
-        'fk_cargo_id',
         'fk_user_id'
     ];
 
@@ -40,9 +39,7 @@ class Professor extends Model
     public function graus(){
         return $this->hasOne(Grau::class,'id','fk_grau_id')->withTrashed();
     }
-    public function cargo(){
-        return $this->hasOne(Cargo::class,'id','fk_cargo_id')->withTrashed();
-    }
+    
     public function user(){
         return $this->hasOne(User::class,'id','fk_user_id')->withTrashed();
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreGrauRequest;
 use App\Models\Grau;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class GrauController extends Controller
 {
@@ -16,6 +17,7 @@ class GrauController extends Controller
     public function index()
     {
         //
+        Gate::authorize('grau');
         return view('pages.graus.index');
     }
 

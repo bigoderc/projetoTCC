@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProjetoPreTcc;
 use App\Http\Requests\StoreProjetoRequest;
 use App\Models\Area;
 use App\Models\Professor;
@@ -10,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Ramsey\Uuid\Uuid;
 
-class ProjetoController extends Controller
+class ProjetoPreTccController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,7 +23,7 @@ class ProjetoController extends Controller
     public function __construct()
     {
         $this->professor = new Professor();
-        $this->model = new Projeto();
+        $this->model = new ProjetoPreTcc();
         $this->area = new Area();
     }
     /**
@@ -30,12 +31,12 @@ class ProjetoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Projeto $projetos)
+    public function index()
     {
         //
-        Gate::authorize('tcc');
-        //dd($projetos->get());
-        return view('pages.projetos.index',['areas'=>$this->area->get(),'professores'=>$this->professor->get()]);
+        Gate::authorize('pre-tcc');
+        //dd($projetos-pre-tcc->get());
+        return view('pages.projetos-pre-tcc.index',['areas'=>$this->area->get(),'professores'=>$this->professor->get()]);
     }
 
     /**
@@ -62,7 +63,7 @@ class ProjetoController extends Controller
             $imageUuid = Uuid::uuid4()->toString();
             $extension = $file->getClientOriginalExtension();
             $path = $imageUuid.'.'.$extension;
-            $file->storeAs('projetos', strtolower($path), 'public');
+            $file->storeAs('projetos-pre-tcc', strtolower($path), 'public');
             $request['projeto'] = strtolower($path);
         }
         $dados=Projeto::create($request->all());
@@ -129,7 +130,7 @@ class ProjetoController extends Controller
             $imageUuid = Uuid::uuid4()->toString();
             $extension = $file->getClientOriginalExtension();
             $path = $imageUuid.'.'.$extension;
-            $file->storeAs('projetos', strtolower($path), 'public');
+            $file->storeAs('projetos-pre-tcc', strtolower($path), 'public');
             $request['projeto'] = strtolower($path);
         }
         $this->model->find($id)->update($request->all());

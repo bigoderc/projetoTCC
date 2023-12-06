@@ -35,14 +35,7 @@
                                             <label for="email">Email</label>
                                             <input type="email" class="form-control" id="email" name="email"
                                                 required>
-                                            <label for="cargo">Cargo</label>
-                                            <select class="form-control" name="fk_cargo_id" id="fk_cargo_id"
-                                                aria-label="Default select example" required>
-                                                <option value="" selected>Selecione o Cargo</option>
-                                                @foreach ($cargos as $cargo)
-                                                    <option value="{{ $cargo->id }}">{{ $cargo->nome }}</option>
-                                                @endforeach
-                                            </select>
+                                            
                                             <label for="nome" class="my-2">Área</label>
                                             <select class="form-control" name="fk_areas_id" id="fk_areas_id"
                                                 aria-label="Default select example" required>
@@ -95,7 +88,6 @@
                                 <th data-field="especialidade.nome" class="col-3" aria-required="true">ESPECIALIDADE
                                 </th>
                                 <th data-field="graus.nome" class="col-3" aria-required="true">GRAU</th>
-                                <th data-field="cargo.nome" class="col-3" aria-required="true">CARGO</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>
@@ -207,8 +199,7 @@
                     if (response.user) {
                         $(`#email`).prop('disabled', true);
                     }
-                    $(`#fk_cargo_id option[value=${response.fk_cargo_id}]`).prop('selected', 'selected')
-                    .change();
+                   
                     $(`#fk_areas_id option[value=${response.fk_areas_id}]`).prop('selected', 'selected')
                     .change();
                     $(`#fk_especialidade_id option[value=${response.fk_especialidade_id}]`).prop('selected',

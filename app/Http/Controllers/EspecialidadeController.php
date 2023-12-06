@@ -6,6 +6,7 @@ use App\Http\Requests\StoreEspecialidadeRequest;
 use App\Http\Requests\StoreEspecialidadesRequest;
 use App\Models\Especialidade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class EspecialidadeController extends Controller
 {
@@ -17,6 +18,7 @@ class EspecialidadeController extends Controller
     public function index()
     {
         //
+        Gate::authorize('especialidade');
         return view('pages.especialidades.index');
     }
 

@@ -5,7 +5,7 @@
     <div class="card-body">
         <div class="card">
             <div class="card-header card-title text-white bg-transparent border-0 m-3">
-                <span class="h4">TCC</span>
+                <span class="h4">Pré-TCC</span>
             </div>
             <div class="card-body">
 
@@ -40,9 +40,7 @@
                                         </select>
                                         <label for="instituicao" class="my-2">Instituição</label>
                                         <input type="text" class="form-control" id="instituicao" value="IF BAIANO" name="instituicao">
-                                        <label for="data_apresentacao" class="my-2">Data Apresentação</label>
-                                        <input type="date" class="form-control" id="apresentacao" name="apresentacao">
-                                        <label for="orientador" class="my-2">Orientador</label>
+                                       <label for="orientador" class="my-2">Orientador</label>
                                         <select class="form-control" name="fk_professores_id" id="fk_professores_id"  aria-label="Default select example" required>
                                             <option value="" selected>Selecione</option>
                                             @foreach($professores as $professor)
@@ -68,7 +66,7 @@
                 data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                 data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
                 data-search-accent-neutralise="true" data-editable-url="#"
-                data-url="{{ route('projetos.show', 1) }}">
+                data-url="{{ route('projetos-pre-tcc.show', 1) }}">
                 <thead>
                     <tr>
                         <th data-field="id" class="col-1">ID</th>
@@ -76,7 +74,6 @@
                         <th data-field="instituicao" class="col-3" aria-required="true">INSTITUIÇÃO</th>
                         <th data-field="area.nome" class="col-3" aria-required="true">ÁREA</th>
                         <th data-field="professor.nome" class="col-3" aria-required="true">PROFESSOR</th>
-                        <th data-field="apresentacao" class="col-3" aria-required="true">APRESENTADO</th>
                         <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                             data-events="acaoEvents">Ação</th>
                     </tr>
@@ -112,8 +109,8 @@ $(document).ready(function() {
                 partialLoader();
                 let id = document.getElementById('id').value;
                 $.ajax({
-                    url: id > 0 ? `{{ url('projetos/update/${id}') }}` :
-                        "{{ route('projetos.store') }}",
+                    url: id > 0 ? `{{ url('projetos-pre-tcc/update/${id}') }}` :
+                        "{{ route('projetos-pre-tcc.store') }}",
                     type:"POST",
                     data: formdata,
                     dataType: "json",
@@ -153,7 +150,7 @@ window.acaoEvents = {
             if (result.isConfirmed) {
                 partialLoader();
                 $.ajax({
-                    url: "projetos/" + row.id,
+                    url: "projetos-pre-tcc/" + row.id,
                     type: "DELETE",
                     dataType: "json",
                     success: function(response) {
@@ -179,7 +176,7 @@ function setIdModal(id) {
     partialLoader();
     document.getElementById('id').value = id;
     $.ajax({
-        url: `{{ url('projetos/findById/${id}') }}`,
+        url: `{{ url('projetos-pre-tcc/findById/${id}') }}`,
         type: "GET",
         success: function(response) {
             $(`#titulo`).text(`Editar Professor ${response.nome}`);

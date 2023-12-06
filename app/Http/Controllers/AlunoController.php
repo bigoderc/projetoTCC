@@ -11,6 +11,7 @@ use App\Models\RoleUser;
 use App\Models\Tema;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class AlunoController extends Controller
@@ -31,6 +32,7 @@ class AlunoController extends Controller
     public function index(Aluno $alunos)
     {
         //
+        Gate::authorize('aluno');
         return view('pages.alunos.index',['cursos'=>Curso::all()]);
     }
 

@@ -26,8 +26,7 @@
                                         <th data-field="especialidade.nome" class="col-3" aria-required="true">ESPECIALIDADE
                                         </th>
                                         <th data-field="graus.nome" class="col-3" aria-required="true">GRAU</th>
-                                        <th data-field="cargo.nome" class="col-3" aria-required="true">CARGO</th>
-                                
+                                        
                                         <th data-field="acao" class="col-1"
                                             data-formatter="acaoFormattercheck2">
                                             Ação</th>
