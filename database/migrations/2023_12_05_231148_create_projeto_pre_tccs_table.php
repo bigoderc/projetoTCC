@@ -19,7 +19,7 @@ class CreateProjetoPreTccsTable extends Migration
             $table->string('projeto', 60)->nullable();
             $table->string('instituicao',120)->nullable();
             $table->smallInteger('fk_professores_id')->nullable();
-            $table->foreign(['fk_professores_id'], 'FK_professores')->references(['id'])->on('professores');
+            $table->foreign(['fk_professores_id'], 'FK_professores2')->references(['id'])->on('professores');
             $table->smallInteger('fk_areas_id')->nullable();
             // Define foreign key constraint
             $table->foreign('fk_areas_id')
