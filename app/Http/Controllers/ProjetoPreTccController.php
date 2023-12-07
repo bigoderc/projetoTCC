@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProjetoPreTcc;
 use App\Http\Requests\StoreProjetoRequest;
+use App\Models\Aluno;
 use App\Models\Area;
 use App\Models\Professor;
 use App\Models\Projeto;
@@ -13,30 +14,31 @@ use Ramsey\Uuid\Uuid;
 
 class ProjetoPreTccController extends Controller
 {
-    /**
+       /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    protected $professor,$model,$area;
+    protected $professor,$model,$area,$aluno;
 
     public function __construct()
     {
         $this->professor = new Professor();
-        $this->model = new ProjetoPreTcc();
+        $this->model = new Projeto();
         $this->area = new Area();
+        $this->aluno = new Aluno();
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Projeto $projetos)
     {
         //
-        Gate::authorize('pre-tcc');
-        //dd($projetos-pre-tcc->get());
-        return view('pages.projetos-pre-tcc.index',['areas'=>$this->area->get(),'professores'=>$this->professor->get()]);
+        Gate::authorize('tcc');
+        //dd($projetos->get());
+        return view('pages.projetos-pre-tcc.index',['alunos'=>$this->aluno->get(),'areas'=>$this->area->get(),'professores'=>$this->professor->get()]);
     }
 
     /**
@@ -68,7 +70,7 @@ class ProjetoPreTccController extends Controller
         }
         $dados=Projeto::create($request->all());
        
-        return response()->json($this->model->with(['professor','area'])->find($dados->id));
+        return response()->json($this->model->with(['aluno','professor','area'])->find($dados->id));
     }
 
     /**
@@ -80,7 +82,7 @@ class ProjetoPreTccController extends Controller
     public function show(Projeto $projeto)
     {
         //
-        return response()->json($this->model->with(['professor','area'])->get());
+        return response()->json($this->model->with(['aluno','professor','area'])->get());
     }
     /**
      * Display the specified resource.
@@ -91,7 +93,7 @@ class ProjetoPreTccController extends Controller
     public function findById($id)
     {
         //
-        return response()->json($this->model->with(['professor','area'])->find($id));
+        return response()->json($this->model->with(['aluno','professor','area'])->find($id));
     }
     /**
      * Display the specified resource.
@@ -102,7 +104,7 @@ class ProjetoPreTccController extends Controller
     public function findByProfessor($id)
     {
         //
-        return response()->json($this->model->with(['professor','area'])->where('fk_professores_id',$id)->get());
+        return response()->json($this->model->with(['aluno','professor','area'])->where('fk_professores_id',$id)->get());
     }
     /**
      * Show the form for editing the specified resource.
@@ -134,7 +136,7 @@ class ProjetoPreTccController extends Controller
             $request['projeto'] = strtolower($path);
         }
         $this->model->find($id)->update($request->all());
-        return response()->json($this->model->with(['professor','area'])->find($id));
+        return response()->json($this->model->with(['aluno','professor','area'])->find($id));
     }
 
     /**

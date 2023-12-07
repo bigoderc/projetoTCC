@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class StoreProfessorRequest extends FormRequest
@@ -30,10 +31,22 @@ class StoreProfessorRequest extends FormRequest
         return [
             //
             'siape' => ['required','max:255',Rule::unique('professores')->ignore($this->id)],
-            'email' => ['required','max:255',Rule::unique('users')->ignore($this->id)],
+            'email' => [
+                'required',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    $existingUser = DB::table('users')
+                        ->where('email', $value)
+                        ->whereNull('deleted_at')
+                        ->first();
+            
+                    if ($existingUser) {
+                        $fail('O e-mail já está em uso.');
+                    }
+                },
+            ],
             'fk_areas_id' => ['required'],
             'fk_grau_id' => ['required'],
-            'fk_cargo_id' => ['required'],
             'fk_especialidade_id' => ['required'],
         ];
     }
@@ -46,7 +59,6 @@ class StoreProfessorRequest extends FormRequest
             'email.unique' => 'Já existe esse email',
             'fk_areas_id.required' => 'É obrigatorio a área',
             'fk_grau_id.required' => 'É obrigatorio o grau',
-            'fk_cargo_id.required' => 'É obrigatorio o cargo',
             'fk_especialidade_id.required' => 'É obrigatorio a especialidade',
         ];
     }

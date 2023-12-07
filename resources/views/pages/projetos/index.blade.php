@@ -30,7 +30,12 @@
                                         <label for="nome" class="my-2">Projeto</label>
                                         <input type="text" class="form-control" id="nome" name="nome" required>
                                         <label for="aluno" class="my-2">Discente</label>
-                                        <input type="text" class="form-control" id="aluno" name="aluno" required>
+                                        <select class="form-control" name="fk_aluno_id" id="fk_aluno_id" aria-label="Selecione" required>
+                                            <option value="" selected>Selecione</option>
+                                            @foreach($alunos as $aluno)
+                                                <option value="{{$aluno->id}}">{{$aluno->nome}}</option>
+                                            @endforeach
+                                        </select>
                                         <label for="area" class="my-2">Área</label>
                                         <select class="form-control" name="fk_areas_id" id="fk_areas_id" aria-label="Selecione" required>
                                             <option value="" selected>Selecione</option>
@@ -72,7 +77,7 @@
                 <thead>
                     <tr>
                         <th data-field="id" class="col-1">ID</th>
-                        <th data-field="nome" class="col-3" aria-required="true">NOME</th>
+                        <th data-field="aluno.nome" class="col-3" aria-required="true">DISCENTE</th>
                         <th data-field="instituicao" class="col-3" aria-required="true">INSTITUIÇÃO</th>
                         <th data-field="area.nome" class="col-3" aria-required="true">ÁREA</th>
                         <th data-field="professor.nome" class="col-3" aria-required="true">PROFESSOR</th>
@@ -192,6 +197,7 @@ function setIdModal(id) {
             .change();
             $(`#fk_areas_id option[value=${response.fk_areas_id}]`).prop('selected', 'selected')
             .change(); 
+            $(`#fk_aluno_id option[value=${response.fk_aluno_id}]`).prop('selected', 'selected').change(); 
             $(`#arquivo`).prop('required',false);
            $('#novalinha').modal('show');
 

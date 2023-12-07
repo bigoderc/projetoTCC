@@ -5,7 +5,7 @@
         <div class="card-body">
             <div class="card">
                 <div class="card-header card-title text-white bg-transparent border-0 m-3">
-                    <span class="h4">Temas</span>
+                    <span class="h4">Proposta de Tema</span>
                 </div>
                 <div class="card-body">
                     <div id="toolbar">

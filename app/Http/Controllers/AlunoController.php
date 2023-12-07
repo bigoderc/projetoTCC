@@ -56,13 +56,29 @@ class AlunoController extends Controller
     public function store(AlunoStoreRequest $request)
     {
         //
-        $user = $this->user->create(
-            [
-                "name" =>$request->nome,
-                "email" =>$request->email,
-                "password" => Hash::make('alterar123'),
-            ]
-        );
+        if(isset($request->formado)){
+            $request['formado']= true;
+        }
+        $user = $this->user->withTrashed()->where('email',$request->email)->whereNotNull('deleted_at')->first();
+        
+        if(!empty($user)){
+            $user->update(
+                [
+                    "name" =>$request->nome,
+                    "password" => Hash::make('alterar123'),
+                    "deleted_at"=>null
+                ] 
+            );
+        }else{
+            $user = $this->user->create(
+                [
+                    "name" =>$request->nome,
+                    "email" =>$request->email,
+                    "password" => Hash::make('alterar123'),
+                ]
+            );
+        }
+        
         $role = Role::where('nome','aluno')->first();
         RoleUser::create([
             'fk_roles_id'=>$role->id,
@@ -106,7 +122,11 @@ class AlunoController extends Controller
     public function update(AlunoStoreRequest $request, Aluno $aluno,$id)
     {
         //
-        
+        if(isset($request->formado)){
+            $request['formado']= true;
+        }else{
+            $request['formado']= false;
+        }
         $aluno->find($id)->update($request->all());
         return response()->json($aluno->with(['curso','turma'])->find($id));
     }
@@ -120,8 +140,10 @@ class AlunoController extends Controller
     public function destroy($id)
     {
         //
-        Aluno::find($id)->delete();
-        return response()->json(['success' => true]);
+        $aluno = Aluno::find($id);
+        User::find($aluno->fk_user_id)->delete();
+        $aluno->delete();
+        return response()->json(true);
     }
     /**
      * Display the specified resource.

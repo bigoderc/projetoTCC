@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             //UserSeeder::class,
             RoleSeeder::class,
             AreaSeeder::class,
-            GrausSeeder::class
+            GrausSeeder::class,
+            Permission05122023Seeder::class
         ]);
     }
 }

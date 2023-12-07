@@ -88,7 +88,7 @@
                     @can('tema')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('temas.index') }}">
-                                <span>{{ ('Tema') }}</span>
+                                <span>{{ ('Proposta de Tema') }}</span>
                             </a>
                         </li>
                     @endcan

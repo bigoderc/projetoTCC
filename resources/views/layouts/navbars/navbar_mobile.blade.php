@@ -1,53 +1,115 @@
-{{-- Navbar da tela de principal de produtos --}}
 <nav class="navbar navbar-dark bg-primary shadow-sm sidebar-mobile">
     <div class="container">
-        {{-- Titulo da navbar --}}
         <a class="navbar-brand disabled" href="{{ url('/') }}">
-            {{-- Alterar titulo no app.name --}}
             {{ config('app.name', 'Nome_Generico') }}
         </a>
 
-        {{-- Dropdown de menu da navbar --}}
-        <ul class="nav">
-            <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                    {{ Auth::user()->name }}
+        <div class="dropdown">
+            <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" aria-haspopup="true" aria-expanded="false" onclick="toggleDropdown('profileDropdown')">
+                {{ Auth::user()->name }}
+            </a>
+
+            <div id="profileDropdown" class="dropdown-menu dropdown-menu-right mt-3" style="display: none;">
+                <a class="dropdown-item" href="{{ route('home') }}">
+                    <i class="px-2 fa fa-solid fa-home fa-lg"></i>{{ __('Painel') }}
+                </a>
+                <a class="dropdown-item" href="{{ route('profile.index') }}">
+                    <i class="px-2 fa fa-solid fa-lg fa-user"></i>{{ __('Perfil') }}
                 </a>
 
-                <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="navbarDropdown">
-                    <ul class="nav flex-column text-left">
-                        <li class="nav-item">
-                            <a href="{{ route('home') }}" class="nav-link"><i class="px-2 fa fa-solid fa-home fa-lg"></i> {{ __('Painel') }}</a>
-                        </li>
-                        
-                        @can('configuracoes')
-                            <li class="nav-item ">
-                                <a class="nav-link" href="{{ route('configuracoes.index') }}">
-                                    <i class="px-2 fa fa-solid fa-lg fa-cog"></i>
-                                    {{ __('Configuracão') }}
-                                </a>
-                            </li> 
+                <div class="dropdown">
+                    <a class="dropdown-item dropdown-toggle" href="#" id="cadastroDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="lg nc-icon nc-single-copy-04 px-2"></i>{{ __('Cadastro') }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="cadastroDropdown">
+                        @can('aluno')
+                            <a class="dropdown-item" href="{{ route('alunos.index') }}">
+                                {{ __('Discente') }}
+                            </a>
+                           
                         @endcan
-                        <li class="nav-item ">
-                            <a class="nav-link" href="{{ route('profile.index') }}">
-                                <i class="px-2 fa fa-solid fa-lg fa-user"></i>
-                                {{ __('Perfil') }}
+                        @can('area')
+                            <a class="dropdown-item" href="{{ route('areas.index') }}">
+                                {{ __('Área') }}
                             </a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="px-2 fa fa-solid fa-lg fa-sign-out"></i>
-                                {{ __('Sair') }}
+                        @endcan
+                        @can('curso')
+                            <a class="dropdown-item" href="{{ route('cursos.index') }}">
+                                {{ __('Curso') }}
                             </a>
-        
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </li>
-                    </ul>
+                        @endcan
+                        @can('especialidade')
+                            <a class="dropdown-item" href="{{ route('especialidades.index') }}">
+                                {{ __('Especialidade') }}
+                            </a>
+                        @endcan
+                        @can('curso')
+                            <a class="dropdown-item" href="{{ route('graus.index') }}">
+                                {{ __('Grau') }}
+                            </a>
+                        @endcan
+                        @can('professor')
+                            <a class="dropdown-item" href="{{ route('professores.index') }}">
+                                {{ __('Professor') }}
+                            </a>
+                            
+                        @endcan
+                        @can('pre-tcc')
+                            <a class="dropdown-item" href="{{ route('projetos-pre-tcc.index') }}">
+                                {{ __('Pré-TCC') }}
+                            </a>
+                        @endcan
+                        @can('tcc')
+                            <a class="dropdown-item" href="{{ route('projetos.index') }}">
+                                {{ __('TCC') }}
+                            </a>
+                        @endcan
+                        @can('tema')
+                            <a class="dropdown-item" href="{{ route('temas.index') }}">
+                                {{ __('Proposta de Tema') }}
+                            </a>
+                        @endcan
+                        @can('turma')
+                            <a class="dropdown-item" href="{{ route('turmas.index') }}">
+                                {{ __('Turma') }}
+                            </a>
+                        @endcan
+                        @can('usuario')
+                            <a class="dropdown-item" href="{{ route('users.index') }}">
+                                {{ __('Usuário') }}
+                            </a>
+                            
+                        @endcan
+                       
+                        <!-- Adicione mais opções conforme necessário -->
+                    </div>
                 </div>
-            </li>
-        </ul>
+
+                @can('configuracoes')
+                    <a class="dropdown-item" href="{{ route('configuracoes.index') }}">
+                        <i class="px-2 fa fa-solid fa-lg fa-cog"></i>{{ __('Configuração') }}
+                    </a>
+                @endcan
+
+                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="px-2 fa fa-solid fa-lg fa-sign-out"></i>{{ __('Sair') }}
+                </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            </div>
+        </div>
     </div>
+
+    <script>
+        function toggleDropdown(dropdownId) {
+            var dropdown = document.getElementById(dropdownId);
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'block';
+            } else {
+                dropdown.style.display = 'none';
+            }
+        }
+    </script>
 </nav>
-{{-- Fim da Navbar da tela de principal de produtos --}}

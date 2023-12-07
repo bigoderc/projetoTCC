@@ -198,17 +198,21 @@
         }
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
-            return [
+            const actions = [
                 `<a class="text-danger m-1" href="#" onclick="setIdModal(${row.id})" data-toggle="modal" title="Atualizar Anexo" data-target="#upload">`,
-                `<i class="fa fa-upload " aria-hidden="true"></i>`,
+                `<i class="fa fa-upload" aria-hidden="true"></i>`,
                 `</a>`,
-                `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="{{ url('areas/toView/${row.id}') }}"  target="_blank" >`,
-                `<i class="fa fa-search" aria-hidden="true"></i>`,
-                `</a>`,
+                // Verificar se row.arquivo é diferente de null antes de adicionar o link
+                row.arquivo !== null ? `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="${row.storage}" target="_blank">` +
+                    `<i class="fa fa-search" aria-hidden="true"></i>` +
+                    `</a>` : '',
                 '<a class="remove" href="javascript:void(0)" title="Remove">',
                 '<i class="fa fa-trash"></i>',
                 '</a>'
-            ].join('');
+            ];
+
+            return actions.join('');
         }
+
     </script>
 @endpush

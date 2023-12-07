@@ -68,13 +68,26 @@ class ProfessorController extends Controller
     public function store(StoreProfessorRequest $request)
     {
         //
-        $user = $this->user->create(
-            [
-                "name" =>$request->nome,
-                "email" =>$request->email,
-                "password" => Hash::make('alterar123'),
-            ]
-        );
+        $user = $this->user->withTrashed()->where('email',$request->email)->whereNotNull('deleted_at')->first();
+        
+        if(!empty($user)){
+            $user->update(
+                [
+                    "name" =>$request->nome,
+                    "password" => Hash::make('alterar123'),
+                    "deleted_at"=>null
+                ] 
+            );
+        }else{
+            $user = $this->user->create(
+                [
+                    "name" =>$request->nome,
+                    "email" =>$request->email,
+                    "password" => Hash::make('alterar123'),
+                ]
+            );
+        }
+        
         $role = Role::where('nome','professor')->first();
         RoleUser::create([
             'fk_roles_id'=>$role->id,
@@ -149,7 +162,9 @@ class ProfessorController extends Controller
     public function destroy($id)
     {
         //
-        $this->professor->find($id)->delete();
+        $professor = $this->professor->find($id);
+        $this->user->find($professor->fk_user_id)->delete();
+        $professor->delete();
         return response()->json(true);
     }
 }

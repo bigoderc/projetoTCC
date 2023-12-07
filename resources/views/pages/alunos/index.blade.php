@@ -1,4 +1,7 @@
-@extends('layouts.pages.dashboard')
+@extends('layouts.pages.dashboard',[
+    'title'=>'checked',
+    'checked'=>true
+])
 
 @section('content-page')
 <div class="content-page">
@@ -59,14 +62,24 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row mb-2">
                                             <div class="col">
-                                                <label for="nome">Período</label>
-                                                <input type="text" class="form-control" maxlength="10" id="periodo" name="periodo">
+                                                <label for="nome">Período de Ingresso</label>
+                                                <input type="text" class="form-control" maxlength="2" id="periodo" name="periodo">
                                             </div>
                                             <div class="col">
-                                                <label for="nome">Ingresso</label>
-                                                <input type="month" class="form-control" id="ingresso" maxlength="10" name="ingresso" required>
+                                                <label for="nome">Ano de Ingresso</label>
+                                                <input type="year" class="form-control" id="ingresso" maxlength="4" name="ingresso" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" name="formado" id="formado">
+                                                    <label class="form-check-label" for="formado">
+                                                        Formado
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -233,6 +246,7 @@
                     $(`#matriculado option[value=${response.matriculado}]`).prop('selected','selected').change();
                     $(`#periodo`).val(response.periodo);
                     $(`#ingresso`).val(response.ingresso);
+                    $(`#formado`).prop('checked',response.formado);
                     $(`#fk_curso_id option[value=${response.fk_curso_id}]`).prop('selected','selected').change();
                     $(`#fk_turma_id option[value=${response.fk_turma_id}]`).prop('selected','selected').change();
                     $('#novalinha').modal('show');
