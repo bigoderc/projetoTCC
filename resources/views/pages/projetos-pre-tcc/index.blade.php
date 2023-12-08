@@ -115,7 +115,7 @@ $(document).ready(function() {
                 partialLoader();
                 let id = document.getElementById('id').value;
                 $.ajax({
-                    url: id > 0 ? `{{ url('projetos-pre-tcc/update/${id}') }}` :
+                    url: id > 0 ? `{{ url('projetos-pretcc/update/${id}') }}` :
                         "{{ route('projetos-pre-tcc.store') }}",
                     type:"POST",
                     data: formdata,
