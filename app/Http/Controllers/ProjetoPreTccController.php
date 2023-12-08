@@ -57,7 +57,7 @@ class ProjetoPreTccController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProjetoRequest $request)
+    public function store(Request $request)
     {
         //
         if($request->hasFile('arquivo')){
@@ -68,7 +68,7 @@ class ProjetoPreTccController extends Controller
             $file->storeAs('projetos-pre-tcc', strtolower($path), 'public');
             $request['projeto'] = strtolower($path);
         }
-        $dados=Projeto::create($request->all());
+        $dados=$this->model->create($request->all());
        
         return response()->json($this->model->with(['aluno','professor','area'])->find($dados->id));
     }
@@ -124,7 +124,7 @@ class ProjetoPreTccController extends Controller
      * @param  \App\Models\Projeto  $projeto
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreProjetoRequest $request, $id)
+    public function update(Request $request, $id)
     {
         //
         if($request->hasFile('arquivo')){
