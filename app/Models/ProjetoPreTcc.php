@@ -51,7 +51,7 @@ class ProjetoPreTcc extends Model
         });
     }
     public function aluno(){
-        return $this->hasOne(Professor::class,'id','fk_aluno_id')->withTrashed();
+        return $this->hasOne(Aluno::class,'id','fk_aluno_id')->withTrashed();
     }
     public function getStorageAttribute()
     {

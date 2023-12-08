@@ -34,7 +34,7 @@ class Projeto extends Model
         return $this->hasOne(Professor::class,'id','fk_professores_id')->withTrashed();
     }
     public function aluno(){
-        return $this->hasOne(Professor::class,'id','fk_aluno_id')->withTrashed();
+        return $this->hasOne(Aluno::class,'id','fk_aluno_id')->withTrashed();
     }
     public function area(){
         return $this->hasOne(Area::class,'id','fk_areas_id')->withTrashed();
