@@ -24,7 +24,7 @@ class ProjetoPreTccController extends Controller
     public function __construct()
     {
         $this->professor = new Professor();
-        $this->model = new Projeto();
+        $this->model = new ProjetoPreTcc();
         $this->area = new Area();
         $this->aluno = new Aluno();
     }
