@@ -75,6 +75,7 @@
                 <thead>
                     <tr>
                         <th data-field="id" class="col-1">ID</th>
+                        <th data-field="nome" class="col-3" aria-required="true">PROJETO</th>
                         <th data-field="aluno.nome" class="col-3" aria-required="true">DISCENTE</th>
                         <th data-field="instituicao" class="col-3" aria-required="true">INSTITUIÇÃO</th>
                         <th data-field="area.nome" class="col-3" aria-required="true">ÁREA</th>
