@@ -22,7 +22,6 @@ class Projeto extends Model
     protected $table = 'projetos';
     protected $fillable = [
         'id',
-        'nome',
         'instituicao',
         'fk_professores_id',
         'apresentacao',

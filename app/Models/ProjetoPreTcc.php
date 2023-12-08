@@ -20,7 +20,6 @@ class ProjetoPreTcc extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = [
         'id',
-        'nome',
         'instituicao',
         'fk_professores_id',
         'apresentacao',
