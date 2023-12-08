@@ -12,6 +12,7 @@ use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
@@ -23,7 +24,7 @@ class ProfessorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected $professor,$area,$especialidade,$grau,$user;
+    protected $professor, $area, $especialidade, $grau, $user;
 
     public function __construct()
     {
@@ -42,10 +43,10 @@ class ProfessorController extends Controller
     {
         //
         Gate::authorize('professor');
-        return view('pages.professores.index',[
-            'areas'=>$this->area->get(),
-            'especialidades'=>$this->especialidade->get(),
-            'graus'=>$this->grau->get()
+        return view('pages.professores.index', [
+            'areas' => $this->area->get(),
+            'especialidades' => $this->especialidade->get(),
+            'graus' => $this->grau->get()
         ]);
     }
 
@@ -68,34 +69,43 @@ class ProfessorController extends Controller
     public function store(StoreProfessorRequest $request)
     {
         //
-        $user = $this->user->withTrashed()->where('email',$request->email)->whereNotNull('deleted_at')->first();
-        
-        if(!empty($user)){
-            $user->update(
-                [
-                    "name" =>$request->nome,
-                    "password" => Hash::make('alterar123'),
-                    "deleted_at"=>null
-                ] 
-            );
-        }else{
-            $user = $this->user->create(
-                [
-                    "name" =>$request->nome,
-                    "email" =>$request->email,
-                    "password" => Hash::make('alterar123'),
-                ]
-            );
+        DB::beginTransaction();
+        try {
+            //code...
+            $user = $this->user->withTrashed()->where('email', $request->email)->whereNotNull('deleted_at')->first();
+
+            if (!empty($user)) {
+                $user->update(
+                    [
+                        "name" => $request->nome,
+                        "password" => Hash::make('alterar123'),
+                        "deleted_at" => null
+                    ]
+                );
+            } else {
+                $user = $this->user->create(
+                    [
+                        "name" => $request->nome,
+                        "email" => $request->email,
+                        "password" => Hash::make('alterar123'),
+                    ]
+                );
+            }
+
+            $role = Role::where('nome', 'professor')->first();
+            RoleUser::create([
+                'fk_roles_id' => $role->id,
+                'fk_users_id' => $user->id
+            ]);
+            $request['fk_user_id'] = $user->id;
+            $dados = Professor::create($request->all());
+            DB::commit();
+            return response()->json($this->professor->with(['areas', 'especialidade', 'graus', 'user'])->find($dados->id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json('Erro Interno',500);
         }
-        
-        $role = Role::where('nome','professor')->first();
-        RoleUser::create([
-            'fk_roles_id'=>$role->id,
-            'fk_users_id'=>$user->id
-        ]);
-        $request['fk_user_id'] = $user->id;
-        $dados = Professor::create($request->all());
-        return response()->json($this->professor->with(['areas','especialidade','graus','user'])->find($dados->id));
     }
 
     /**
@@ -107,9 +117,9 @@ class ProfessorController extends Controller
     public function show(Professor $professor)
     {
         //
-        return response()->json($this->professor->with(['areas','especialidade','graus','user'])->get());
+        return response()->json($this->professor->with(['areas', 'especialidade', 'graus', 'user'])->get());
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -119,7 +129,7 @@ class ProfessorController extends Controller
     public function findById($id)
     {
         //
-        return response()->json($this->professor->with(['areas','especialidade','graus','user'])->find($id));
+        return response()->json($this->professor->with(['areas', 'especialidade', 'graus', 'user'])->find($id));
     }
 
     /**
@@ -140,11 +150,21 @@ class ProfessorController extends Controller
      * @param  \App\Models\Professor  $professor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Professor $professor,$id)
+    public function update(Request $request, Professor $professor, $id)
     {
         //
-        $professor->find($id)->update($request->all());
-        return response()->json($this->professor->with(['areas','especialidade','graus','user'])->find($id));
+        DB::beginTransaction();
+        try {
+            //code...
+            $professor->find($id)->update($request->all());
+            DB::commit();
+            return response()->json($this->professor->with(['areas', 'especialidade', 'graus', 'user'])->find($id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json('Erro Interno',500);
+        }
+        
     }
 
     /**

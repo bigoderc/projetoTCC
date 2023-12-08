@@ -11,6 +11,7 @@ use App\Models\RoleUser;
 use App\Models\Tema;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
@@ -56,37 +57,49 @@ class AlunoController extends Controller
     public function store(AlunoStoreRequest $request)
     {
         //
-        if(isset($request->formado)){
-            $request['formado']= true;
+        DB::beginTransaction();
+        try {
+            //code...
+            if(isset($request->formado)){
+                $request['formado']= true;
+            }else{
+                $request['formado']= false;
+            }
+            $user = $this->user->withTrashed()->where('email',$request->email)->whereNotNull('deleted_at')->first();
+            
+            if(!empty($user)){
+                $user->update(
+                    [
+                        "name" =>$request->nome,
+                        "password" => Hash::make('alterar123'),
+                        "deleted_at"=>null
+                    ] 
+                );
+            }else{
+                $user = $this->user->create(
+                    [
+                        "name" =>$request->nome,
+                        "email" =>$request->email,
+                        "password" => Hash::make('alterar123'),
+                    ]
+                );
+            }
+            
+            $role = Role::where('nome','aluno')->first();
+            RoleUser::create([
+                'fk_roles_id'=>$role->id,
+                'fk_users_id'=>$user->id
+            ]);
+            $request['fk_user_id'] = $user->id;
+            $dados=Aluno::create($request->all());
+            DB::commit();
+            return response()->json($this->model->with(['curso','turma'])->find($dados->id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json('Erro Interno',500);
         }
-        $user = $this->user->withTrashed()->where('email',$request->email)->whereNotNull('deleted_at')->first();
         
-        if(!empty($user)){
-            $user->update(
-                [
-                    "name" =>$request->nome,
-                    "password" => Hash::make('alterar123'),
-                    "deleted_at"=>null
-                ] 
-            );
-        }else{
-            $user = $this->user->create(
-                [
-                    "name" =>$request->nome,
-                    "email" =>$request->email,
-                    "password" => Hash::make('alterar123'),
-                ]
-            );
-        }
-        
-        $role = Role::where('nome','aluno')->first();
-        RoleUser::create([
-            'fk_roles_id'=>$role->id,
-            'fk_users_id'=>$user->id
-        ]);
-        $request['fk_user_id'] = $user->id;
-        $dados=Aluno::create($request->all());
-        return response()->json($this->model->with(['curso','turma'])->find($dados->id));
     }
 
     /**
@@ -122,13 +135,23 @@ class AlunoController extends Controller
     public function update(AlunoStoreRequest $request, Aluno $aluno,$id)
     {
         //
-        if(isset($request->formado)){
-            $request['formado']= true;
-        }else{
-            $request['formado']= false;
+        DB::beginTransaction();
+        try {
+            //code...
+            if(isset($request->formado)){
+                $request['formado']= true;
+            }else{
+                $request['formado']= false;
+            }
+            $aluno->find($id)->update($request->all());
+            DB::commit();
+            return response()->json($aluno->with(['curso','turma'])->find($id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json('Erro Interno',500);
         }
-        $aluno->find($id)->update($request->all());
-        return response()->json($aluno->with(['curso','turma'])->find($id));
+        
     }
 
     /**

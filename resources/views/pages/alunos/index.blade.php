@@ -75,7 +75,7 @@
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" name="formado" id="formado">
+                                                    <input class="form-check-input" type="checkbox" value="1" name="formado" id="formado">
                                                     <label class="form-check-label" for="formado">
                                                         Formado
                                                     </label>
@@ -126,6 +126,7 @@
 
     //Adicionar uma nova linha e lançar via ajax
     $(document).ready(function() {
+        
         var forms = document.getElementsByClassName('needs-validation');
         $("#addLinha").submit(function(event) {
             event.preventDefault();
@@ -144,6 +145,7 @@
                         dataType: "json",
                         success: function(response) {
                             partialLoader(false);
+                            $(`#formado`).prop('checked',false);
                             clearForm('addLinha','novalinha');
                             
                             

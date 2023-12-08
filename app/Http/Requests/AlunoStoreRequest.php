@@ -30,14 +30,27 @@ class AlunoStoreRequest extends FormRequest
         $id = $this->segment(2) ?? 0;
         return [
             //
-            'matricula' => ['required','max:255',Rule::unique('alunos')->ignore($this->id)],
+            'matricula' => [
+                'required',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    $existingUser = DB::table('alunos')
+                        ->where('matricula', $value)
+                        ->whereNull('deleted_at')
+                        ->first();
+            
+                    if ($existingUser) {
+                        $fail('a matricula já está em uso.');
+                    }
+                }
+            ],
             'email' => [
                 'required',
                 'max:255',
                 function ($attribute, $value, $fail) {
                     $existingUser = DB::table('users')
                         ->where('email', $value)
-                        ->whereNotNull('deleted_at')
+                        ->whereNull('deleted_at')
                         ->first();
             
                     if ($existingUser) {
