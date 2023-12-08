@@ -20,12 +20,12 @@ class ProjetoPreTcc extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = [
         'id',
+        'nome',
         'instituicao',
         'fk_professores_id',
         'apresentacao',
         'projeto',
-        'fk_areas_id',
-        'aluno'
+        'fk_areas_id'
     ];
     public function professor(){
         return $this->hasOne(Professor::class,'id','fk_professores_id')->withTrashed();
