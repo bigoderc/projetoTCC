@@ -32,7 +32,6 @@ class StoreProjetoRequest extends FormRequest
             'nome' => ['required','max:255',Rule::unique('projetos')->ignore($this->id)],
             'fk_areas_id' => ['required'],
             'fk_professores_id' => ['required'],
-            'arquivo' => 'required_if:id,null|mimes:pdf',
         ];
     }
     public function messages()
@@ -43,8 +42,6 @@ class StoreProjetoRequest extends FormRequest
             'nome.unique' => 'Já existe esse projeto',
             'fk_areas_id.required' => 'É obrigatorio a área',
             'fk_grau_id.required' => 'É obrigatorio o professor',
-            'arquivo.mimes' => 'O arquivo do projeto deve ser um PDF.',
-            'arquivo.required' =>'É obrigatorio o  projeto em pdf'
         ];
     }
     public function failedValidation(Validator $validator)
