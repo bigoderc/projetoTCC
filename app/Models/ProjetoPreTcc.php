@@ -55,7 +55,7 @@ class ProjetoPreTcc extends Model
     }
     public function getStorageAttribute()
     {
-        $caminho = Helper::url('projetos');
+        $caminho = Helper::url('projetos-pre-tcc');
         $path = $this->attributes['projeto'];
 
         // Use $path se estiver definido e não vazio, caso contrário, use $name
