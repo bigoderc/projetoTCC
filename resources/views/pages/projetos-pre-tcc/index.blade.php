@@ -156,7 +156,7 @@ window.acaoEvents = {
             if (result.isConfirmed) {
                 partialLoader();
                 $.ajax({
-                    url: "projetos-pre-tcc/" + row.id,
+                    url: "projetos-pretcc/" + row.id,
                     type: "DELETE",
                     dataType: "json",
                     success: function(response) {
@@ -182,7 +182,7 @@ function setIdModal(id) {
     partialLoader();
     document.getElementById('id').value = id;
     $.ajax({
-        url: `{{ url('projetos-pre-tcc/findById/${id}') }}`,
+        url: `{{ url('projetos-pretcc/findById/${id}') }}`,
         type: "GET",
         success: function(response) {
             $(`#titulo`).text(`Editar Professor ${response.nome}`);
