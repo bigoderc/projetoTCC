@@ -18,7 +18,7 @@ class TurmaController extends Controller
     public function index()
     {
         //
-        Gate::authorize('turma');
+        Gate::authorize('read-turma');
         return view('pages.turmas.index',['cursos'=>Curso::all()]);
     }
 
@@ -41,6 +41,7 @@ class TurmaController extends Controller
     public function store(StoreTurmaRequest $request)
     {
         //
+        Gate::authorize('insert-turma');
         $turma = Turma::create($request->all());
         return response()->json(Turma::with('curso')->find($turma->id));
     }
@@ -54,6 +55,7 @@ class TurmaController extends Controller
     public function show($id)
     {
         //
+        Gate::authorize('read-turma');
         return response()->json(Turma::with('curso')->where('fk_curso_id',$id)->get());
         
     }
@@ -79,6 +81,7 @@ class TurmaController extends Controller
     public function update(Request $request, Turma $turma)
     {
         //
+        Gate::authorize('update-turma');
         if($request->ajax()){
             $turma->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
             return response()->json(['success' => true]);
@@ -94,6 +97,7 @@ class TurmaController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-turma');
         Turma::find($id)->delete();
         return response()->json(['success' => true]);
     }

@@ -36,7 +36,7 @@ class ProjetoPreTccController extends Controller
     public function index(Projeto $projetos)
     {
         //
-        Gate::authorize('tcc');
+        Gate::authorize('read-pre_tcc');
         //dd($projetos->get());
         return view('pages.projetos-pre-tcc.index',['alunos'=>$this->aluno->get(),'areas'=>$this->area->get(),'professores'=>$this->professor->get()]);
     }
@@ -60,6 +60,7 @@ class ProjetoPreTccController extends Controller
     public function store(Request $request)
     {
         //
+        Gate::authorize('insert-pre_tcc');
         if($request->hasFile('arquivo')){
             $file = $request->file('arquivo');
             $imageUuid = Uuid::uuid4()->toString();
@@ -82,6 +83,7 @@ class ProjetoPreTccController extends Controller
     public function show(Projeto $projeto)
     {
         //
+        Gate::authorize('read-pre_tcc');
         return response()->json($this->model->with(['aluno','professor','area'])->get());
     }
     /**
@@ -127,6 +129,7 @@ class ProjetoPreTccController extends Controller
     public function update(Request $request, $id)
     {
         //
+        Gate::authorize('update-pre_tcc');
         if($request->hasFile('arquivo')){
             $file = $request->file('arquivo');
             $imageUuid = Uuid::uuid4()->toString();
@@ -148,6 +151,7 @@ class ProjetoPreTccController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-pre_tcc');
         $this->model->find($id)->delete();
         return response()->json(true);
     }

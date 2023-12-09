@@ -33,7 +33,7 @@ class AlunoController extends Controller
     public function index(Aluno $alunos)
     {
         //
-        Gate::authorize('aluno');
+        Gate::authorize('read-discente');
         return view('pages.alunos.index',['cursos'=>Curso::all()]);
     }
 
@@ -57,6 +57,7 @@ class AlunoController extends Controller
     public function store(AlunoStoreRequest $request)
     {
         //
+        Gate::authorize('store-discente');
         DB::beginTransaction();
         try {
             //code...
@@ -111,6 +112,7 @@ class AlunoController extends Controller
     public function show()
     {
         //
+        Gate::authorize('read-discente');
         return response()->json($this->model->with(['curso','turma'])->get());
     }
 
@@ -135,6 +137,7 @@ class AlunoController extends Controller
     public function update(AlunoStoreRequest $request, Aluno $aluno,$id)
     {
         //
+        Gate::authorize('update-discente');
         DB::beginTransaction();
         try {
             //code...
@@ -163,6 +166,7 @@ class AlunoController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-discente');
         $aluno = Aluno::find($id);
         User::find($aluno->fk_user_id)->delete();
         $aluno->delete();

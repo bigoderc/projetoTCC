@@ -55,8 +55,7 @@
                     <thead>
                         <tr>
                             <th data-field="id" data-sortable="true" class="col-1">ID</th>
-                            <th data-field="acao" data-sortable="true" class="col-3">NOME</th>
-                            <th data-field="description" data-sortable="true" class="col-3">DESCRIÇÂO</th>
+                            <th data-field="description" data-sortable="true" class="col-3">PERMISSÃO</th>
                             <th data-field="permission" data-formatter="permissionFormatter" class="col-auto">PROPRIEDADES
                             </th>
                         </tr>

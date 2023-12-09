@@ -9,8 +9,10 @@
                 </div>
                 <div class="card-body">
                     <div id="toolbar">
-                        <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
-                                class="fa fa-plus"></i> Adicionar nova linha</button>
+                        @can('insert-proposta_tema')
+                            <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
+                                    class="fa fa-plus"></i> Adicionar nova linha</button>
+                        @endcan
 
                         <div class="modal fade" id="novalinha" tabindex="-1" aria-labelledby="novalinha"
                             aria-hidden="true">
@@ -215,16 +217,17 @@
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             const actions = [
-                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
+                
+                `@can('update-proposta_tema')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
                 `<i class="fa fa-edit"></i>`,
-                `</a>`,
+                `</a>@endcan`,
                 // Verificar se row.arquivo é diferente de null antes de adicionar o link
                 row.arquivo !== null ? `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="${row.storage}" target="_blank">` +
                     `<i class="fa fa-search" aria-hidden="true"></i>` +
                     `</a>` : '',
-                '<a class="remove" href="javascript:void(0)" title="Remove">',
+                '@can('delete-proposta_tema')<a class="remove" href="javascript:void(0)" title="Remove">',
                 '<i class="fa fa-trash"></i>',
-                '</a>'
+                '</a>@endcan'
             ];
 
             return actions.join('');

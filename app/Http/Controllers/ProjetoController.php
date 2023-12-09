@@ -35,7 +35,7 @@ class ProjetoController extends Controller
     public function index(Projeto $projetos)
     {
         //
-        Gate::authorize('tcc');
+        Gate::authorize('read-tcc');
         //dd($projetos->get());
         return view('pages.projetos.index',['alunos'=>$this->aluno->get(),'areas'=>$this->area->get(),'professores'=>$this->professor->get()]);
     }
@@ -59,6 +59,7 @@ class ProjetoController extends Controller
     public function store(StoreProjetoRequest $request)
     {
         //
+        Gate::authorize('insert-tcc');
         if($request->hasFile('arquivo')){
             $file = $request->file('arquivo');
             $imageUuid = Uuid::uuid4()->toString();
@@ -81,6 +82,7 @@ class ProjetoController extends Controller
     public function show(Projeto $projeto)
     {
         //
+        Gate::authorize('read-tcc');
         return response()->json($this->model->with(['aluno','professor','area'])->get());
     }
     /**
@@ -126,6 +128,7 @@ class ProjetoController extends Controller
     public function update(StoreProjetoRequest $request, $id)
     {
         //
+        Gate::authorize('update-tcc');
         if($request->hasFile('arquivo')){
             $file = $request->file('arquivo');
             $imageUuid = Uuid::uuid4()->toString();
@@ -147,6 +150,7 @@ class ProjetoController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-tcc');
         $this->model->find($id)->delete();
         return response()->json(true);
     }

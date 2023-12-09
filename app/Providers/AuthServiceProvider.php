@@ -29,23 +29,25 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(GateContract $gate)
     {
         $this->registerPolicies($gate);
-
         $permissoes = new Permission();
         if (Schema::hasTable($permissoes->getTable()) ) {
 
-            $permissoes = Permission::with('roles')->get();
-            //
-
-            //roda todas as permissoes e verifica o que o usuario pode ver
+            $permissoes = Permission::has('permissionRole')->with(['permissionRole','roles'])->get();
             foreach ($permissoes as $permissao) {
-                //dd($permissao->roles);
-                //dd(auth()->user());
-                $gate->define($permissao->name, function(User $user) use ($permissao){
-                    return $user->hasPermission($permissao);
-                });
+                if (!empty($permissao->permissionRole)) {
+                    foreach ($permissao->permissionRole as $permission_find) {
+                        $permisssion = mb_strtolower($permissao->name, 'UTF-8');
+                        $acao = mb_strtolower($permission_find->acao, 'UTF-8');
+                        $regra = $acao.'-'.$permisssion;
+                        $gate->define($regra, function (User $user) use ($permissao) {
+                            return $user->hasPermission($permissao);
+                        });
+                    }
+                }
             }
             //antes de rodar a função ele entra nessa condição para o administrador
             $gate->before(function( User $user, $habilidade){
+                $user->find(auth()->user()->id);
                 /*se o usuario estiver vinculado a regra "adm" ele retorna true e consegue ver todas as permissoes*/
                 if($user->hasAnyRoles('admin') ){
                     return true;

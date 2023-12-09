@@ -24,7 +24,7 @@ class AreaController extends Controller
     public function index()
     {
         //
-        Gate::authorize('area');
+        Gate::authorize('read-area');
         return view('pages.areas.index');
     }
 
@@ -47,6 +47,7 @@ class AreaController extends Controller
     public function store(StoreAreaRequest $request)
     {
         //
+        Gate::authorize('insert-area');
         if($request->hasFile('file')){
             $file = $request->file('file');
             $imageUuid = Uuid::uuid4()->toString();
@@ -69,6 +70,7 @@ class AreaController extends Controller
     public function show()
     {
         //
+        Gate::authorize('read-area');
         return response()->json($this->model->all());
     }
 
@@ -93,6 +95,7 @@ class AreaController extends Controller
     public function update(Request $request, Area $area)
     {
         //
+        Gate::authorize('update-area');
         if($request->ajax()){
             $area->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
              return response()->json(['success' => true]);
@@ -108,6 +111,7 @@ class AreaController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-area');
         Area::find($id)->delete();
         return response()->json(['success' => true]);
     }

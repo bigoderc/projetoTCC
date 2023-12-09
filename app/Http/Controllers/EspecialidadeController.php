@@ -18,7 +18,7 @@ class EspecialidadeController extends Controller
     public function index()
     {
         //
-        Gate::authorize('especialidade');
+        Gate::authorize('read-especialidade');
         return view('pages.especialidades.index');
     }
 
@@ -41,6 +41,7 @@ class EspecialidadeController extends Controller
     public function store(StoreEspecialidadeRequest $request)
     {
         //
+        Gate::authorize('insert-especialidade');
         $dados = Especialidade::create($request->all());
         return response()->json($dados);
     }
@@ -54,6 +55,7 @@ class EspecialidadeController extends Controller
     public function show(Especialidade $especialidade)
     {
         //
+        Gate::authorize('read-especialidade');
         return response()->json(Especialidade::all());
     }
 
@@ -78,6 +80,7 @@ class EspecialidadeController extends Controller
     public function update(Request $request, Especialidade $especialidade)
     {
         //
+        Gate::authorize('update-especialidade');
         if($request->ajax()){
             $especialidade->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
             return response()->json(['success' => true]);
@@ -93,6 +96,7 @@ class EspecialidadeController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-especialidade');
         Especialidade::find($id)->delete();
         return response()->json(['success' => true]);
     }

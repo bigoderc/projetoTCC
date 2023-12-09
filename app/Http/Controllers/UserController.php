@@ -26,7 +26,7 @@ class UserController extends Controller
     public function index(User $users)
     {
         //
-        Gate::authorize('usuario');
+        Gate::authorize('read-usuario');
         $roles = Role::get();
         return view('pages.users.index',['users'=>$users->get(),'roles'=>$roles]);
     }
@@ -49,7 +49,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $data)
     {
         //
-
+        Gate::authorize('insert-usuario');
         $dados=User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -80,6 +80,7 @@ class UserController extends Controller
     public function show($id)
     {
         //
+        Gate::authorize('read-usuario');
         $data = $this->model->with('roles')->get();
 
         $data->each(function ($item) {
@@ -126,6 +127,7 @@ class UserController extends Controller
     public function update(StoreUserRequest $request,User $user, $id)
     {
         //
+        Gate::authorize('update-usuario');
         $user = User::findOrFail($id);
 
         // Atualizar os dados do usuário
@@ -158,6 +160,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-usuario');
         $this->model->find($id)->delete();
         return response()->json(true);
     }

@@ -17,7 +17,7 @@ class GrauController extends Controller
     public function index()
     {
         //
-        Gate::authorize('grau');
+        Gate::authorize('read-grau');
         return view('pages.graus.index');
     }
 
@@ -40,6 +40,7 @@ class GrauController extends Controller
     public function store(StoreGrauRequest $request)
     {
         //
+        Gate::authorize('insert-grau');
         $dados = Grau::create($request->all());
         return response()->json($dados);
     }
@@ -53,6 +54,7 @@ class GrauController extends Controller
     public function show(Grau $grau)
     {
         //
+        Gate::authorize('read-grau');
         return response()->json(Grau::all());
     }
 
@@ -77,6 +79,7 @@ class GrauController extends Controller
     public function update(Request $request, Grau $grau)
     {
         //
+        Gate::authorize('update-grau');
         if($request->ajax()){
             $grau->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
             return response()->json(['success' => true]);
@@ -92,7 +95,8 @@ class GrauController extends Controller
     public function destroy($id)
     {
         //
-       Grau::find($id)->delete();
+        Gate::authorize('delete-grau');
+        Grau::find($id)->delete();
         return response()->json(['success' => true]);
     }
 }

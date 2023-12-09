@@ -18,7 +18,17 @@
                 </div>
             </li>
 
-            @if(Gate::check('usuario') || Gate::check('professor') || Gate::check('aluno') || Gate::check('areas')|| Gate::check('tema')||Gate::check('projeto')||Gate::check('curso'))
+            @if(Gate::check('read-usuario') || 
+                Gate::check('read-professor') || 
+                Gate::check('read-discente') || 
+                Gate::check('read-area')|| 
+                Gate::check('read-proposta_tema')||
+                Gate::check('read-tcc')||
+                Gate::check('read-pre_tcc')||
+                Gate::check('read-turma')||
+                Gate::check('read-especialidade')||
+                Gate::check('read-grau')||
+                Gate::check('read-curso'))
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
                 <div class="d-flex justify-content-center" role="button">
                     <a class="text-decoration-none text-nowrap text-white" href="#">
@@ -28,21 +38,21 @@
                     </a>
                 </div>
                 <ul class="list-group text-left d-none">
-                    @can('curso')
+                    @can('read-curso')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('curso.index') }}">
                                 <span>{{ ('Curso') }}</span>
                             </a>
                         </li>
                     @endcan
-                    @can('turma')
+                    @can('read-turma')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('turma.index') }}">
                                 <span>{{ ('Turma') }}</span>
                             </a>
                         </li>
                     @endcan
-                    @can('area')
+                    @can('read-area')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('area.index') }}">
                                 <span>{{ ('Área') }}</span>
@@ -50,21 +60,21 @@
                         </li>
                     @endcan
                     
-                    @can('especialidade')
+                    @can('read-especialidade')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('especialidade.index') }}">
                                 <span>{{ ('Especialidade') }}</span>
                             </a>
                         </li>
                     @endcan
-                    @can('grau')
+                    @can('read-grau')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('grau.index') }}">
                                 <span>{{ ('Grau') }}</span>
                             </a>
                         </li>
                     @endcan
-                    @can('aluno')
+                    @can('read-discente')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('discente.index') }}">
                                 <span>{{ ('Discente') }}</span>
@@ -73,35 +83,35 @@
                         </li>
                     @endcan
                     
-                    @can('professor')
+                    @can('read-professor')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('professor.index') }}">
                                 <span>{{ ('Professor') }}</span>
                             </a>
                         </li>
                     @endcan
-                    @can('tema')
+                    @can('read-proposta_tema')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('proposta-tema.index') }}">
                                 <span>{{ ('Proposta de Tema') }}</span>
                             </a>
                         </li>
                     @endcan
-                    @can('pre-tcc')
+                    @can('read-pre_tcc')
                     <li class="list-group-item bg-white py-1">
                         <a class="text-decoration-none text-dark" href="{{ route('pre-tcc.index')}}">
                             <span>{{('Pré-TCC')}}</span>
                         </a>
                     </li>
                     @endcan
-                    @can('tcc')
+                    @can('read-tcc')
                     <li class="list-group-item bg-white py-1">
                         <a class="text-decoration-none text-dark" href="{{ route('tcc.index')}}">
                             <span>{{('TCC')}}</span>
                         </a>
                     </li>
                     @endcan                   
-                    @can('usuario')
+                    @can('read-usuario')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('user.index') }}">
                                 <span>{{ ('Usuário') }}</span>
@@ -112,7 +122,7 @@
             </li>
             @endif
             
-            @can('configuracoes')
+            @can('read-configuracao')
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
                 <div class="d-flex justify-content-center">
                     <a class="text-decoration-none text-nowrap text-white" href="{{ route('configuracao.index') }}">

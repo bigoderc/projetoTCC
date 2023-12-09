@@ -42,7 +42,7 @@ class ProfessorController extends Controller
     public function index(Professor $professor)
     {
         //
-        Gate::authorize('professor');
+        Gate::authorize('read-professor');
         return view('pages.professores.index', [
             'areas' => $this->area->get(),
             'especialidades' => $this->especialidade->get(),
@@ -69,6 +69,7 @@ class ProfessorController extends Controller
     public function store(StoreProfessorRequest $request)
     {
         //
+        Gate::authorize('insert-professor');
         DB::beginTransaction();
         try {
             //code...
@@ -117,6 +118,7 @@ class ProfessorController extends Controller
     public function show()
     {
         //
+        Gate::authorize('read-professor');
         return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->get());
     }
 
@@ -153,6 +155,7 @@ class ProfessorController extends Controller
     public function update(Request $request, Professor $professor, $id)
     {
         //
+        Gate::authorize('update-professor');
         DB::beginTransaction();
         try {
             //code...
@@ -182,6 +185,7 @@ class ProfessorController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-professor');
         $professor = $this->professor->find($id);
         $this->user->find($professor->fk_user_id)->delete();
         $professor->delete();

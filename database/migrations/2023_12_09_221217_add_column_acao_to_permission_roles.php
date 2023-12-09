@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DropColumnToProjetos extends Migration
+class AddColumnAcaoToPermissionRoles extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class DropColumnToProjetos extends Migration
      */
     public function up()
     {
-        Schema::table('projetos', function (Blueprint $table) {
+        Schema::table('permission_roles', function (Blueprint $table) {
             //
-            $table->dropColumn('nome');
+            $table->string('acao')->nullable();
         });
-        Schema::table('projeto_pre_tccs', function (Blueprint $table) {
-            //
-            $table->dropColumn('nome');
-        });
+        Schema::dropIfExists('permission_properties');
     }
 
     /**
@@ -30,7 +27,7 @@ class DropColumnToProjetos extends Migration
      */
     public function down()
     {
-        Schema::table('projetos', function (Blueprint $table) {
+        Schema::table('permission_roles', function (Blueprint $table) {
             //
         });
     }

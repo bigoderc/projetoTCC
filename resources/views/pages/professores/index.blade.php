@@ -9,8 +9,10 @@
                 </div>
                 <div class="card-body">
                     <div id="toolbar">
-                        <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
+                        @can('insert-professor')
+                            <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
                                 class="fa fa-plus"></i> Adicionar nova linha</button>
+                        @endcan
 
                         <div class="modal fade" id="novalinha" tabindex="-1" aria-labelledby="novalinha"
                             aria-hidden="true">
@@ -222,12 +224,12 @@
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             return [
-                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
+                `@can('update-professor')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
                 `<i class="fa fa-edit"></i>`,
-                `</a>`,
-                '<a class="remove" href="javascript:void(0)" title="Remove">',
+                `</a>@endcan`,
+                '@can('delete-professor')<a class="remove" href="javascript:void(0)" title="Remove">',
                 '<i class="fa fa-trash"></i>',
-                '</a>'
+                '</a>@endcan'
             ].join('');
         }
     </script>

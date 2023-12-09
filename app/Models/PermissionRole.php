@@ -12,6 +12,7 @@ class PermissionRole extends Model
     protected $fillable = [
         'id',
         'fk_roles_id',
-        'fk_permission_id'
+        'fk_permission_id',
+        'acao'
     ];
 }

@@ -30,32 +30,6 @@ class RoleSeeder extends Seeder
         $professor_role->nome = 'professor';
         $professor_role->description = 'Usuário Professor do Sistema';
         $professor_role->save();
-
-        // Cadastrar no banco a permission configurações
-        $configuracao_all = new Permission();
-        $configuracao_all->name = 'configuracoes';
-        $configuracao_all->acao = 'Configurações do Sistema';
-        $configuracao_all->save();
-        // Cadastrar no banco a permission gasto
-        $aluno_all = new Permission();
-        $aluno_all->name = 'aluno';
-        $aluno_all->acao = 'Cadastro Aluno';
-        $aluno_all->save();
-        // Cadastrar no banco a permission professor
-        $professor_all = new Permission();
-        $professor_all->name = 'professor';
-        $professor_all->acao = 'Cadastro de professor';
-        $professor_all->save();
-        // Cadastrar no banco a permission tema
-        $tema_all = new Permission();
-        $tema_all->name = 'tema';
-        $tema_all->acao = 'Cadastro de Temas';
-        $tema_all->save();
-        // Cadastrar no banco a permission Usuario
-        $usuario_all = new Permission();
-        $usuario_all->name = 'usuario';
-        $usuario_all->acao = 'Usuário';
-        $usuario_all->save();
         //criando Usuario
         $user = User::where('email','admin@paper.com')->first();
         if(empty($user)){

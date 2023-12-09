@@ -34,12 +34,13 @@ class AlunoStoreRequest extends FormRequest
                 'required',
                 'max:255',
                 function ($attribute, $value, $fail) {
-                    $existingUser = DB::table('alunos')
+                    $existingMatricula = DB::table('alunos')
                         ->where('matricula', $value)
+                        ->where('id','<>',$this->id)
                         ->whereNull('deleted_at')
                         ->first();
             
-                    if ($existingUser) {
+                    if ($existingMatricula) {
                         $fail('a matricula já está em uso.');
                     }
                 }

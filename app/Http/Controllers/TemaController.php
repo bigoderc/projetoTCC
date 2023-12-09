@@ -21,7 +21,7 @@ class TemaController extends Controller
     public function index(Tema $tema)
     {
         //
-        Gate::authorize('tema');
+        Gate::authorize('read-proposta_tema');
         $areas = Area::all();
         return view('pages.temas.index',['areas'=>$areas]);
     }
@@ -45,6 +45,7 @@ class TemaController extends Controller
     public function store(Request $request)
     {
         //
+        Gate::authorize('insert-proposta_tema');
         if($request->hasFile('file')){
             $file = $request->file('file');
             $imageUuid = Uuid::uuid4()->toString();
@@ -66,6 +67,7 @@ class TemaController extends Controller
     public function show(Tema $tema)
     {
         //
+        Gate::authorize('read-proposta_tema');
         $user = request()->user();
         $data = User::with('roles')->find($user->id);
 
@@ -102,6 +104,7 @@ class TemaController extends Controller
     public function update(Request $request, Tema $tema,$id)
     {
         //
+        Gate::authorize('update-proposta_tema');
         if($request->hasFile('file')){
             $file = $request->file('file');
             $imageUuid = Uuid::uuid4()->toString();
@@ -123,6 +126,7 @@ class TemaController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-proposta_tema');
         Tema::find($id)->delete();
         return response()->json(['success' => true]);
     }
