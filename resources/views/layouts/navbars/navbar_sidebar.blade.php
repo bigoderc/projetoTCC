@@ -115,7 +115,7 @@
             @can('configuracoes')
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
                 <div class="d-flex justify-content-center">
-                    <a class="text-decoration-none text-nowrap text-white" href="{{ route('configuracoes.index') }}">
+                    <a class="text-decoration-none text-nowrap text-white" href="{{ route('configuracao.index') }}">
                         <i class="px-2 fa fa-solid fa-lg fa-cog"></i>
                         <span class="d-none">{{ ('Configuração') }}</span>
                     </a>

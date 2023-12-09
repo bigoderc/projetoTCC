@@ -169,11 +169,11 @@ class ConfiguracaoController extends Controller
      * @param  \App\Models\Configuracao  $configuracao
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $configuracao)
+    public function show()
     {
         //
 
-        return response()->json($configuracao->all());
+        return response()->json(Role::all());
         
     }
 

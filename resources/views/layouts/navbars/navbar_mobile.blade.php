@@ -88,7 +88,7 @@
                 </div>
 
                 @can('configuracoes')
-                    <a class="dropdown-item" href="{{ route('configuracoes.index') }}">
+                    <a class="dropdown-item" href="{{ route('configuracao.index') }}">
                         <i class="px-2 fa fa-solid fa-lg fa-cog"></i>{{ __('Configuração') }}
                     </a>
                 @endcan

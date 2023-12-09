@@ -49,7 +49,7 @@ Route::group(['middleware' => 'auth:web'], function () {
         'discente' =>AlunoController::class,
         'tcc'=>ProjetoController::class,
         'pre-tcc'=>ProjetoPreTccController::class,
-        'configuracoes'=>ConfiguracaoController::class,
+        'configuracao'=>ConfiguracaoController::class,
         'curso'=>CursoController::class,
         'turma'=>TurmaController::class,
         'especialidade'=>EspecialidadeController::class,
@@ -82,7 +82,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::put('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
     
     //configuraçoes
-    Route::get('/configuracao', [ConfiguracaoController::class, 'index'])->name('configuracao');
+    Route::get('/configuracao', [ConfiguracaoController::class, 'index'])->name('configuracao.index');
     Route::get('/configuracao/permission/{role}', [ConfiguracaoController::class, 'permission'])->name('configuracao.permission');
     Route::get('/configuracao/getPermission/{role}', [ConfiguracaoController::class, 'getPermission'])->name('configuracao.getPermission');
     Route::post('/configuracao/setPermission', [ConfiguracaoController::class, 'setPermission'])->name('configuracao.setPermission');
