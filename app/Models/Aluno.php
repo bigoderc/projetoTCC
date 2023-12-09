@@ -59,4 +59,7 @@ class Aluno extends Model
             }
         });
     }
+    public function user(){
+        return $this->hasOne(User::class,'id','fk_user_id')->withTrashed();
+    }
 }

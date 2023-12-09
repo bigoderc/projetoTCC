@@ -107,6 +107,7 @@ function clearForm(formId,modalId) {
     $(`#${modalId}`).modal('hide');
     $(`#titulo`).text(`Adicionar`);
     $(`#salvar`).text(`Adicionar`);
+    $(`#email`).prop('disabled', false);
 }
 
 function errorResponse(status,data,text) {

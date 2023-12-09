@@ -82,7 +82,7 @@
                         <th data-field="instituicao" class="col-3" aria-required="true">INSTITUIÇÃO</th>
                         <th data-field="area.nome" class="col-3" aria-required="true">ÁREA</th>
                         <th data-field="professor.nome" class="col-3" aria-required="true">PROFESSOR</th>
-                        <th data-field="apresentacao" class="col-3" aria-required="true">APRESENTADO</th>
+                        <th data-field="apresentado_desc" class="col-3" aria-required="true">APRESENTADO</th>
                         <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                             data-events="acaoEvents">Ação</th>
                     </tr>

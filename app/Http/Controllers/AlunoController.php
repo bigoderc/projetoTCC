@@ -94,7 +94,7 @@ class AlunoController extends Controller
             $request['fk_user_id'] = $user->id;
             $dados=Aluno::create($request->all());
             DB::commit();
-            return response()->json($this->model->with(['curso','turma'])->find($dados->id));
+            return response()->json($this->model->with(['user','curso','turma'])->find($dados->id));
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
@@ -113,7 +113,7 @@ class AlunoController extends Controller
     {
         //
         Gate::authorize('read-discente');
-        return response()->json($this->model->with(['curso','turma'])->get());
+        return response()->json($this->model->with(['user','curso','turma'])->get());
     }
 
     /**
@@ -148,7 +148,7 @@ class AlunoController extends Controller
             }
             $aluno->find($id)->update($request->all());
             DB::commit();
-            return response()->json($aluno->with(['curso','turma'])->find($id));
+            return response()->json($aluno->with(['user','curso','turma'])->find($id));
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
@@ -179,7 +179,7 @@ class AlunoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function findById($id){
-        return response()->json($this->model->with(['curso','turma'])->find($id));
+        return response()->json($this->model->with(['user','curso','turma'])->find($id));
     }
     /**
      * Store a newly created resource in storage.

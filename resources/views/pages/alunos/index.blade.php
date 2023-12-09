@@ -243,7 +243,11 @@
                     $(`#titulo`).text(`Editar Discente ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
-                    $(`#email`).val(response.email);
+                    
+                    $(`#email`).val(response.user?.email);
+                    if (response.user) {
+                        $(`#email`).prop('disabled', true);
+                    }
                     $(`#instituicao`).val(response.instituicao);
                     $(`#matricula`).val(response.matricula);
                     $(`#matriculado option[value=${response.matriculado}]`).prop('selected','selected').change();
