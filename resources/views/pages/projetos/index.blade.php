@@ -217,17 +217,20 @@ function setIdModal(id) {
 
 //Criar colunar ação
 function acaoFormatter(value, row, index) {
-    return [
+    const actions = [
         `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
         `<i class="fa fa-edit"></i>`,
         `</a>`,
-        `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="${row.storage}"  target="_blank" >`,
-        `<i class="fa fa-search" aria-hidden="true"></i>`,
-        `</a>`,
+        // Verificar se row.arquivo é diferente de null antes de adicionar o link
+        row.projeto !== null ? `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="${row.storage}" target="_blank">` +
+            `<i class="fa fa-search" aria-hidden="true"></i>` +
+            `</a>` : '',
         '<a class="remove" href="javascript:void(0)" title="Remove">',
         '<i class="fa fa-trash"></i>',
         '</a>'
-    ].join('');
+    ];
+
+    return actions.join('');
 }
 </script>
 @endpush

@@ -22,22 +22,22 @@
                         <i class="lg nc-icon nc-single-copy-04 px-2"></i>{{ __('Cadastro') }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="cadastroDropdown">
-                        @can('aluno')
-                            <a class="dropdown-item" href="{{ route('alunos.index') }}">
-                                {{ __('Discente') }}
+                        @can('curso')
+                            <a class="dropdown-item" href="{{ route('cursos.index') }}">
+                                {{ __('Curso') }}
                             </a>
-                           
+                        @endcan
+                        @can('turma')
+                            <a class="dropdown-item" href="{{ route('turmas.index') }}">
+                                {{ __('Turma') }}
+                            </a>
                         @endcan
                         @can('area')
                             <a class="dropdown-item" href="{{ route('areas.index') }}">
                                 {{ __('Área') }}
                             </a>
                         @endcan
-                        @can('curso')
-                            <a class="dropdown-item" href="{{ route('cursos.index') }}">
-                                {{ __('Curso') }}
-                            </a>
-                        @endcan
+
                         @can('especialidade')
                             <a class="dropdown-item" href="{{ route('especialidades.index') }}">
                                 {{ __('Especialidade') }}
@@ -48,11 +48,23 @@
                                 {{ __('Grau') }}
                             </a>
                         @endcan
+                        @can('aluno')
+                            <a class="dropdown-item" href="{{ route('alunos.index') }}">
+                                {{ __('Discente') }}
+                            </a>
+                           
+                        @endcan
+                        
                         @can('professor')
                             <a class="dropdown-item" href="{{ route('professores.index') }}">
                                 {{ __('Professor') }}
                             </a>
                             
+                        @endcan
+                        @can('tema')
+                            <a class="dropdown-item" href="{{ route('temas.index') }}">
+                                {{ __('Proposta de Tema') }}
+                            </a>
                         @endcan
                         @can('pre-tcc')
                             <a class="dropdown-item" href="{{ route('projetos-pre-tcc.index') }}">
@@ -63,17 +75,7 @@
                             <a class="dropdown-item" href="{{ route('projetos.index') }}">
                                 {{ __('TCC') }}
                             </a>
-                        @endcan
-                        @can('tema')
-                            <a class="dropdown-item" href="{{ route('temas.index') }}">
-                                {{ __('Proposta de Tema') }}
-                            </a>
-                        @endcan
-                        @can('turma')
-                            <a class="dropdown-item" href="{{ route('turmas.index') }}">
-                                {{ __('Turma') }}
-                            </a>
-                        @endcan
+                        @endcan                        
                         @can('usuario')
                             <a class="dropdown-item" href="{{ route('users.index') }}">
                                 {{ __('Usuário') }}

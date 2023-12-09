@@ -119,6 +119,7 @@
         $(document).ready(function() {
             var forms = document.getElementsByClassName('needs-validation');
             $("#addLinha").submit(function(event) {
+                partialLoader();
                 event.preventDefault();
                 var validation = Array.prototype.filter.call(forms, function(form) {
                     if (form.checkValidity() === false) {
@@ -138,7 +139,13 @@
                             success: function(response) {
                                 clearForm('addLinha', 'novalinha')
                                 partialLoader(false);
-                                $('#my_table_id').bootstrapTable('append', response);
+                                id > 0 ? $('#my_table_id').bootstrapTable(
+                                'updateByUniqueId', {
+                                    id: id,
+                                    row: response,
+                                    replace: false
+                                }) : $('#my_table_id').bootstrapTable('prepend',
+                                response);
                                 successResponse();
                             },
                             error: function(xhr, status, error) {
@@ -151,30 +158,6 @@
                 });
 
             });
-        });
-        $("#addUpload").submit(function(event) {
-            event.preventDefault();
-            partialLoader();
-            var formdata = new FormData($("form[name='addUpload']")[0]);
-            $.ajax({
-                url: "{{ route('temas.upload') }}",
-                type: "POST",
-                data: formdata,
-                dataType: "json",
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    partialLoader(false);
-                    $('#upload').modal('hide');
-                    successResponse();
-                },
-                error: function(xhr, status, error) {
-                    partialLoader(false);
-                    errorResponse(xhr.status, xhr.responseJSON.data, xhr
-                        .responseText);
-                }
-            });
-
         });
         //Excluir uma nova linha
         window.acaoEvents = {
@@ -229,42 +212,22 @@
                 }
             });
         }
-
-        function setIdUpload(id) {
-            partialLoader();
-            document.getElementById('id_upload').value = id;
-            $.ajax({
-                url: `{{ url('temas/findById/${id}') }}`,
-                type: "GET",
-                success: function(response) {
-                    partialLoader(false);
-                    $(`#modalupload`).text(`Upload Tema ${response.nome}`);
-                    $(`#salvar`).text(`Salvar`);
-                    $('#upload').modal('show');
-                },
-                error: function(xhr, status, error) {
-                    partialLoader(false);
-                    errorResponse(xhr.status, xhr.responseJSON.data, xhr
-                        .responseText);
-                }
-            });
-        }
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
-            return [
-                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})"title="Editar Registro">`,
+            const actions = [
+                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
                 `<i class="fa fa-edit"></i>`,
                 `</a>`,
-                `<a class="text-danger m-1" href="#" onclick="setIdUpload(${row.id})" data-toggle="modal" title="Atualizar Anexo" data-target="#upload">`,
-                `<i class="fa fa-upload " aria-hidden="true"></i>`,
-                `</a>`,
-                `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="${row.storage}"  target="_blank" >`,
-                `<i class="fa fa-search" aria-hidden="true"></i>`,
-                `</a>`,
+                // Verificar se row.arquivo é diferente de null antes de adicionar o link
+                row.arquivo !== null ? `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="${row.storage}" target="_blank">` +
+                    `<i class="fa fa-search" aria-hidden="true"></i>` +
+                    `</a>` : '',
                 '<a class="remove" href="javascript:void(0)" title="Remove">',
                 '<i class="fa fa-trash"></i>',
                 '</a>'
-            ].join('');
+            ];
+
+            return actions.join('');
         }
     </script>
 @endpush

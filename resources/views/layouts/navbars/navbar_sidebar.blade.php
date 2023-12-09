@@ -28,11 +28,17 @@
                     </a>
                 </div>
                 <ul class="list-group text-left d-none">
-                    @can('aluno')
+                    @can('curso')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('alunos.index') }}">
-                                <span>{{ ('Discente') }}</span>
-
+                            <a class="text-decoration-none text-dark" href="{{ route('cursos.index') }}">
+                                <span>{{ ('Curso') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('turma')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('turmas.index') }}">
+                                <span>{{ ('Turma') }}</span>
                             </a>
                         </li>
                     @endcan
@@ -43,31 +49,41 @@
                             </a>
                         </li>
                     @endcan
-                    @can('curso')
-                        <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('cursos.index') }}">
-                                <span>{{ ('Curso') }}</span>
-                            </a>
-                        </li>
-                    @endcan
-                    @can('curso')
+                    
+                    @can('especialidade')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('especialidades.index') }}">
                                 <span>{{ ('Especialidade') }}</span>
                             </a>
                         </li>
                     @endcan
-                    @can('curso')
+                    @can('grau')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('graus.index') }}">
                                 <span>{{ ('Grau') }}</span>
                             </a>
                         </li>
                     @endcan
+                    @can('aluno')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('alunos.index') }}">
+                                <span>{{ ('Discente') }}</span>
+
+                            </a>
+                        </li>
+                    @endcan
+                    
                     @can('professor')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('professores.index') }}">
                                 <span>{{ ('Professor') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('tema')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('temas.index') }}">
+                                <span>{{ ('Proposta de Tema') }}</span>
                             </a>
                         </li>
                     @endcan
@@ -84,21 +100,7 @@
                             <span>{{('TCC')}}</span>
                         </a>
                     </li>
-                    @endcan
-                    @can('tema')
-                        <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('temas.index') }}">
-                                <span>{{ ('Proposta de Tema') }}</span>
-                            </a>
-                        </li>
-                    @endcan
-                    @can('turma')
-                        <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('turmas.index') }}">
-                                <span>{{ ('Turma') }}</span>
-                            </a>
-                        </li>
-                    @endcan
+                    @endcan                   
                     @can('usuario')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('users.index') }}">
