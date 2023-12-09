@@ -61,7 +61,7 @@
                         data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true"
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
-                        data-search-accent-neutralise="true" data-editable-url="#" data-url="{{ route('temas.show', 1) }}">
+                        data-search-accent-neutralise="true" data-editable-url="#" data-url="{{ route('proposta-tema.show', 1) }}">
                         <thead>
                             <tr>
                                 <th data-field="id" class="col-1">ID</th>
@@ -129,8 +129,8 @@
                         var formdata = new FormData($("form[name='addLinha']")[0]);
                         let id = document.getElementById('id').value;
                         $.ajax({
-                            url: id > 0 ? `{{ url('temas/update/${id}') }}` :
-                                "{{ route('temas.store') }}",
+                            url: id > 0 ? `{{ url('proposta-tema/update/${id}') }}` :
+                                "{{ route('proposta-tema.store') }}",
                             type: "POST",
                             data: formdata,
                             dataType: "json",
@@ -166,7 +166,7 @@
                     if (result.isConfirmed) {
                         partialLoader();
                         $.ajax({
-                            url: "temas/" + row.id,
+                            url: "proposta-tema/" + row.id,
                             type: "DELETE",
                             dataType: "json",
                             success: function(response) {
@@ -192,7 +192,7 @@
             partialLoader();
             document.getElementById('id').value = id;
             $.ajax({
-                url: `{{ url('temas/findById/${id}') }}`,
+                url: `{{ url('proposta-tema/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
                     partialLoader(false);

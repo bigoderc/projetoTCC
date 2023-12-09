@@ -73,7 +73,7 @@
                 data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                 data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
                 data-search-accent-neutralise="true" data-editable-url="#"
-                data-url="{{ route('projetos.show', 1) }}">
+                data-url="{{ route('tcc.show', 1) }}">
                 <thead>
                     <tr>
                         <th data-field="id" class="col-1">ID</th>
@@ -118,8 +118,8 @@ $(document).ready(function() {
                 partialLoader();
                 let id = document.getElementById('id').value;
                 $.ajax({
-                    url: id > 0 ? `{{ url('projetos/update/${id}') }}` :
-                        "{{ route('projetos.store') }}",
+                    url: id > 0 ? `{{ url('tcc/update/${id}') }}` :
+                        "{{ route('tcc.store') }}",
                     type:"POST",
                     data: formdata,
                     dataType: "json",
@@ -159,7 +159,7 @@ window.acaoEvents = {
             if (result.isConfirmed) {
                 partialLoader();
                 $.ajax({
-                    url: "projetos/" + row.id,
+                    url: "tcc/" + row.id,
                     type: "DELETE",
                     dataType: "json",
                     success: function(response) {
@@ -185,7 +185,7 @@ function setIdModal(id) {
     partialLoader();
     document.getElementById('id').value = id;
     $.ajax({
-        url: `{{ url('projetos/findById/${id}') }}`,
+        url: `{{ url('tcc/findById/${id}') }}`,
         type: "GET",
         success: function(response) {
             $(`#titulo`).text(`Editar Professor ${response.nome}`);

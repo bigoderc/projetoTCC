@@ -42,13 +42,13 @@ Route::group(['middleware' => 'auth:web'], function () {
     // Sitema de teste
    
     Route::resources([
-        'temas' => TemaController::class,
+        'proposta-tema' => TemaController::class,
         'area' => AreaController::class,
         'professor' =>ProfessorController::class,
-        'users' =>UserController::class,
+        'user' =>UserController::class,
         'discente' =>AlunoController::class,
-        'projetos'=>ProjetoController::class,
-        'projetos-pre-tcc'=>ProjetoPreTccController::class,
+        'tcc'=>ProjetoController::class,
+        'pre-tcc'=>ProjetoPreTccController::class,
         'configuracoes'=>ConfiguracaoController::class,
         'curso'=>CursoController::class,
         'turma'=>TurmaController::class,
@@ -66,20 +66,20 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/discente/findById/{id}', [AlunoController::class, 'findById'])->name('discente.findById');
     Route::get('/professor/findById/{id}', [ProfessorController::class, 'findById'])->name('professor.findById');
     Route::put('/professor/update/{id}', [ProfessorController::class, 'update'])->name('professor.update');
-    Route::get('/temas/findById/{id}', [TemaController::class, 'findById'])->name('temas.findById');
-    Route::post('/temas/update/{id}', [TemaController::class, 'update'])->name('temas.update');
-    Route::get('/temas/toView/{id}',[TemaController::class,'toView'])->name('temas.toView');
-    Route::post('/temas/upload', [TemaController::class, 'upload'])->name('temas.upload');
-    Route::get('/projetos/findById/{id}', [ProjetoController::class, 'findById'])->name('projetos.findById');
-    Route::get('/projetos/findByProfessor/{id}', [ProjetoController::class, 'findByProfessor'])->name('projetos.findByProfessor');
-    Route::post('/projetos/update/{id}', [ProjetoController::class, 'update'])->name('projetos.update');
-    Route::get('/projetos-pretcc/findById/{id}', [ProjetoPreTccController::class, 'findById'])->name('projetos-pre-tcc.findById');
-    Route::get('/projetos-pretcc/findByProfessor/{id}', [ProjetoPreTccController::class, 'findByProfessor'])->name('projetos-pre-tcc.findByProfessor');
-    Route::post('/projetos-pretcc/update/{id}', [ProjetoPreTccController::class, 'update'])->name('projetos-pre-tcc.update');
+    Route::get('/proposta-tema/findById/{id}', [TemaController::class, 'findById'])->name('proposta-tema.findById');
+    Route::post('/proposta-tema/update/{id}', [TemaController::class, 'update'])->name('proposta-tema.update');
+    Route::get('/proposta-tema/toView/{id}',[TemaController::class,'toView'])->name('proposta-tema.toView');
+    Route::post('/proposta-tema/upload', [TemaController::class, 'upload'])->name('proposta-tema.upload');
+    Route::get('/tcc/findById/{id}', [ProjetoController::class, 'findById'])->name('tcc.findById');
+    Route::get('/tcc/findByProfessor/{id}', [ProjetoController::class, 'findByProfessor'])->name('tcc.findByProfessor');
+    Route::post('/tcc/update/{id}', [ProjetoController::class, 'update'])->name('tcc.update');
+    Route::get('/pre-tcc/findById/{id}', [ProjetoPreTccController::class, 'findById'])->name('pre-tcc.findById');
+    Route::get('/pre-tcc/findByProfessor/{id}', [ProjetoPreTccController::class, 'findByProfessor'])->name('pre-tcc.findByProfessor');
+    Route::post('/pre-tcc/update/{id}', [ProjetoPreTccController::class, 'update'])->name('pre-tcc.update');
     
-    Route::get('/users/findById/{id}', [UserController::class, 'findById'])->name('users.findById');
+    Route::get('/user/findById/{id}', [UserController::class, 'findById'])->name('user.findById');
     
-    Route::put('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::put('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
     
     //configuraçoes
     Route::get('/configuracao', [ConfiguracaoController::class, 'index'])->name('configuracao');

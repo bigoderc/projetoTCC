@@ -41,7 +41,7 @@
         function initTrabalhos(params) {
             partialLoader();
             $.ajax({
-                url: `{{ url('projetos/findByProfessor/${params}') }}`,
+                url: `{{ url('tcc/findByProfessor/${params}') }}`,
                 type: "GET",
                 success: function(response) {
                     partialLoader(false);

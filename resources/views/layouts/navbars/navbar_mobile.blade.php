@@ -62,22 +62,22 @@
                             
                         @endcan
                         @can('tema')
-                            <a class="dropdown-item" href="{{ route('temas.index') }}">
+                            <a class="dropdown-item" href="{{ route('proposta-tema.index') }}">
                                 {{ __('Proposta de Tema') }}
                             </a>
                         @endcan
                         @can('pre-tcc')
-                            <a class="dropdown-item" href="{{ route('projetos-pre-tcc.index') }}">
+                            <a class="dropdown-item" href="{{ route('pre-tcc.index') }}">
                                 {{ __('Pré-TCC') }}
                             </a>
                         @endcan
                         @can('tcc')
-                            <a class="dropdown-item" href="{{ route('projetos.index') }}">
+                            <a class="dropdown-item" href="{{ route('tcc.index') }}">
                                 {{ __('TCC') }}
                             </a>
                         @endcan                        
                         @can('usuario')
-                            <a class="dropdown-item" href="{{ route('users.index') }}">
+                            <a class="dropdown-item" href="{{ route('user.index') }}">
                                 {{ __('Usuário') }}
                             </a>
                             

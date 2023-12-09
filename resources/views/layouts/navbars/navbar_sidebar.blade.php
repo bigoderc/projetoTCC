@@ -82,28 +82,28 @@
                     @endcan
                     @can('tema')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('temas.index') }}">
+                            <a class="text-decoration-none text-dark" href="{{ route('proposta-tema.index') }}">
                                 <span>{{ ('Proposta de Tema') }}</span>
                             </a>
                         </li>
                     @endcan
                     @can('pre-tcc')
                     <li class="list-group-item bg-white py-1">
-                        <a class="text-decoration-none text-dark" href="{{ route('projetos-pre-tcc.index')}}">
+                        <a class="text-decoration-none text-dark" href="{{ route('pre-tcc.index')}}">
                             <span>{{('Pré-TCC')}}</span>
                         </a>
                     </li>
                     @endcan
                     @can('tcc')
                     <li class="list-group-item bg-white py-1">
-                        <a class="text-decoration-none text-dark" href="{{ route('projetos.index')}}">
+                        <a class="text-decoration-none text-dark" href="{{ route('tcc.index')}}">
                             <span>{{('TCC')}}</span>
                         </a>
                     </li>
                     @endcan                   
                     @can('usuario')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('users.index') }}">
+                            <a class="text-decoration-none text-dark" href="{{ route('user.index') }}">
                                 <span>{{ ('Usuário') }}</span>
                             </a>
                         </li>

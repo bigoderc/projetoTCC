@@ -71,7 +71,7 @@
                 data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                 data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
                 data-search-accent-neutralise="true" data-editable-url="#"
-                data-url="{{ route('projetos-pre-tcc.show', 1) }}">
+                data-url="{{ route('pre-tcc.show', 1) }}">
                 <thead>
                     <tr>
                         <th data-field="id" class="col-1">ID</th>
@@ -115,8 +115,8 @@ $(document).ready(function() {
                 partialLoader();
                 let id = document.getElementById('id').value;
                 $.ajax({
-                    url: id > 0 ? `{{ url('projetos-pretcc/update/${id}') }}` :
-                        "{{ route('projetos-pre-tcc.store') }}",
+                    url: id > 0 ? `{{ url('pre-tcc/update/${id}') }}` :
+                        "{{ route('pre-tcc.store') }}",
                     type:"POST",
                     data: formdata,
                     dataType: "json",
@@ -156,7 +156,7 @@ window.acaoEvents = {
             if (result.isConfirmed) {
                 partialLoader();
                 $.ajax({
-                    url: "projetos-pretcc/" + row.id,
+                    url: "pre-tcc/" + row.id,
                     type: "DELETE",
                     dataType: "json",
                     success: function(response) {
@@ -182,7 +182,7 @@ function setIdModal(id) {
     partialLoader();
     document.getElementById('id').value = id;
     $.ajax({
-        url: `{{ url('projetos-pretcc/findById/${id}') }}`,
+        url: `{{ url('pre-tcc/findById/${id}') }}`,
         type: "GET",
         success: function(response) {
             $(`#titulo`).text(`Editar Professor ${response.nome}`);
