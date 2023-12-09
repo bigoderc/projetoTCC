@@ -30,13 +30,13 @@ class Professor extends Model
 
     public $timestamps = false;
     
-    public function areas(){
+    public function area(){
         return $this->hasOne(Area::class,'id','fk_areas_id')->withTrashed();
     }
     public function especialidade(){
         return $this->hasOne(Especialidade::class,'id','fk_especialidade_id')->withTrashed();
     }
-    public function graus(){
+    public function grau(){
         return $this->hasOne(Grau::class,'id','fk_grau_id')->withTrashed();
     }
     

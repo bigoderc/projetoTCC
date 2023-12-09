@@ -58,7 +58,7 @@
         }
         function init() {
             $.ajax({
-                url: `{{ route('professores.show', 1) }}`,
+                url: `{{ route('professor.show', 1) }}`,
                 type: "GET",
                 success: function(response) {
                     $('#tema_table').bootstrapTable('removeAll');

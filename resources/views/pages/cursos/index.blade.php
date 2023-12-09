@@ -45,8 +45,8 @@
                         data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true"
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
-                        data-search-accent-neutralise="true" data-editable-url="{{ route('cursos.update1') }}"
-                        data-url="{{ route('cursos.show', 1) }}">
+                        data-search-accent-neutralise="true" data-editable-url="{{ route('curso.update1') }}"
+                        data-url="{{ route('curso.show', 1) }}">
                         <thead>
                             <tr>
                                 <th data-field="id" class="col-1">ID</th>
@@ -86,7 +86,7 @@
                         partialLoader();
                         var formdata = new FormData($("form[name='addLinha']")[0]);
                         $.ajax({
-                            url: "{{ route('cursos.store') }}",
+                            url: "{{ route('curso.store') }}",
                             type: "POST",
                             data:  $('#addLinha').serialize(),
                             dataType: "json",
@@ -114,7 +114,7 @@
                     if (result.isConfirmed) {
                         partialLoader();
                         $.ajax({
-                            url: "cursos/" + row.id,
+                            url: "curso/" + row.id,
                             type: "DELETE",
                             dataType: "json",
                             success: function(response) {

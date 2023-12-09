@@ -23,40 +23,40 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="cadastroDropdown">
                         @can('curso')
-                            <a class="dropdown-item" href="{{ route('cursos.index') }}">
+                            <a class="dropdown-item" href="{{ route('curso.index') }}">
                                 {{ __('Curso') }}
                             </a>
                         @endcan
                         @can('turma')
-                            <a class="dropdown-item" href="{{ route('turmas.index') }}">
+                            <a class="dropdown-item" href="{{ route('turma.index') }}">
                                 {{ __('Turma') }}
                             </a>
                         @endcan
                         @can('area')
-                            <a class="dropdown-item" href="{{ route('areas.index') }}">
+                            <a class="dropdown-item" href="{{ route('area.index') }}">
                                 {{ __('Área') }}
                             </a>
                         @endcan
 
                         @can('especialidade')
-                            <a class="dropdown-item" href="{{ route('especialidades.index') }}">
+                            <a class="dropdown-item" href="{{ route('especialidade.index') }}">
                                 {{ __('Especialidade') }}
                             </a>
                         @endcan
                         @can('curso')
-                            <a class="dropdown-item" href="{{ route('graus.index') }}">
+                            <a class="dropdown-item" href="{{ route('grau.index') }}">
                                 {{ __('Grau') }}
                             </a>
                         @endcan
                         @can('aluno')
-                            <a class="dropdown-item" href="{{ route('alunos.index') }}">
+                            <a class="dropdown-item" href="{{ route('discente.index') }}">
                                 {{ __('Discente') }}
                             </a>
                            
                         @endcan
                         
                         @can('professor')
-                            <a class="dropdown-item" href="{{ route('professores.index') }}">
+                            <a class="dropdown-item" href="{{ route('professor.index') }}">
                                 {{ __('Professor') }}
                             </a>
                             

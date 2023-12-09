@@ -43,29 +43,29 @@ Route::group(['middleware' => 'auth:web'], function () {
    
     Route::resources([
         'temas' => TemaController::class,
-        'areas' => AreaController::class,
-        'professores' =>ProfessorController::class,
+        'area' => AreaController::class,
+        'professor' =>ProfessorController::class,
         'users' =>UserController::class,
-        'alunos' =>AlunoController::class,
+        'discente' =>AlunoController::class,
         'projetos'=>ProjetoController::class,
         'projetos-pre-tcc'=>ProjetoPreTccController::class,
         'configuracoes'=>ConfiguracaoController::class,
-        'cursos'=>CursoController::class,
-        'turmas'=>TurmaController::class,
-        'especialidades'=>EspecialidadeController::class,
-        'graus'=>GrauController::class,
+        'curso'=>CursoController::class,
+        'turma'=>TurmaController::class,
+        'especialidade'=>EspecialidadeController::class,
+        'grau'=>GrauController::class,
     ]);
-    Route::post('/areas/update', [AreaController::class, 'update'])->name('areas.update1');
-    Route::post('/cursos/update', [CursoController::class, 'update'])->name('cursos.update1');
-    Route::post('/turmas/update', [TurmaController::class, 'update'])->name('turmas.update1');
-    Route::post('/especialidades/update', [EspecialidadeController::class, 'update'])->name('especialidades.update1');
-    Route::post('/graus/update', [GrauController::class, 'update'])->name('graus.update1');
-    Route::post('/areas/upload', [AreaController::class, 'upload'])->name('areas.upload');
-    Route::get('areas/toView/{id}',[AreaController::class,'toView'])->name('areas.toView');
-    Route::put('/alunos/update/{id}', [AlunoController::class, 'update'])->name('alunos.update');
-    Route::get('/alunos/findById/{id}', [AlunoController::class, 'findById'])->name('alunos.findById');
-    Route::get('/professores/findById/{id}', [ProfessorController::class, 'findById'])->name('professores.findById');
-    Route::put('/professores/update/{id}', [ProfessorController::class, 'update'])->name('professores.update');
+    Route::post('/area/update', [AreaController::class, 'update'])->name('area.update1');
+    Route::post('/curso/update', [CursoController::class, 'update'])->name('curso.update1');
+    Route::post('/turma/update', [TurmaController::class, 'update'])->name('turma.update1');
+    Route::post('/especialidade/update', [EspecialidadeController::class, 'update'])->name('especialidade.update1');
+    Route::post('/grau/update', [GrauController::class, 'update'])->name('grau.update1');
+    Route::post('/area/upload', [AreaController::class, 'upload'])->name('area.upload');
+    Route::get('area/toView/{id}',[AreaController::class,'toView'])->name('area.toView');
+    Route::put('/discente/update/{id}', [AlunoController::class, 'update'])->name('discente.update');
+    Route::get('/discente/findById/{id}', [AlunoController::class, 'findById'])->name('discente.findById');
+    Route::get('/professor/findById/{id}', [ProfessorController::class, 'findById'])->name('professor.findById');
+    Route::put('/professor/update/{id}', [ProfessorController::class, 'update'])->name('professor.update');
     Route::get('/temas/findById/{id}', [TemaController::class, 'findById'])->name('temas.findById');
     Route::post('/temas/update/{id}', [TemaController::class, 'update'])->name('temas.update');
     Route::get('/temas/toView/{id}',[TemaController::class,'toView'])->name('temas.toView');

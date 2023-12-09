@@ -100,7 +100,7 @@ class ProfessorController extends Controller
             $request['fk_user_id'] = $user->id;
             $dados = Professor::create($request->all());
             DB::commit();
-            return response()->json($this->professor->with(['areas', 'especialidade', 'graus', 'user'])->find($dados->id));
+            return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->find($dados->id));
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
@@ -114,10 +114,10 @@ class ProfessorController extends Controller
      * @param  \App\Models\Professor  $professor
      * @return \Illuminate\Http\Response
      */
-    public function show(Professor $professor)
+    public function show()
     {
         //
-        return response()->json($this->professor->with(['areas', 'especialidade', 'graus', 'user'])->get());
+        return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->get());
     }
 
     /**
@@ -129,7 +129,7 @@ class ProfessorController extends Controller
     public function findById($id)
     {
         //
-        return response()->json($this->professor->with(['areas', 'especialidade', 'graus', 'user'])->find($id));
+        return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->find($id));
     }
 
     /**
@@ -158,7 +158,7 @@ class ProfessorController extends Controller
             //code...
             $professor->find($id)->update($request->all());
             DB::commit();
-            return response()->json($this->professor->with(['areas', 'especialidade', 'graus', 'user'])->find($id));
+            return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->find($id));
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();

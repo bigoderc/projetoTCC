@@ -96,7 +96,7 @@
                     data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR" data-search="true"
                     data-show-columns="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar"
                     data-unique-id="id" data-id-field="id" data-page-size="25" data-page-list="[5, 10, 25, 50, 100, all]"
-                    data-pagination="true" data-search-accent-neutralise="true" data-editable-url="#" data-url="{{ route('alunos.show',1) }}">
+                    data-pagination="true" data-search-accent-neutralise="true" data-editable-url="#" data-url="{{ route('discente.show',1) }}">
                     <thead>
                         <tr>
                             <th data-field="id" class="col-1">ID</th>
@@ -139,7 +139,7 @@
                     partialLoader();
                     let id =document.getElementById('id').value;
                     $.ajax({
-                        url: id > 0 ? `{{ url('alunos/update/${id}') }}` : "{{ route('alunos.store') }}",
+                        url: id > 0 ? `{{ url('discente/update/${id}') }}` : "{{ route('discente.store') }}",
                         type: id >0 ? "PUT" : "POST",
                         data: $(`#addLinha`).serialize(),
                         dataType: "json",
@@ -171,7 +171,7 @@
                 if (result.isConfirmed) {
                     partialLoader();
                     $.ajax({
-                        url: "alunos/" + row.id,
+                        url: "discente/" + row.id,
                         type: "DELETE",
                         dataType: "json",
                         success: function(response) {
@@ -208,7 +208,7 @@
         $("#turma").find("*").not("label").remove();
         let id_curso = $(this).val();
         $.ajax({
-            url:`{{ url('turmas/${id_curso}') }}`,
+            url:`{{ url('turma/${id_curso}') }}`,
             type: "GET",
             success: function(response) { 
                 let select = document.createElement("select");
@@ -236,7 +236,7 @@
     function setIdModal(id) {
         document.getElementById('id').value = id;
         $.ajax({
-                url: `{{ url('alunos/findById/${id}') }}`,
+                url: `{{ url('discente/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
                     $(`#titulo`).text(`Editar Discente ${response.nome}`);

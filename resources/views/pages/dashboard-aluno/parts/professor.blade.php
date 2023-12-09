@@ -22,10 +22,10 @@
                                         <th data-field="id" class="col-1">ID</th>
                                         <th data-field="nome" class="col-3" aria-required="true">NOME</th>
                                         <th data-field="siape" class="col-3" aria-required="true">SIAPE</th>
-                                        <th data-field="areas.nome" class="col-3" aria-required="true">ÁREA</th>
+                                        <th data-field="area.nome" class="col-3" aria-required="true">ÁREA</th>
                                         <th data-field="especialidade.nome" class="col-3" aria-required="true">ESPECIALIDADE
                                         </th>
-                                        <th data-field="graus.nome" class="col-3" aria-required="true">GRAU</th>
+                                        <th data-field="grau.nome" class="col-3" aria-required="true">GRAU</th>
                                         
                                         <th data-field="acao" class="col-1"
                                             data-formatter="acaoFormattercheck2">
@@ -68,7 +68,7 @@
         }
         function init1() {
             $.ajax({
-                url: `{{ route('professores.show',1) }}`,
+                url: `{{ route('professor.show',1) }}`,
                 type: "GET",
                 success: function(response) {
                     $('#orientador_table').bootstrapTable('removeAll');

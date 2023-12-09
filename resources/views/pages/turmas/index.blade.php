@@ -51,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-                <table id="my_table_id" class="text-center" data-toggle="table" data-editable="true" data-editable-pk="id" data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR" data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25" data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true" data-search-accent-neutralise="true" data-editable-url="{{ route('turmas.update1') }}">
+                <table id="my_table_id" class="text-center" data-toggle="table" data-editable="true" data-editable-pk="id" data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR" data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25" data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true" data-search-accent-neutralise="true" data-editable-url="{{ route('turma.update1') }}">
                     <thead>
                         <tr>
                             <th data-field="id" class="col-1">ID</th>
@@ -84,7 +84,7 @@
         let id_curso = `${document.getElementById('cursoSelect').value}`;
         document.getElementById('fk_curso_id').value = id_curso;
         $.ajax({
-            url:`{{ url('turmas/${id_curso}') }}`,
+            url:`{{ url('turma/${id_curso}') }}`,
             type: "GET",
             success: function(response) {
                 if(response.length >0){
@@ -112,7 +112,7 @@
 
             } else {
                 $.ajax({
-                    url: "{{ route('turmas.store') }}",
+                    url: "{{ route('turma.store') }}",
                     type: "POST",
                     data: $("#addLinha").serialize(),
                     dataType: "json",
@@ -142,7 +142,7 @@
             if (result.isConfirmed) {
                 partialLoader();
                 $.ajax({
-                    url: "turmas/" + row.id,
+                    url: "turma/" + row.id,
                     type: "DELETE",
                     dataType: "json",
                     success: function(response) {

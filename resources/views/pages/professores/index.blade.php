@@ -78,16 +78,16 @@
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
                         data-search-accent-neutralise="true" data-editable-url="#"
-                        data-url="{{ route('professores.show', 1) }}">
+                        data-url="{{ route('professor.show',1) }}">
                         <thead>
                             <tr>
                                 <th data-field="id" class="col-1">ID</th>
                                 <th data-field="nome" class="col-3" aria-required="true">NOME</th>
                                 <th data-field="siape" class="col-3" aria-required="true">SIAPE</th>
-                                <th data-field="areas.nome" class="col-3" aria-required="true">ÁREA</th>
+                                <th data-field="area.nome" class="col-3" aria-required="true">ÁREA</th>
                                 <th data-field="especialidade.nome" class="col-3" aria-required="true">ESPECIALIDADE
                                 </th>
-                                <th data-field="graus.nome" class="col-3" aria-required="true">GRAU</th>
+                                <th data-field="grau.nome" class="col-3" aria-required="true">GRAU</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>
@@ -123,8 +123,8 @@
                         partialLoader();
                         let id = document.getElementById('id').value;
                         $.ajax({
-                            url: id > 0 ? `{{ url('professores/update/${id}') }}` :
-                                "{{ route('professores.store') }}",
+                            url: id > 0 ? `{{ url('professor/update/${id}') }}` :
+                                "{{ route('professor.store') }}",
                             type: id > 0 ? "PUT" : "POST",
                             data: $("#addLinha").serialize(),
                             dataType: "json",
@@ -162,7 +162,7 @@
                     if (result.isConfirmed) {
                         partialLoader();
                         $.ajax({
-                            url: "professores/" + row.id,
+                            url: "professor/" + row.id,
                             type: "DELETE",
                             dataType: "json",
                             success: function(response) {
@@ -188,7 +188,7 @@
             partialLoader();
             document.getElementById('id').value = id;
             $.ajax({
-                url: `{{ url('professores/findById/${id}') }}`,
+                url: `{{ url('professor/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
                     $(`#titulo`).text(`Editar Professor ${response.nome}`);
