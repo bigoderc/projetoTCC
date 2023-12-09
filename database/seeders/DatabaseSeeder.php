@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Permission;
 use Illuminate\Database\Seeder;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\AreaSeeder;
@@ -20,7 +21,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             AreaSeeder::class,
             GrausSeeder::class,
-            Permission05122023Seeder::class
+            PermissionsSeeder::class
         ]);
     }
 }

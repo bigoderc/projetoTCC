@@ -134,7 +134,7 @@ class AlunoController extends Controller
      * @param  \App\Models\Aluno  $aluno
      * @return \Illuminate\Http\Response
      */
-    public function update(AlunoStoreRequest $request, Aluno $aluno,$id)
+    public function update(Request $request, Aluno $aluno,$id)
     {
         //
         Gate::authorize('update-discente');
