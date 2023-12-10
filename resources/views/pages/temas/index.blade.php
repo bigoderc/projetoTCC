@@ -33,7 +33,7 @@
                                             <input type="text" class="form-control" id="nome" name="nome"
                                                 required>
                                             <label for="nome">Descrição</label>
-                                            <input type="text" class="form-control" id="descricao" name="descricao">
+                                            <textarea class="form-control" id="descricao" rows="5" name="descricao"></textarea>
                                             <label for="nome" class="my-2">Área</label>
                                             <select class="form-control" id="fk_areas_id" name="fk_areas_id"
                                                 aria-label="Default select example" required>

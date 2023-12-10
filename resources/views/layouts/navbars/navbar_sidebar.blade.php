@@ -98,18 +98,25 @@
                         </li>
                     @endcan
                     @can('read-pre_tcc')
-                    <li class="list-group-item bg-white py-1">
-                        <a class="text-decoration-none text-dark" href="{{ route('pre-tcc.index')}}">
-                            <span>{{('Pré-TCC')}}</span>
-                        </a>
-                    </li>
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('pre-tcc.index')}}">
+                                <span>{{('Pré-TCC')}}</span>
+                            </a>
+                        </li>
                     @endcan
                     @can('read-tcc')
-                    <li class="list-group-item bg-white py-1">
-                        <a class="text-decoration-none text-dark" href="{{ route('tcc.index')}}">
-                            <span>{{('TCC')}}</span>
-                        </a>
-                    </li>
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('tcc.index')}}">
+                                <span>{{('TCC')}}</span>
+                            </a>
+                        </li>
+                    @endcan 
+                    @can('read-biblioteca')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('biblioteca.index')}}">
+                                <span>{{('Link Biblioteca')}}</span>
+                            </a>
+                        </li>
                     @endcan                   
                     @can('read-usuario')
                         <li class="list-group-item bg-white py-1">
@@ -123,14 +130,14 @@
             @endif
             
             @can('read-configuracao')
-            <li class="bg-gold border-gold rounded my-1 overflow-hidden">
-                <div class="d-flex justify-content-center">
-                    <a class="text-decoration-none text-nowrap text-white" href="{{ route('configuracao.index') }}">
-                        <i class="px-2 fa fa-solid fa-lg fa-cog"></i>
-                        <span class="d-none">{{ ('Configuração') }}</span>
-                    </a>
-                </div>
-            </li>
+                <li class="bg-gold border-gold rounded my-1 overflow-hidden">
+                    <div class="d-flex justify-content-center">
+                        <a class="text-decoration-none text-nowrap text-white" href="{{ route('configuracao.index') }}">
+                            <i class="px-2 fa fa-solid fa-lg fa-cog"></i>
+                            <span class="d-none">{{ ('Configuração') }}</span>
+                        </a>
+                    </div>
+                </li>
             @endcan
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
                 <div class="d-flex justify-content-center">

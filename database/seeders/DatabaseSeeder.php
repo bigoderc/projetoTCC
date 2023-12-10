@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             AreaSeeder::class,
             GrausSeeder::class,
-            PermissionsSeeder::class
+            PermissionsSeeder::class,
+            PermissionBibliotecaSeeder::class
         ]);
     }
 }

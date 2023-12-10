@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\TemaController;
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\BibliotecaController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\ProjetoController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\GrauController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjetoPreTccController;
 use App\Http\Controllers\TurmaController;
+use App\Models\Biblioteca;
 use App\Models\Professor;
 
 // Route::get('/', function () {
@@ -51,12 +53,14 @@ Route::group(['middleware' => 'auth:web'], function () {
         'pre-tcc'=>ProjetoPreTccController::class,
         'configuracao'=>ConfiguracaoController::class,
         'curso'=>CursoController::class,
+        'biblioteca'=>BibliotecaController::class,
         'turma'=>TurmaController::class,
         'especialidade'=>EspecialidadeController::class,
         'grau'=>GrauController::class,
     ]);
     Route::post('/area/update', [AreaController::class, 'update'])->name('area.update1');
     Route::post('/curso/update', [CursoController::class, 'update'])->name('curso.update1');
+    Route::post('/biblioteca/update', [BibliotecaController::class, 'update'])->name('biblioteca.update1');
     Route::post('/turma/update', [TurmaController::class, 'update'])->name('turma.update1');
     Route::post('/especialidade/update', [EspecialidadeController::class, 'update'])->name('especialidade.update1');
     Route::post('/grau/update', [GrauController::class, 'update'])->name('grau.update1');
