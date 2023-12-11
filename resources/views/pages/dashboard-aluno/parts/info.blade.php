@@ -4,7 +4,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="titulo">Informações</h5>
-                    <button type="button" class="close" onclick="fecharModalinfo()" aria-label="Close">
+                    <button type="button" class="close" onclick="fecharModalinfo1()" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="fecharModalinfo()">Fechar</button>
+                    <button type="button" class="btn btn-secondary" onclick="fecharModalinfo1()">Fechar</button>
                 </div>
             </div>
         </div>
@@ -102,12 +102,13 @@
                 },
                 error: function(xhr, status, error) {
                     partialLoader(false);
-                    errorResponse(xhr);
+                    errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                        .responseText);
                 }
             });
         }
 
-        function fecharModalinfo(params) {
+        function fecharModalinfo1(params) {
             $("input[type='radio']").prop('checked', false);
             $('#info').modal('hide');
         }

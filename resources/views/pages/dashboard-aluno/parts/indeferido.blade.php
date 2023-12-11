@@ -53,7 +53,8 @@
                 },
                 error: function(xhr, status, error) {
                     partialLoader(false);
-                    errorResponse(xhr);
+                    errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                        .responseText);
                 }
             });
         }
@@ -76,9 +77,10 @@
                     renderizarCards(response);
                 },
                 error: function(xhr, status, error) {
-                    partialLoader(false);
-                    errorResponse(xhr);
-                }
+                                partialLoader(false);
+                                errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                                    .responseText);
+                            }
             })
         }
         function setTema(params) {
@@ -99,9 +101,10 @@
                     renderizarCards(response);
                 },
                 error: function(xhr, status, error) {
-                    partialLoader(false);
-                    errorResponse(xhr);
-                }
+                                partialLoader(false);
+                                errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                                    .responseText);
+                            }
             })
         }
 

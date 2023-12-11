@@ -49,7 +49,8 @@
                 },
                 error: function(xhr, status, error) {
                     partialLoader(false);
-                    errorResponse(xhr);
+                    errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                        .responseText);
                 }
             });
         }
@@ -70,7 +71,7 @@
                         <div class=" card-title text-white fw-semibold mb-1"><span class="texto-limitado small">${item.nome} - ${item.area?.nome}</span></div>
                         <div>
                             <span class="small fw-semibold">Aluno: </span>
-                            <span class="texto-limitado small">${item.aluno ?? ''}</span>
+                            <span class="texto-limitado small">${item.aluno?.nome ?? ''}</span>
                         </div>
                         <div>
                             <span class="small fw-semibold">Área: </span>

@@ -102,7 +102,8 @@
                 },
                 error: function(xhr, status, error) {
                     partialLoader(false);
-                    errorResponse(xhr);
+                    errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                        .responseText);
                 }
             });
         }

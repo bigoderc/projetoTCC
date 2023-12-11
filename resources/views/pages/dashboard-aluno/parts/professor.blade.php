@@ -1,10 +1,10 @@
 <div class="card-body">
-    <div class="modal fade" id="professor" tabindex="-1" aria-labelledby="professor" aria-hidden="true">
+    <div class="modal fade" id="professor_modal" tabindex="-1" aria-labelledby="professor" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="titulo">Associar orientador</h5>
-                    <button type="button" class="close" onclick="fecharModalprofessor()" aria-label="Close">
+                    <button type="button" class="close" onclick="fecharModalprofessor1()" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="fecharModalprofessor()">Fechar</button>
+                    <button type="button" class="btn btn-secondary" onclick="fecharModalprofessor1()">Fechar</button>
                     <button type="button" id="salvar" onclick="associar()"
                         class="btn btn-primary">Salvar</button>
                 </div>
@@ -52,7 +52,7 @@
         function setprofessor(params) {
             $(`#orientador_id`).val(params);
             init1();
-            $('#professor').modal('show');
+            $('#professor_modal').modal('show');
         }
         function acaoFormattercheck2(value, row, index) {
             return [
@@ -75,9 +75,10 @@
                     $('#orientador_table').bootstrapTable('append',response);
                 },
                 error: function(xhr, status, error) {
-                    partialLoader(false);
-                    errorResponse(xhr);
-                }
+                                partialLoader(false);
+                                errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                                    .responseText);
+                            }
             });
         }
 
@@ -85,7 +86,7 @@
 
             var id = $(`#orientador_id`).val();
             var radios = document.getElementsByName('orientador');
-            var valorSelecionado = '';
+            var valorSelecionado = null;
 
             for (var i = 0; i < radios.length; i++) {
                 if (radios[i].checked) {
@@ -93,34 +94,39 @@
                     break;
                 }
             }
+            if(valorSelecionado==null){
+                errorResponse(422, {professor:'Professor é obrigatório'},'Professor vazio');
+                
+            }else{
+                partialLoader();
+                $.ajax({
+                    url: "{{ route('dashboardAluno.store') }}",
+                    type: "POST",
+                    data: {
+                        id: id,
+                        professor_id: valorSelecionado
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        $('#professor').modal('hide');
 
-            partialLoader();
-            $.ajax({
-                url: "{{ route('dashboardAluno.store') }}",
-                type: "POST",
-                data: {
-                    id: id,
-                    professor_id: valorSelecionado
-                },
-                dataType: "json",
-                success: function(response) {
-                    $('#professor').modal('hide');
-
-                    partialLoader(false);
-                    successResponse();
-                    fecharModalprofessor();
-                    renderizarCards(response);
-                },
-                error: function(xhr, status, error) {
-                    partialLoader(false);
-                    errorResponse(xhr);
-                }
-            })
+                        partialLoader(false);
+                        successResponse();
+                        fecharModalprofessor1();
+                        renderizarCards(response);
+                    },
+                    error: function(xhr, status, error) {
+                        partialLoader(false);
+                        errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                            .responseText);
+                    }
+                })
+            }
         }
 
-        function fecharModalprofessor(params) {
+        function fecharModalprofessor1(params) {
             $("input[type='radio']").prop('checked', false);
-            $('#professor').modal('hide');
+            $('#professor_modal').modal('hide');
         }
     </script>
 @endpush
