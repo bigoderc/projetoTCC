@@ -68,10 +68,10 @@
                 card.innerHTML = `
                 <div class="card styled-border placeholder-glow shadow-sm mb-2">
                     <div class="card-body pb-0">
-                        <div class=" card-title text-white fw-semibold mb-1"><span class="texto-limitado small">${item.nome} - ${item.area?.nome}</span></div>
+                        <div class=" card-title text-white fw-semibold mb-1"><span class="texto-limitado small">${item.nome}</span></div>
                         <div>
                             <span class="small fw-semibold">Aluno: </span>
-                            <span class="texto-limitado small">${item.aluno?.nome ?? ''}</span>
+                            <span class=" small">${item.aluno?.nome ?? ''}</span>
                         </div>
                         <div>
                             <span class="small fw-semibold">Área: </span>
@@ -109,5 +109,13 @@
     </script>
 @endpush
 @push('css')
-    <style></style>
+    <style>
+        .texto-limitado {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 100%; /* Ou qualquer largura desejada */
+            display: inline-block; /* Isso é importante para o texto não quebrar em várias linhas */
+        }
+    </style>
 @endpush

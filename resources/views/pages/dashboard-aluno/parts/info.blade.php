@@ -8,65 +8,60 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="row">
-                    <input type="hidden" class="form-control" id="carregamento_id" name="carregamento_id">
-                    <div class="col-12">
-                        <div class="col">
-                            <div class="modal-body" class="my-2">
-                                <div class="row mb-3">
-                                    <div class="col">
-                                        <label for="tema">Tema</label>
-                                        <input type="text" class="form-control" id="tema" name="tema"
-                                            required>
-                                    </div>
-                                    <div class="col">
-                                        <label for="descricao">Descrição</label>
-                                        <textarea class="form-control" name="descricao" id="descricao" rows="3"></textarea>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="link_tema">Mais informações em</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="link_tema"></span>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="embed-responsive embed-responsive-16by9" id="pdfViewerTema"></div>
-                                    </div>
-                                </div>
-                                <hr class="my-4">
-                                <div class="row mb-3">
-                                    <div class="col">
-                                        <label for="area">Área</label>
-                                        <input type="text" class="form-control" id="area" name="area"
-                                            required>
-                                    </div>
-                                    <div class="col">
-                                        <label for="descricao_area">Descrição</label>
-                                        <textarea class="form-control" name="descricao_area" id="descricao_area" rows="3"></textarea>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="link_area">Mais informações em</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text w-25" id="link_area"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="embed-responsive embed-responsive-16by9" id="pdfViewerArea"></div>
-                                    </div>
+                <div class="modal-body my-2">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="tema">Tema</label>
+                            <input type="text" class="form-control" id="tema" name="tema" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="descricao">Descrição</label>
+                            <textarea class="form-control" name="descricao" id="descricao" rows="3"></textarea>
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="link_tema">Mais informações em</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="link_tema"></span>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="embed-responsive embed-responsive-16by9" id="pdfViewerTema"></div>
+                        </div>
+                    </div>
+                
+                    <hr class="my-4">
+                
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="area">Área</label>
+                            <input type="text" class="form-control" id="area" name="area" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="descricao_area">Descrição</label>
+                            <textarea class="form-control" name="descricao_area" id="descricao_area" rows="3"></textarea>
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="link_area">Mais informações em</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text w-25" id="link_area"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="embed-responsive embed-responsive-16by9" id="pdfViewerArea"></div>
+                        </div>
                     </div>
                 </div>
+                
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="fecharModalinfo1()">Fechar</button>
