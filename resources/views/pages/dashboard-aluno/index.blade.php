@@ -162,7 +162,7 @@
                         <div class=" card-title text-white fw-semibold mb-1"><span class="texto-limitado small">${item.nome} - ${item.area?.nome}</span></div>
                         <div>
                             <span class="small fw-semibold">Descrição: </span>
-                            <span class="texto-limitado small">${item.descricao ?? ''}</span>
+                            <span class="small">${item.descricao ?? ''}</span>
                         </div>
                         <div>
                             <span class="small fw-semibold">Área: </span>
