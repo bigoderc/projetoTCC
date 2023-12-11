@@ -152,7 +152,7 @@ class DashboardAlunoController extends Controller
         //
         $aluno = auth()->user()->aluno;
         $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
-            $query->where('fk_alunos_id',$aluno->id);
+            $query->where('fk_alunos_id',$aluno->id ??0);
         })->get();
         
         if(count($dados)>0){
