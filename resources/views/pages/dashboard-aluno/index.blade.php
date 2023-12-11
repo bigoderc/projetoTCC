@@ -248,10 +248,11 @@
 @push('css')
     <style>
         .texto-limitado {
-            white-space: nowrap;      /* Impede a quebra de linha */
-            overflow: hidden;         /* Esconde o conteúdo além da largura especificada */
-            text-overflow: ellipsis;  /* Adiciona reticências (...) no final do texto cortado */
-            max-width: 100px;         /* Largura máxima desejada */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 100%; /* Ou qualquer largura desejada */
+            display: inline-block; /* Isso é importante para o texto não quebrar em várias linhas */
         }
     </style>
 @endpush
