@@ -186,7 +186,7 @@
                             ${item.tema_aluno ? ``:`<button type="button" title="Selecionar tema" class="btn btn-primary btn-sm mb-3" onclick="changeStatus(${item.id},'selecionar')">
                                 <i class="fa fa-check-square"></i>
                             </button>`}
-                            ${item.tema_aluno?.fk_professores_id ? ``:`
+                            ${item.tema_aluno?.fk_professores_id || !item.tema_aluno ? ``:`
                             <button type="button" title="Selecionar orientador" class="btn btn-primary btn-sm mb-3" onclick="changeOrientador(${item.id})">
                                 <i class="fa fa-user"></i> 
                             </button>`}
