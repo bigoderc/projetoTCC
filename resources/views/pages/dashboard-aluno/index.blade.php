@@ -166,7 +166,7 @@
                         </div>
                         <div>
                             <span class="small fw-semibold">Área: </span>
-                            <span class="texto-limitado small">${item.area?.nome ?? ''}</span>
+                            <span class="small">${item.area?.nome ?? ''}</span>
                         </div>
                         <div>
                             <span class="small fw-semibold">Lançado por: </span>
