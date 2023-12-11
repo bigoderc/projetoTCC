@@ -170,7 +170,7 @@
             </div>
             <div class="version">
                 <div class="d-flex align-items-center version">
-                    <i>v1.0.6</i>
+                    <i>v2.0.0</i>
                 </div>
             </div>
         </div>
