@@ -68,21 +68,21 @@
                 card.innerHTML = `
                 <div class="card styled-border placeholder-glow shadow-sm mb-2">
                     <div class="card-body pb-0">
-                        <div class=" card-title text-white fw-semibold mb-1"><span class="texto-limitado small">${item.nome}</span></div>
+                        <div class=" card-title text-white fw-bold mb-1"><span class="texto-limitado small">${item.nome}</span></div>
                         <div>
-                            <span class="small fw-semibold">Aluno: </span>
+                            <span class="small fw-bold">Aluno: </span>
                             <span class=" small">${item.aluno?.nome ?? ''}</span>
                         </div>
                         <div>
-                            <span class="small fw-semibold">Área: </span>
+                            <span class="small fw-bold">Área: </span>
                             <span class="small">${item.area?.nome ?? ''}</span>
                         </div>
                         <div>
-                            <span class="small fw-semibold">Apresentado em: </span>
+                            <span class="small fw-bold">Apresentado em: </span>
                             <span class="small">${item.apresentado_desc ?? ''}</span>
                         </div>
                         <div>
-                            <span class="small fw-semibold">Orientado por: </span>
+                            <span class="small fw-bold">Orientado por: </span>
                             <span class="small">${item.professor.nome ?? ''}</span>
                         </div>
                         <div class="mt-3 mb-3">

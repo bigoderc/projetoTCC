@@ -159,27 +159,27 @@
                 card.innerHTML = `
                 <div class="card styled-border placeholder-glow shadow-sm mb-2">
                     <div class="card-body pb-0">
-                        <div class=" card-title text-white fw-semibold mb-1"><span class="texto-limitado small">${item.nome}</span></div>
+                        <div class=" card-title text-white fw-bold mb-1"><span class="texto-limitado small">${item.nome}</span></div>
                         <div>
-                            <span class="small fw-semibold">Descrição: </span>
+                            <span class="small fw-bold">Descrição: </span>
                             <span class="small">${item.descricao ?? ''}</span>
                         </div>
                         <div>
-                            <span class="small fw-semibold">Área: </span>
+                            <span class="small fw-bold">Área: </span>
                             <span class="small">${item.area?.nome ?? ''}</span>
                         </div>
                         <div>
-                            <span class="small fw-semibold">Lançado por: </span>
+                            <span class="small fw-bold">Lançado por: </span>
                             <span class="small">${item.criado?.name ?? ''}</span>
                         </div>
                         <div>
-                            <span class="small fw-semibold">Lançado em: </span>
+                            <span class="small fw-bold">Lançado em: </span>
                             <span class="small">${item.created_at ?? ''}</span>
                         </div>
                         
                         ${item.tema_aluno?.fk_professores_id ? `
                             <div>
-                                <span class="small fw-semibold">Orientado por: </span>
+                                <span class="small fw-bold">Orientado por: </span>
                                 <span class="small">${item.tema_aluno.professor.nome ?? ''}</span>
                             </div>` : ''}
                         <div class="mt-3 mb-3">
