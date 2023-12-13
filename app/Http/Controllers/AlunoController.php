@@ -69,11 +69,11 @@ class AlunoController extends Controller
             $user = $this->user->withTrashed()->where('email',$request->email)->whereNotNull('deleted_at')->first();
             
             if(!empty($user)){
+                $user->restore();
                 $user->update(
                     [
                         "name" =>$request->nome,
-                        "password" => Hash::make('alterar123'),
-                        "deleted_at"=>null
+                        "password" => Hash::make('alterar123')
                     ] 
                 );
             }else{
@@ -112,7 +112,6 @@ class AlunoController extends Controller
     public function show()
     {
         //
-        Gate::authorize('read-discente');
         return response()->json($this->model->with(['user','curso','turma'])->get());
     }
 
@@ -168,7 +167,13 @@ class AlunoController extends Controller
         //
         Gate::authorize('delete-discente');
         $aluno = Aluno::find($id);
-        User::find($aluno->fk_user_id)->delete();
+        try {
+            //code...
+            User::find($aluno->fk_user_id)->delete();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
         $aluno->delete();
         return response()->json(true);
     }

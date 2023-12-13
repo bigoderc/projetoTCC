@@ -70,7 +70,6 @@ class AreaController extends Controller
     public function show()
     {
         //
-        Gate::authorize('read-area');
         return response()->json($this->model->all());
     }
 

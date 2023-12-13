@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTemaRequest;
 use App\Models\Area;
 use App\Models\Tema;
 use App\Models\User;
@@ -42,7 +43,7 @@ class TemaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTemaRequest $request)
     {
         //
         Gate::authorize('insert-proposta_tema');

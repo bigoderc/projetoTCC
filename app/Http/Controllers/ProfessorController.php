@@ -76,6 +76,7 @@ class ProfessorController extends Controller
             $user = $this->user->withTrashed()->where('email', $request->email)->whereNotNull('deleted_at')->first();
 
             if (!empty($user)) {
+                $user->restore();
                 $user->update(
                     [
                         "name" => $request->nome,
@@ -118,7 +119,6 @@ class ProfessorController extends Controller
     public function show()
     {
         //
-        Gate::authorize('read-professor');
         return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->get());
     }
 
@@ -187,7 +187,13 @@ class ProfessorController extends Controller
         //
         Gate::authorize('delete-professor');
         $professor = $this->professor->find($id);
-        $this->user->find($professor->fk_user_id)->delete();
+        try {
+            //code...
+            $this->user->find($professor->fk_user_id)->delete();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
         $professor->delete();
         return response()->json(true);
     }

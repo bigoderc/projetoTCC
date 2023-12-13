@@ -36,4 +36,7 @@ class AlunoTema extends Model
     public function professor(){
         return $this->hasOne(Professor::class,'id','fk_professores_id')->withTrashed();
     }
+    public function aluno(){
+        return $this->hasOne(Aluno::class,'id','fk_alunos_id')->withTrashed();
+    }
 }

@@ -117,7 +117,7 @@ class ConfiguracaoController extends Controller
     {   
         Gate::authorize('insert-configuracao') ||  Gate::authorize('update-configuracao');
 
-        PermissionRole::where("fk_permission_id", $request->permission)->delete();
+        PermissionRole::where("fk_permission_id", $request->permission)->where('fk_roles_id',$request->role)->delete();
 
         if (!empty($request->acao)){
             foreach ($request->acao as $value) {

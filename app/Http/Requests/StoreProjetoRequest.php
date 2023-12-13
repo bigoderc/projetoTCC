@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class StoreProjetoRequest extends FormRequest
@@ -29,7 +30,17 @@ class StoreProjetoRequest extends FormRequest
         $id = $this->segment(2) ?? 0;
         return [
             //
-            'nome' => ['required','max:255',Rule::unique('projetos')->ignore($this->id)],
+            'nome' => ['required','max:255',function ($attribute, $value, $fail) {
+                $existingMatricula = DB::table('projetos')
+                    ->where('nome', $value)
+                    ->where('id','<>',$this->id)
+                    ->whereNull('deleted_at')
+                    ->first();
+        
+                if ($existingMatricula) {
+                    $fail('o projeto já está em uso.');
+                }
+            }],
             'fk_areas_id' => ['required'],
             'fk_professores_id' => ['required'],
         ];

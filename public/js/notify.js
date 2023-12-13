@@ -100,7 +100,7 @@ function clearForm(formId,modalId) {
         var element = form.elements[i];
 
         // Limpa apenas os campos de input, textarea e select
-        if (element.type !== 'button' && element.type !== 'submit' && element.type !== 'reset') {
+        if (element.type !== 'button' && element.type !== 'submit' && element.type !== 'reset' && element.type !== 'hidden') {
             element.value = '';
         }
     }

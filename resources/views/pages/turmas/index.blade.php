@@ -41,7 +41,7 @@
                                         <input type="text" class="form-control" id="nome" name="nome" required>
                                         <label for="nome">Descrição</label>
                                         <input type="text" class="form-control" id="descricao" name="descricao">
-                                        <input type="hidden" class="form-control" id="fk_curso_id" name="fk_curso_id">
+                                        <input type="hidden" class="form-control fk_curso_id" name="fk_curso_id">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" onclick="clearForm('addLinha','novalinha')">Fechar</button>
@@ -83,7 +83,7 @@
     function getNewCurso() {
         partialLoader();
         let id_curso = `${document.getElementById('cursoSelect').value}`;
-        document.getElementById('fk_curso_id').value = id_curso;
+        $(`.fk_curso_id`).val(id_curso);
         $.ajax({
             url:`{{ url('turma/${id_curso}') }}`,
             type: "GET",

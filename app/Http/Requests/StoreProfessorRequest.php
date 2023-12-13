@@ -30,7 +30,19 @@ class StoreProfessorRequest extends FormRequest
         $id = $this->segment(2) ?? 0;
         return [
             //
-            'siape' => ['required','max:255',Rule::unique('professores')->ignore($this->id)],
+            'siape' => ['required','max:255',
+                function ($attribute, $value, $fail) {
+                    $existingMatricula = DB::table('professores')
+                        ->where('siape', $value)
+                        ->where('id','<>',$this->id)
+                        ->whereNull('deleted_at')
+                        ->first();
+            
+                    if ($existingMatricula) {
+                        $fail('o siape já está em uso.');
+                    }
+                }
+            ],
             'email' => [
                 'required',
                 'max:255',

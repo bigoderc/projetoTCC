@@ -167,9 +167,10 @@
                             <span class="small fw-bold">Área: </span>
                             <span class="small">${item.area?.nome ?? ''}</span>
                         </div>
+                       
                         <div>
-                            <span class="small fw-bold">Lançado por: </span>
-                            <span class="small">${item.criado?.name ?? ''}</span>
+                            <span class="small fw-bold">Escolhido por: </span>
+                            <span class="small">${item.tema_aluno?.aluno?.nome ?? ''}</span>
                         </div>
                         <div>
                             <span class="small fw-bold">Lançado em: </span>
@@ -183,11 +184,10 @@
                                 <i class="fa fa-envelope"></i>
                             </a>
                             
-                            ${item.tema_aluno?.deferido !=false ? `
+                            ${item.tema_aluno?.deferido !=true ? `
                                     <button type="button" title=Aceitar tema" class="btn btn-warning btn-sm mb-3" onclick="showDeferido(${item.id})">
                                         <i class="fa fa-check-square"></i>
-                                    </button>`:`
-                                `}
+                                    </button>`:``}
                             
                         </div>
 

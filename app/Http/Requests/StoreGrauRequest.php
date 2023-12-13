@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class StoreGrauRequest extends FormRequest
@@ -29,7 +30,17 @@ class StoreGrauRequest extends FormRequest
         $id = $this->segment(2) ?? 0;
         return [
             //
-            'nome' => ['required','max:255',Rule::unique('graus')->ignore($this->id)],
+            'nome' => ['required','max:255',function ($attribute, $value, $fail) {
+                $existingMatricula = DB::table('graus')
+                    ->where('nome', $value)
+                    ->where('id','<>',$this->id)
+                    ->whereNull('deleted_at')
+                    ->first();
+        
+                if ($existingMatricula) {
+                    $fail('o grau já está em uso.');
+                }
+            }],
         ];
     }
     public function messages()

@@ -158,7 +158,7 @@ class DashboardAlunoController extends Controller
         if(count($dados)>0){
             return response()->json($dados);
         }else{
-            return response()->json(Tema::with(['area','criado','temaAluno','temaAluno.professor'])->get());
+            return response()->json(Tema::with(['area','criado','temaAluno','temaAluno.professor'])->doesntHave('temaAluno')->get());
         }
        
     }
