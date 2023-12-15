@@ -68,7 +68,7 @@
                 card.innerHTML = `
                 <div class="card styled-border placeholder-glow shadow-sm mb-2">
                     <div class="card-body pb-0">
-                        <div class=" card-title text-white fw-bold mb-1"><span class="texto-limitado small">${item.nome}</span></div>
+                        <div class=" card-title text-white fw-bold mb-1"><span class="ml-1 mt-2 texto-limitado big">${item.nome}</span></div>
                         <div>
                             <span class="small fw-bold">Aluno: </span>
                             <span class=" small">${item.aluno?.nome ?? ''}</span>

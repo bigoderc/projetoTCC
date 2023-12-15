@@ -159,7 +159,7 @@
                 card.innerHTML = `
                 <div class="card styled-border placeholder-glow shadow-sm mb-2">
                     <div class="card-body pb-0">
-                        <div class=" card-title text-white fw-bold mb-1"><span class="texto-limitado small">${item.nome}</span></div>
+                        <div class="card-header card-title text-white rounded-1 fw-bold mb-1"><span class="h5">${item.nome}</span></div>
                         <div>
                             <span class="small fw-bold">Descrição: </span>
                             <span class="small">${item.descricao ?? ''}</span>

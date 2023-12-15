@@ -205,7 +205,7 @@
         ].join('');
     }
     $("#fk_curso_id").change(function() {
-        partialLoader();
+        
         $("#turma").find("*").not("label").remove();
         let id_curso = $(this).val();
         $.ajax({
@@ -226,15 +226,16 @@
                     select.append(option);
                 }
                 document.getElementById("turma").append(select);
-                partialLoader(false);
+                
             },
             error: function(xhr, status, error) {
-                partialLoader(false);
+               
                 errorResponse(xhr.status,xhr.responseJSON.data,xhr.responseText);
             }
         });
     });
     function setIdModal(id) {
+        partialLoader();
         document.getElementById('id').value = id;
         $.ajax({
                 url: `{{ url('discente/findById/${id}') }}`,
@@ -255,9 +256,12 @@
                     $(`#ingresso`).val(response.ingresso);
                     $(`#formado`).prop('checked',response.formado);
                     $(`#fk_curso_id option[value=${response.fk_curso_id}]`).prop('selected','selected').change();
-                    $(`#fk_turma_id option[value=${response.fk_turma_id}]`).prop('selected','selected').change();
-                    $('#novalinha').modal('show');
-                    partialLoader(false);
+                    setTimeout(function () {
+                        $(`#fk_turma_id option[value=${response.fk_turma_id}]`).prop('selected', 'selected').change();
+                        $('#novalinha').modal('show');
+                        partialLoader(false);
+                    }, 1500);
+                    
                 },
                 error: function(xhr, status, error) {
                     partialLoader(false);

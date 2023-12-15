@@ -210,8 +210,7 @@ class AlunoController extends Controller
                 [
                     'fk_alunos_id'=>$aluno->id,
                     'fk_tema_id'=>$request->tema_id,
-                    'fk_professores_id'=>$user->professor->id,
-                    'deferido'=>true
+                    'fk_professores_id'=>$user->professor->id
                 ]
             );
         }

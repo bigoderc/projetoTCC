@@ -71,6 +71,7 @@
                                 <th data-field="descricao" class="col-2" aria-required="true">DESCRIÇÃO</th>
                                 <th data-field="area.nome" class="col-2" aria-required="true">ÁREA</th>
                                 <th data-field="link" class="col-3" aria-required="true">LINK</th>
+                                <th data-field="criado.name" class="col-3" aria-required="true">PROPONENTE</th>
                                 <th data-field="acao" class="col-2" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>
