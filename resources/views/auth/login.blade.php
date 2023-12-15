@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid d-flex align-items-center justify-content-center">
     <div class="col-lg-3  rounded text-center p-3" style="background-color: rgba(255, 255, 255, 0.6);">
-        <img class="mr-1 mb-2" src="#" alt="logo da empresa" width="100">
+        <span class="h2">SAT-TCC</span>
         <form method="POST" action="{{ route('login') }}">
             @csrf
 

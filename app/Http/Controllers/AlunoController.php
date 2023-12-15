@@ -57,7 +57,7 @@ class AlunoController extends Controller
     public function store(AlunoStoreRequest $request)
     {
         //
-        Gate::authorize('store-discente');
+        Gate::authorize('insert-discente');
         DB::beginTransaction();
         try {
             //code...

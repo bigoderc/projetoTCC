@@ -2,7 +2,7 @@
     z-index: 1;">
     <div class="d-flex justify-content-center align-items-center text-white my-3">
         <div class="img" >
-			<span class="h2">GRC</span>
+			<span class="h2">SAT-TCC</span>
       	</div>
       
     </div>
