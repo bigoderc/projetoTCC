@@ -20,7 +20,8 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="titulo">Adicionar nova linha</h5>
-                                        <button type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
+                                        <button type="button" class="close" onclick="clearForm('addLinha','novalinha')"
+                                            aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
@@ -35,9 +36,10 @@
                                             <label for="nome">Descrição</label>
                                             <textarea class="form-control" id="descricao" rows="5" name="descricao"></textarea>
                                             <label for="nome" class="my-2">Área</label>
-                                            <select class="form-control" id="fk_areas_id" name="fk_areas_id"
-                                                aria-label="Default select example" required>
-                                                <option value="" selected>Selecione a Área</option>
+                                            <select class="form-control" id="fk_areas_id" name="areas[]" multiple
+                                                multiselect-hide-x="true" multiselect-search="true"
+                                                multiselect-max-items="5" required onchange="limitarSelecao(this,5)">
+
                                                 @foreach ($areas as $area)
                                                     <option value="{{ $area->id }}">{{ $area->nome }}</option>
                                                 @endforeach
@@ -63,13 +65,15 @@
                         data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true"
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
-                        data-search-accent-neutralise="true" data-editable-url="#" data-url="{{ route('proposta-tema.show', 1) }}">
+                        data-search-accent-neutralise="true" data-editable-url="#"
+                        data-url="{{ route('proposta-tema.show', 1) }}"
+                        data-response-handler="responseHandler">
                         <thead>
                             <tr>
                                 <th data-field="id" class="col-1">ID</th>
                                 <th data-field="nome" class="col-2" aria-required="true">NOME</th>
                                 <th data-field="descricao" class="col-2" aria-required="true">DESCRIÇÃO</th>
-                                <th data-field="area.nome" class="col-2" aria-required="true">ÁREA</th>
+                                <th data-field="areas_to_string" class="col-3" aria-required="true">ÁREA</th>
                                 <th data-field="link" class="col-3" aria-required="true">LINK</th>
                                 <th data-field="criado.name" class="col-3" aria-required="true">PROPONENTE</th>
                                 <th data-field="acao" class="col-2" data-formatter="acaoFormatter"
@@ -93,7 +97,7 @@
                                         <input type="file" name="file" accept=".pdf,.jpeg,.png" required="" />
                                         <input type="hidden" name="id" id="id_upload" value="" />
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
+                                            <button type="button" class="close"
                                                 onclick="clearForm('addLinha','novalinha')">Fechar</button>
                                             <button type="submit" id="btnAnexo"
                                                 class="btn btn-primary ml-2">Importar</button>
@@ -118,17 +122,19 @@
             }
         });
 
+
         //Adicionar uma nova linha e lançar via ajax
         $(document).ready(function() {
             var forms = document.getElementsByClassName('needs-validation');
             $("#addLinha").submit(function(event) {
-                partialLoader();
+
                 event.preventDefault();
                 var validation = Array.prototype.filter.call(forms, function(form) {
                     if (form.checkValidity() === false) {
                         form.classList.add('was-validated');
 
                     } else {
+                        partialLoader();
                         var formdata = new FormData($("form[name='addLinha']")[0]);
                         let id = document.getElementById('id').value;
                         $.ajax({
@@ -143,12 +149,12 @@
                                 clearForm('addLinha', 'novalinha')
                                 partialLoader(false);
                                 id > 0 ? $('#my_table_id').bootstrapTable(
-                                'updateByUniqueId', {
-                                    id: id,
-                                    row: response,
-                                    replace: false
-                                }) : $('#my_table_id').bootstrapTable('prepend',
-                                response);
+                                    'updateByUniqueId', {
+                                        id: id,
+                                        row: response,
+                                        replace: false
+                                    }) : $('#my_table_id').bootstrapTable('prepend',
+                                    response);
                                 successResponse();
                             },
                             error: function(xhr, status, error) {
@@ -191,6 +197,22 @@
             }
         }
 
+        function responseHandler(res) {
+            let nome_areas = [];
+            for (const obj of res) {
+                // Define valores padrão usando operador de coalescência nula (??)
+                for (const area of obj['areas']) {
+                    nome_areas.push(area?.nome ?? '');
+                }
+                nome_areas = [...new Set(nome_areas)];
+
+                // Criar uma string separada por vírgulas
+                obj['areas_to_string'] = nome_areas.join(', ');
+
+            }
+            return res;
+        }
+
         function setIdModal(id) {
             partialLoader();
             document.getElementById('id').value = id;
@@ -204,8 +226,19 @@
                     $(`#nome`).val(response.nome);
                     $(`#descricao`).val(response.descricao);
                     $(`#link`).val(response.link);
-                    $(`#fk_areas_id option[value=${response.fk_areas_id}]`).prop('selected', 'selected')
-                    .change();
+                    var select = document.getElementById('fk_areas_id');
+
+                    response.areas.forEach(function(valor) {
+                        // Encontrar a opção pelo valor e defini-la como selecionada
+                        var option = select.querySelector('option[value="' + valor.id + '"]');
+                        if (option) {
+
+                            option.selected = true;
+                        }
+                        select.loadOptions();
+                    });
+                    // $(`#fk_areas_id option[value=${response.fk_areas_id}]`).prop('selected', 'selected')
+                    // .change();
                     $('#novalinha').modal('show');
                 },
                 error: function(xhr, status, error) {
@@ -218,14 +251,15 @@
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             const actions = [
-                
+
                 `@can('update-proposta_tema')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
                 `<i class="fa fa-edit"></i>`,
                 `</a>@endcan`,
                 // Verificar se row.arquivo é diferente de null antes de adicionar o link
-                row.arquivo !== null ? `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="${row.storage}" target="_blank">` +
-                    `<i class="fa fa-search" aria-hidden="true"></i>` +
-                    `</a>` : '',
+                row.arquivo !== null ?
+                `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="${row.storage}" target="_blank">` +
+                `<i class="fa fa-search" aria-hidden="true"></i>` +
+                `</a>` : '',
                 '@can('delete-proposta_tema')<a class="remove" href="javascript:void(0)" title="Remove">',
                 '<i class="fa fa-trash"></i>',
                 '</a>@endcan'

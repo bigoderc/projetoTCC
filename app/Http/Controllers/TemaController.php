@@ -7,6 +7,7 @@ use App\Models\Area;
 use App\Models\Tema;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Guid\Guid;
@@ -47,16 +48,29 @@ class TemaController extends Controller
     {
         //
         Gate::authorize('insert-proposta_tema');
-        if($request->hasFile('file')){
-            $file = $request->file('file');
-            $imageUuid = Uuid::uuid4()->toString();
-            $extension = $file->getClientOriginalExtension();
-            $path = $imageUuid.'.'.$extension;
-            $file->storeAs('temas', strtolower($path), 'public');
-            $request['arquivo'] = strtolower($path);
+        DB::beginTransaction();
+        try {
+            //code...
+            if($request->hasFile('file')){
+                $file = $request->file('file');
+                $imageUuid = Uuid::uuid4()->toString();
+                $extension = $file->getClientOriginalExtension();
+                $path = $imageUuid.'.'.$extension;
+                $file->storeAs('temas', strtolower($path), 'public');
+                $request['arquivo'] = strtolower($path);
+            }
+            $tema =Tema::create($request->all());
+            $tema = Tema::with(['areas'])->find($tema->id);
+            $tema->areas()->sync($request->areas);
+            DB::commit();
+            return response()->json(Tema::with(['areas'])->find($tema->id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json($th->getMessage(),500);
+            
         }
-        $dados =Tema::create($request->all());
-        return response()->json(Tema::with(['area'])->find($dados->id));
+        
     }
 
     /**
@@ -76,9 +90,9 @@ class TemaController extends Controller
             $data->role = $data->roles->first();
         }
         if($data->role->nome =='aluno'){
-            return response()->json(Tema::with(['area','criado'])->where('user_id_created',$user->id)->get());
+            return response()->json(Tema::with(['areas','criado'])->where('user_id_created',$user->id)->get());
         }else{
-            return response()->json(Tema::with(['area','criado'])->get());
+            return response()->json(Tema::with(['areas','criado'])->get());
         }
         
     }
@@ -106,16 +120,28 @@ class TemaController extends Controller
     {
         //
         Gate::authorize('update-proposta_tema');
-        if($request->hasFile('file')){
-            $file = $request->file('file');
-            $imageUuid = Uuid::uuid4()->toString();
-            $extension = $file->getClientOriginalExtension();
-            $path = $imageUuid.'.'.$extension;
-            $file->storeAs('temas', strtolower($path), 'public');
-            $request['arquivo'] = strtolower($path);
+        DB::beginTransaction();
+        try {
+            //code...
+            if($request->hasFile('file')){
+                $file = $request->file('file');
+                $imageUuid = Uuid::uuid4()->toString();
+                $extension = $file->getClientOriginalExtension();
+                $path = $imageUuid.'.'.$extension;
+                $file->storeAs('temas', strtolower($path), 'public');
+                $request['arquivo'] = strtolower($path);
+            }
+            $tema->find($id)->update($request->all());
+            $tema = Tema::with(['areas'])->find($tema->id);
+            $tema->areas()->sync($request->areas);
+            DB::commit();
+            return response()->json($tema->with(['areas'])->find($id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json($th->getMessage(),500);
         }
-        $tema->find($id)->update($request->all());
-        return response()->json($tema->with(['area'])->find($id));
+        
     }
 
     /**
@@ -138,7 +164,7 @@ class TemaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function findById($id){
-        return response()->json(Tema::with(['area'])->find($id));
+        return response()->json(Tema::with(['areas'])->find($id));
     }
     public function toView(Tema $tema,$id){
         $tema = $tema->find($id);

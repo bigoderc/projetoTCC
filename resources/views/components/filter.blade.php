@@ -50,8 +50,10 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Área</span>
                                         </div>
-                                        <select class="form-control" name="area_id" id="area_id">
-                                            <option value="">Selecione</option>
+                                        <select class="form-control" id="area_id" name="areas[]" multiple
+                                            multiselect-hide-x="true" multiselect-search="true"
+                                            multiselect-max-items="5" required>
+
                                             @foreach ($areas as $area)
                                                 <option value="{{ $area->id }}">{{ $area->nome }}</option>
                                             @endforeach

@@ -41,7 +41,6 @@ class StoreProjetoRequest extends FormRequest
                     $fail('o projeto já está em uso.');
                 }
             }],
-            'fk_areas_id' => ['required'],
             'fk_professores_id' => ['required'],
         ];
     }

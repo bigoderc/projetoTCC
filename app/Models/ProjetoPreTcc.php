@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\Helper;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,14 +26,10 @@ class ProjetoPreTcc extends Model
         'fk_professores_id',
         'apresentacao',
         'projeto',
-        'fk_areas_id',
         'fk_aluno_id'
     ];
     public function professor(){
         return $this->hasOne(Professor::class,'id','fk_professores_id')->withTrashed();
-    }
-    public function area(){
-        return $this->hasOne(Area::class,'id','fk_areas_id')->withTrashed();
     }
     protected static function boot()
     {
@@ -61,19 +58,8 @@ class ProjetoPreTcc extends Model
         // Use $path se estiver definido e não vazio, caso contrário, use $name
         return $this->attributes['storage'] = $caminho . $path;
     }
-    public function getApresentadoDescAttribute()
-    {
-        try {
-            //code...
-            $created = Carbon::parse($this->attributes['apresentacao']);
-            $created->setTimezone('America/Sao_Paulo');
-            return $this->attributes['apresentado_desc'] =  $created->format('d/m/Y');
-        } catch (\Throwable $th) {
-            //throw $th;
-            return null;
-        }
-        
-        
+    public function areas(){
+        return $this->belongsToMany(Area::class,'projeto_pre_tcc_areas','fk_projeto_pre_tcc_id','fk_area_id')->withTrashed();
     }
-    protected $appends = ['storage','apresentado_desc'];
+    protected $appends = ['storage'];
 }

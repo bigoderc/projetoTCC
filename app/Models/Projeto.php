@@ -36,8 +36,8 @@ class Projeto extends Model
     public function aluno(){
         return $this->hasOne(Aluno::class,'id','fk_aluno_id')->withTrashed();
     }
-    public function area(){
-        return $this->hasOne(Area::class,'id','fk_areas_id')->withTrashed();
+    public function areas(){
+        return $this->belongsToMany(Area::class,'projeto_areas','fk_projeto_id','fk_area_id')->withTrashed();
     }
     protected static function boot()
     {

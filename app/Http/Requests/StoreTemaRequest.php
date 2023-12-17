@@ -41,7 +41,7 @@ class StoreTemaRequest extends FormRequest
                     $fail('o tema já está em uso.');
                 }
             }],
-            'fk_areas_id' => ['required'],
+            
         ];
     }
     public function messages()
@@ -50,7 +50,7 @@ class StoreTemaRequest extends FormRequest
             'nome.required' => 'É obrigatorio o nome do tema',
             'nome.unique' => 'Já existe esse tema',
             'nome.max' => 'Nome não pode passar de 255 caracteres',
-            'fk_areas_id.required' => 'É obrigatorio a área',
+            
         ];
     }
     public function failedValidation(Validator $validator)

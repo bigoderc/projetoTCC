@@ -9,6 +9,7 @@ use App\Models\Area;
 use App\Models\Professor;
 use App\Models\Projeto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Ramsey\Uuid\Uuid;
 
@@ -61,17 +62,28 @@ class ProjetoPreTccController extends Controller
     {
         //
         Gate::authorize('insert-pre_tcc');
-        if($request->hasFile('arquivo')){
-            $file = $request->file('arquivo');
-            $imageUuid = Uuid::uuid4()->toString();
-            $extension = $file->getClientOriginalExtension();
-            $path = $imageUuid.'.'.$extension;
-            $file->storeAs('projetos-pre-tcc', strtolower($path), 'public');
-            $request['projeto'] = strtolower($path);
+        DB::beginTransaction();
+        try {
+            //code...
+            if($request->hasFile('arquivo')){
+                $file = $request->file('arquivo');
+                $imageUuid = Uuid::uuid4()->toString();
+                $extension = $file->getClientOriginalExtension();
+                $path = $imageUuid.'.'.$extension;
+                $file->storeAs('projetos-pre-tcc', strtolower($path), 'public');
+                $request['projeto'] = strtolower($path);
+            }
+            $dados=$this->model->create($request->all());
+            $projeto = $this->model->with(['aluno','professor','areas'])->find($dados->id);
+            $projeto->areas()->sync($request->areas);
+            DB::commit();
+            return response()->json($this->model->with(['aluno','professor','areas'])->find($dados->id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json($th->getMessage(),500);
         }
-        $dados=$this->model->create($request->all());
-       
-        return response()->json($this->model->with(['aluno','professor','area'])->find($dados->id));
+        
     }
 
     /**
@@ -84,7 +96,7 @@ class ProjetoPreTccController extends Controller
     {
         //
         Gate::authorize('read-pre_tcc');
-        return response()->json($this->model->with(['aluno','professor','area'])->get());
+        return response()->json($this->model->with(['aluno','professor','areas'])->get());
     }
     /**
      * Display the specified resource.
@@ -95,7 +107,7 @@ class ProjetoPreTccController extends Controller
     public function findById($id)
     {
         //
-        return response()->json($this->model->with(['aluno','professor','area'])->find($id));
+        return response()->json($this->model->with(['aluno','professor','areas'])->find($id));
     }
     /**
      * Display the specified resource.
@@ -106,7 +118,7 @@ class ProjetoPreTccController extends Controller
     public function findByProfessor($id)
     {
         //
-        return response()->json($this->model->with(['aluno','professor','area'])->where('fk_professores_id',$id)->get());
+        return response()->json($this->model->with(['aluno','professor','areas'])->where('fk_professores_id',$id)->get());
     }
     /**
      * Show the form for editing the specified resource.
@@ -130,16 +142,28 @@ class ProjetoPreTccController extends Controller
     {
         //
         Gate::authorize('update-pre_tcc');
-        if($request->hasFile('arquivo')){
-            $file = $request->file('arquivo');
-            $imageUuid = Uuid::uuid4()->toString();
-            $extension = $file->getClientOriginalExtension();
-            $path = $imageUuid.'.'.$extension;
-            $file->storeAs('projetos-pre-tcc', strtolower($path), 'public');
-            $request['projeto'] = strtolower($path);
+        DB::beginTransaction();
+        try {
+            //code...
+            if($request->hasFile('arquivo')){
+                $file = $request->file('arquivo');
+                $imageUuid = Uuid::uuid4()->toString();
+                $extension = $file->getClientOriginalExtension();
+                $path = $imageUuid.'.'.$extension;
+                $file->storeAs('projetos-pre-tcc', strtolower($path), 'public');
+                $request['projeto'] = strtolower($path);
+            }
+            $this->model->find($id)->update($request->all());
+            $projeto = $this->model->with(['aluno','professor','areas'])->find($id);
+            $projeto->areas()->sync($request->areas);
+            DB::commit();
+            return response()->json($this->model->with(['aluno','professor','areas'])->find($id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json($th->getMessage(),500);
         }
-        $this->model->find($id)->update($request->all());
-        return response()->json($this->model->with(['aluno','professor','area'])->find($id));
+        
     }
 
     /**

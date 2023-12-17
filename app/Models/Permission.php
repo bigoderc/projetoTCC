@@ -12,7 +12,7 @@ class Permission extends Model
     protected $fillable = ['name', 'acao'];
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'permission_roles', 'fk_permission_id', 'fk_roles_id');
+        return $this->belongsToMany(Role::class, 'permission_roles', 'fk_permission_id', 'fk_roles_id')->withPivot(['id']);
     }
     public function permissionRole()
     {

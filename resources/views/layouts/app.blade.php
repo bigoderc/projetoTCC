@@ -42,6 +42,7 @@
     <script src="{{ url('js/notify.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Chart JS -->
+    <script src="{{ url('js/multiselect-dropdown.js') }}"></script>
     @stack('scripts')
 
 </body>

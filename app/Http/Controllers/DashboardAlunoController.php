@@ -97,11 +97,14 @@ class DashboardAlunoController extends Controller
     {
         //
         $query = $this->tema->query();
-        $query->with(['area','criado','temaAluno','temaAluno.professor']);
+        $query->with(['area','criado','temaAluno','temaAluno.professor'])
+        ->whereHas('areas',function($query) use($request){
+            $query->whereIn('areas.id',$request->areas);
+        });
         $query->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$request->data_inicio, $request->data_fim]);
-        if (!empty($request->area_id)) {
-            $query->where('fk_areas_id',$request->area_id);
-        } 
+        // if (!empty($request->area_id)) {
+        //     $query->where('fk_areas_id',$request->area_id);
+        // } 
         if (!empty($request->professor_id)) {
             $query->where('user_id_created',$request->professor_id);
         }        

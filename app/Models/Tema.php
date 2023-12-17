@@ -27,8 +27,8 @@ class Tema extends Model
         'link',
         'arquivo'
     ];
-    public function area(){
-        return $this->hasOne(Area::class,'id','fk_areas_id')->withTrashed();
+    public function areas(){
+        return $this->belongsToMany(Area::class,'tema_areas','fk_tema_id','fk_area_id')->withTrashed();
     }
     protected static function boot()
     {
@@ -72,4 +72,5 @@ class Tema extends Model
         return $this->attributes['storage'] = $caminho . $path;
     }
     protected $appends = ['storage'];
+    
 }
