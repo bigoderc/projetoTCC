@@ -208,7 +208,7 @@
 
                 // Criar uma string separada por vírgulas
                 obj['areas_to_string'] = nome_areas.join(', ');
-                const limiteCaracteres = 70;
+                const limiteCaracteres = 50;
                 if(obj['descricao']){
                     if (obj['descricao'].length > limiteCaracteres) {
                         // Substitua a string por uma versão truncada com "..."
