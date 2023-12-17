@@ -214,7 +214,7 @@
                         // Substitua a string por uma versão truncada com "..."
                         obj['descricao'] = obj['descricao'].substring(0, limiteCaracteres) + '...';
                     } else {
-                        obj['descricao'] = areas_string;
+                        obj['descricao'] = obj['descricao'];
                     }
                 }
                 if(obj['link']){
@@ -222,7 +222,7 @@
                         // Substitua a string por uma versão truncada com "..."
                         obj['link'] = obj['link'].substring(0, limiteCaracteres) + '...';
                     } else {
-                        obj['link'] = areas_string;
+                        obj['link'] = obj['descricao'];
                     }
                 }
                 
