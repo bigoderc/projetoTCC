@@ -72,7 +72,7 @@
                             <tr>
                                 <th data-field="id" class="col-1">ID</th>
                                 <th data-field="nome" class="col-2" aria-required="true">NOME</th>
-                                <th data-field="descricao" class="col-2" aria-required="true">DESCRIÇÃO</th>
+                                {{-- <th data-field="descricao" class="col-2" aria-required="true">DESCRIÇÃO</th> --}}
                                 <th data-field="areas_to_string" class="col-3" aria-required="true">ÁREA</th>
                                 <th data-field="link" class="col-3" aria-required="true">LINK</th>
                                 <th data-field="criado.name" class="col-3" aria-required="true">PROPONENTE</th>
