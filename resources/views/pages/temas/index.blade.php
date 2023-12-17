@@ -218,7 +218,7 @@
                     }
                 }
                 if(obj['link']){
-                    if (obj['link'].length > limiteCaracteres) {
+                    if (obj['link'].length > 30) {
                         // Substitua a string por uma versão truncada com "..."
                         obj['link'] = obj['link'].substring(0, limiteCaracteres) + '...';
                     } else {
