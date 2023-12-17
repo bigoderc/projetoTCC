@@ -222,7 +222,7 @@
                         // Substitua a string por uma versão truncada com "..."
                         obj['link'] = obj['link'].substring(0, limiteCaracteres) + '...';
                     } else {
-                        obj['link'] = obj['descricao'];
+                        obj['link'] = obj['link'];
                     }
                 }
                 
