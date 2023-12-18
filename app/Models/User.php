@@ -63,7 +63,7 @@ class User extends Authenticatable
     }
     public function roles()
     {
-        return $this->belongsToMany(\App\Models\Role::class,'role_users', 'fk_users_id', 'fk_roles_id');
+        return $this->belongsToMany(\App\Models\Role::class,'role_users', 'fk_users_id', 'fk_roles_id')->withPivot(['id']);
     }
 
     protected static function boot()
