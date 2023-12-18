@@ -7,7 +7,7 @@
       
     </div>
 
-    <div>
+    <div id="navbar">
         <ul class="nav flex-column">
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
                 <div class="d-flex justify-content-center">
@@ -37,7 +37,7 @@
 
                     </a>
                 </div>
-                <ul class="list-group text-left d-none">
+                <ul class="list-group text-left @empty($checked) d-none @endempty">
                     @can('read-curso')
                         <li class="list-group-item bg-white py-1">
                             <a class="text-decoration-none text-dark" href="{{ route('curso.index') }}">

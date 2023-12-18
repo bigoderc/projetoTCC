@@ -1,5 +1,7 @@
-@extends('layouts.pages.dashboard')
-
+@extends('layouts.pages.dashboard',[
+    'title'=>'checked',
+    'checked'=>true
+])
 @section('content-page')
 <div class="content-page">
     <div class="card-body">
