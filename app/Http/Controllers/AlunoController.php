@@ -216,7 +216,7 @@ class AlunoController extends Controller
         }
         
         $aluno = auth()->user()->aluno;
-        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
+        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
             $query->where('fk_alunos_id',$aluno->id);
         })->get();
         return response()->json($dados);
