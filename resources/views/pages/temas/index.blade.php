@@ -200,8 +200,9 @@
         }
 
         function responseHandler(res) {
-            let nome_areas = [];
+            
             for (const obj of res) {
+                let nome_areas = [];
                 // Define valores padrão usando operador de coalescência nula (??)
                 for (const area of obj['areas']) {
                     nome_areas.push(area?.nome ?? '');
