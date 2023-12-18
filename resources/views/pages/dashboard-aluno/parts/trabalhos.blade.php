@@ -62,7 +62,14 @@
 
             // Itere pelos dados e crie os cards
             data.forEach(function(item, index) {
-                
+                let nome_areas = [];
+                for (const area of item.areas) {
+                        nome_areas.push(area?.nome ?? '');
+                    }
+                    nome_areas = [...new Set(nome_areas)];
+
+                // Criar uma string separada por vírgulas
+                var areas_to_string = nome_areas.join(', ');
                 const card = document.createElement('div');
                 card.className = 'timeline right';
                 card.innerHTML = `
@@ -75,7 +82,7 @@
                         </div>
                         <div>
                             <span class="small fw-bold">Área: </span>
-                            <span class="small">${item.area?.nome ?? ''}</span>
+                            <span class="small">${areas_to_string ?? ''}</span>
                         </div>
                         <div>
                             <span class="small fw-bold">Apresentado em: </span>

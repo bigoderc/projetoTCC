@@ -53,7 +53,7 @@ class DashboardAlunoController extends Controller
         //
         AlunoTema::where('fk_tema_id',$request->id)->update(['fk_professores_id'=>$request->professor_id]);
 
-        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->where('id',$request->id)->get();
+        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->where('id',$request->id)->get();
         return response()->json($dados);
     }
 
@@ -71,7 +71,7 @@ class DashboardAlunoController extends Controller
             'deferido'=>null,
             'fk_professores_id'=>null
         ]);
-        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->where('id',$request->tema_id)->get();
+        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->where('id',$request->tema_id)->get();
         return response()->json($dados);
     }
     /**
@@ -84,7 +84,7 @@ class DashboardAlunoController extends Controller
     {
         //
         AlunoTema::where('fk_tema_id',$request->tema_id)->delete();
-        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->doesntHave('temaAluno')->get();
+        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->doesntHave('temaAluno')->get();
         return response()->json($dados);
     }
     /**
@@ -97,7 +97,7 @@ class DashboardAlunoController extends Controller
     {
         //
         $query = $this->tema->query();
-        $query->with(['area','criado','temaAluno','temaAluno.professor'])
+        $query->with(['areas','criado','temaAluno','temaAluno.professor'])
         ->whereHas('areas',function($query) use($request){
             $query->whereIn('areas.id',$request->areas);
         });
@@ -110,7 +110,7 @@ class DashboardAlunoController extends Controller
         }        
         $data = $query->orderBy('id','desc')->get();
         $aluno = auth()->user()->aluno;
-        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
+        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
             $query->where('fk_alunos_id',$aluno->id);
         })->get();
         
@@ -140,7 +140,7 @@ class DashboardAlunoController extends Controller
     public function findById($id)
     {
         //
-        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->where('id',$id)->first();
+        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->where('id',$id)->first();
         return response()->json($dados);
     }
 
@@ -154,14 +154,14 @@ class DashboardAlunoController extends Controller
     {
         //
         $aluno = auth()->user()->aluno;
-        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
+        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
             $query->where('fk_alunos_id',$aluno->id ??0);
         })->get();
         
         if(count($dados)>0){
             return response()->json($dados);
         }else{
-            return response()->json(Tema::with(['area','criado','temaAluno','temaAluno.professor'])->doesntHave('temaAluno')->get());
+            return response()->json(Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->doesntHave('temaAluno')->get());
         }
        
     }

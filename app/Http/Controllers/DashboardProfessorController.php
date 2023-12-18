@@ -58,7 +58,7 @@ class DashboardProfessorController extends Controller
         }
         AlunoTema::where('fk_tema_id',$request->tema_id)->update($data);
         $professor = auth()->user()->professor;
-        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor','temaAluno.aluno'])->whereHas('temaAluno',function($query) use($professor){
+        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor','temaAluno.aluno'])->whereHas('temaAluno',function($query) use($professor){
             $query->where('fk_professores_id',$professor->id);
             $query->where(function ($query) {
                 $query->where('deferido', '<>', false)
@@ -88,7 +88,7 @@ class DashboardProfessorController extends Controller
     {
         //
         $professor = auth()->user()->professor;
-        $dados = Tema::with(['area','criado','temaAluno','temaAluno.professor','temaAluno.aluno'])->whereHas('temaAluno',function($query) use($professor){
+        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor','temaAluno.aluno'])->whereHas('temaAluno',function($query) use($professor){
             $query->where('fk_professores_id',$professor->id);
             $query->where(function ($query) {
                 $query->where('deferido', '<>', false)

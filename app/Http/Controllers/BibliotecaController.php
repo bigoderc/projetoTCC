@@ -51,11 +51,11 @@ class BibliotecaController extends Controller
      * @param  \App\Models\Biblioteca  $biblioteca
      * @return \Illuminate\Http\Response
      */
-    public function show(Biblioteca $biblioteca)
+    public function show()
     {
         //
         Gate::authorize('read-biblioteca');
-        return response()->json($biblioteca->all());
+        return response()->json(Biblioteca::all());
     }
 
     /**

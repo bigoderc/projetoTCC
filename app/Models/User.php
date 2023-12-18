@@ -48,19 +48,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    public function hasPermission(Permission $permissao){
-        return $this->hasAnyRoles($permissao->roles);
+    public function hasPermission(Permission $permission)
+    {
+        return $this->hasAnyRoles($permission->roles);
     }
 
-    public function hasAnyRoles($regras){
-        //dd($regras);
-        if(is_array($regras) || is_object($regras)){
-
-            return !! $regras->intersect($this->roles)->count();
+    public function hasAnyRoles($roles)
+    {
+        if (is_array($roles) || is_object($roles)) {
+            return !!$roles->intersect($this->roles)->count();
         }
-        //dd('sdfsdf');
-        //checar se tem um usuario com uma regra so
-        return $this->roles->contains('nome', $regras);
+
+        return $this->roles->contains('nome', $roles);
     }
     public function roles()
     {
