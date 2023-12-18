@@ -154,7 +154,7 @@ class ProjetoPreTccController extends Controller
                 $request['projeto'] = strtolower($path);
             }
             $this->model->find($id)->update($request->all());
-            $projeto = $this->model->with(['aluno','professor','areas'])->find($id);
+            $projeto = $this->model->find($id);
             $projeto->areas()->sync($request->areas);
             DB::commit();
             return response()->json($this->model->with(['aluno','professor','areas'])->find($id));

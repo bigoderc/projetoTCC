@@ -132,7 +132,8 @@ class TemaController extends Controller
                 $request['arquivo'] = strtolower($path);
             }
             $tema->find($id)->update($request->all());
-            $tema = Tema::with(['areas'])->find($tema->id);
+            $tema = Tema::find($id);
+            
             $tema->areas()->sync($request->areas);
             DB::commit();
             return response()->json($tema->with(['areas'])->find($id));
