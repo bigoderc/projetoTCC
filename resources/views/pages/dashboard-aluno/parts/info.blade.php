@@ -59,15 +59,13 @@
                 type: "GET",
                 success: function(response) {
 
-                    viewPDFArea(response.area?.storage);
+                  
                     viewPDFTema(response.storage);
                     partialLoader(false);
                     $(`#tema`).val(response.nome);
                     $(`#descricao`).val(response.descricao);
                     $(`#link_tema`).text(response.link);
-                    $(`#area`).val(response.area?.nome);
-                    $(`#descricao_area`).val(response.area.descricao);
-                    $(`#link_area`).text(response.area.link);
+                   
                 },
                 error: function(xhr, status, error) {
                     partialLoader(false);
