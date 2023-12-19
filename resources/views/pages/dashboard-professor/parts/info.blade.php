@@ -34,32 +34,6 @@
                         </div>
                     </div>
                 
-                    <hr class="my-4">
-                
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="area">Área</label>
-                            <input type="text" class="form-control" id="area" name="area" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="descricao_area">Descrição</label>
-                            <textarea class="form-control" name="descricao_area" id="descricao_area" rows="3"></textarea>
-                        </div>
-                    </div>
-                
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="link_area">Mais informações em</label>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text w-25" id="link_area"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="embed-responsive embed-responsive-16by9" id="pdfViewerArea"></div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="modal-footer">
