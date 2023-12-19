@@ -1,52 +1,50 @@
-<div class="card-body">
-    <div class="modal fade" id="professor_modal" tabindex="-1" aria-labelledby="professor" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="titulo">Associar orientador</h5>
-                    <button type="button" class="close" onclick="fecharModalprofessor1()" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="row">
-                    <input type="hidden" class="form-control" id="orientador_id" name="orientador_id">
-                    <div class="col-12">
-                        <div class="col">
-                            <table id="orientador_table" class="text-center" data-toggle="table"
-                                data-editable="true" data-editable-pk="id" data-editable-mode="inline"
-                                data-editable-type="text" data-locale="pt-BR" data-search="true"
-                                data-show-columns="false" data-show-export="false"
-                                data-search-accent-neutralise="true" data-editable-url="#">
-                                <thead>
-                                    <tr>
-                                        <th data-field="id" class="col-1">ID</th>
-                                        <th data-field="nome" class="col-3" aria-required="true">NOME</th>
-                                        <th data-field="siape" class="col-3" aria-required="true">SIAPE</th>
-                                        <th data-field="area.nome" class="col-3" aria-required="true">ÁREA</th>
-                                        <th data-field="especialidade.nome" class="col-3" aria-required="true">ESPECIALIDADE
-                                        </th>
-                                        <th data-field="grau.nome" class="col-3" aria-required="true">GRAU</th>
-                                        
-                                        <th data-field="acao" class="col-1"
-                                            data-formatter="acaoFormattercheck2">
-                                            Ação</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
+<div class="modal fade" id="professor_modal" tabindex="-1" aria-labelledby="professor" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titulo">Associar orientador</h5>
+                <button type="button" class="close" onclick="fecharModalprofessor1()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="orientador_id" name="orientador_id">
+                <div class="col-12">
+                    <div class="col">
+                        <table id="orientador_table" class="text-center" data-toggle="table"
+                            data-editable="true" data-editable-pk="id" data-editable-mode="inline"
+                            data-editable-type="text" data-locale="pt-BR" data-search="true"
+                            data-show-columns="false" data-show-export="false"
+                            data-search-accent-neutralise="true" data-editable-url="#">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" class="col-1">ID</th>
+                                    <th data-field="nome" class="col-3" aria-required="true">NOME</th>
+                                    <th data-field="siape" class="col-3" aria-required="true">SIAPE</th>
+                                    <th data-field="area.nome" class="col-3" aria-required="true">ÁREA</th>
+                                    <th data-field="especialidade.nome" class="col-3" aria-required="true">ESPECIALIDADE
+                                    </th>
+                                    <th data-field="grau.nome" class="col-3" aria-required="true">GRAU</th>
+                                    
+                                    <th data-field="acao" class="col-1"
+                                        data-formatter="acaoFormattercheck2">
+                                        Ação</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
+            </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="fecharModalprofessor1()">Fechar</button>
-                    <button type="button" id="salvar" onclick="associar()"
-                        class="btn btn-primary">Salvar</button>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="fecharModalprofessor1()">Fechar</button>
+                <button type="button" id="salvar" onclick="associar()"
+                    class="btn btn-primary">Salvar</button>
             </div>
         </div>
     </div>
-    @include('pages.dashboard-aluno.parts.trabalhos')
 </div>
+@include('pages.dashboard-aluno.parts.trabalhos')
 @push('scripts')
     <script>
         function setprofessor(params) {

@@ -16,11 +16,7 @@ class Helper extends Controller
 
     public static function url(string $string)
     {
-        if (strpos(strtolower($_SERVER['SERVER_PROTOCOL']), 'https') === false) {
-            $protocolo = 'http://'; //Atribui o valor http
-        } else {
-            $protocolo = 'https://'; //Atribui o valor https
-        }
+        $protocolo = config('app.env') === 'production' ? 'https://' : 'http://';
         $dominio = $_SERVER['HTTP_HOST'];
         $url = $protocolo . $dominio;
         $partes = explode("/api", $url);
