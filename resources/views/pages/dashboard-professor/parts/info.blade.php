@@ -12,7 +12,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="tema">Tema</label>
-                            <input type="text" class="form-control" id="tema" name="tema" required>
+                            <textarea  class="form-control" id="tema" name="tema" rows="5"></textarea>
                         </div>
                         <div class="col-md-6">
                             <label for="descricao">Descrição</label>
