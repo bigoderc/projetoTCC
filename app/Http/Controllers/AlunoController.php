@@ -195,7 +195,7 @@ class AlunoController extends Controller
     public function linkTheme(Request $request)
     {
         //
-        $aluno = auth()->user()->aluno;
+        $aluno = Aluno::where('fk_user_id',auth()->user()->id)->first();
         $tema = Tema::find($request->tema_id);
         $user = User::with('professor')->find($tema->user_id_created);
         if(empty($user->professor)){
