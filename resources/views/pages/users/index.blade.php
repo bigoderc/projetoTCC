@@ -62,7 +62,6 @@
                         data-url="{{ route('user.show', 1) }}">
                         <thead>
                             <tr>
-                                <th data-field="id" class="col-1">ID</th>
                                 <th data-field="name" data-editable="true" class="col-3" aria-required="true">NOME</th>
                                 <th data-field="email" data-editable="true" class="col-3" aria-required="true">
                                     EMAIL</th>

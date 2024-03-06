@@ -7,7 +7,7 @@
         <div class="card-body">
             <div class="card">
                 <div class="card-header card-title text-white bg-transparent border-0 m-3">
-                    <span class="h4">Professores</span>
+                    <span class="h4">Docente</span>
                 </div>
                 <div class="card-body">
                     <div id="toolbar">
@@ -21,7 +21,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="titulo">Adicionar Professor</h5>
+                                        <h5 class="modal-title" id="titulo">Adicionar Docente</h5>
                                         <button type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -82,10 +82,9 @@
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
                         data-search-accent-neutralise="true" data-editable-url="#"
-                        data-url="{{ route('professor.show',1) }}">
+                        data-url="{{ route('docente.show',1) }}">
                         <thead>
                             <tr>
-                                <th data-field="id" class="col-1">ID</th>
                                 <th data-field="nome" class="col-3" aria-required="true">NOME</th>
                                 <th data-field="siape" class="col-3" aria-required="true">SIAPE</th>
                                 <th data-field="area.nome" class="col-3" aria-required="true">ÁREA</th>
@@ -127,8 +126,8 @@
                         partialLoader();
                         let id = document.getElementById('id').value;
                         $.ajax({
-                            url: id > 0 ? `{{ url('professor/update/${id}') }}` :
-                                "{{ route('professor.store') }}",
+                            url: id > 0 ? `{{ url('docente/update/${id}') }}` :
+                                "{{ route('docente.store') }}",
                             type: id > 0 ? "PUT" : "POST",
                             data: $("#addLinha").serialize(),
                             dataType: "json",
@@ -195,7 +194,7 @@
                 url: `{{ url('professor/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
-                    $(`#titulo`).text(`Editar Professor ${response.nome}`);
+                    $(`#titulo`).text(`Editar Docente ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
                     $(`#siape`).val(response.siape);

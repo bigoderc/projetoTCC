@@ -57,7 +57,6 @@
                 <table id="my_table_id" class="text-center" data-toggle="table" data-editable="true" data-editable-pk="id" data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR" data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25" data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true" data-search-accent-neutralise="true" data-editable-url="{{ route('turma.update1') }}">
                     <thead>
                         <tr>
-                            <th data-field="id" class="col-1">ID</th>
                             <th data-field="nome" data-editable="true" class="col-3" aria-required="true">NOME</th>
                             <th data-field="descricao" data-editable="true" class="col-3" aria-required="true">DESCRIÇÃO</th>
                             <th data-field="curso.nome" data-editable="false" class="col-3" aria-required="true">CURSO</th>
@@ -83,6 +82,7 @@
     
 
     function getNewCurso() {
+        $('#my_table_id').bootstrapTable('removeAll');
         partialLoader();
         let id_curso = `${document.getElementById('cursoSelect').value}`;
         $(`.fk_curso_id`).val(id_curso);
@@ -90,11 +90,7 @@
             url:`{{ url('turma/${id_curso}') }}`,
             type: "GET",
             success: function(response) {
-                if(response.length >0){
-                    $('#my_table_id').bootstrapTable('append', response);
-                }else{
-                    $('#my_table_id').bootstrapTable('removeAll');
-                }
+                $('#my_table_id').bootstrapTable('append', response);
                 partialLoader(false);
             },
             error: function(result) {

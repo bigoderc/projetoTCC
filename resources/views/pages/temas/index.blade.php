@@ -1,6 +1,6 @@
-@extends('layouts.pages.dashboard',[
-    'title'=>'checked',
-    'checked'=>true
+@extends('layouts.pages.dashboard', [
+    'title' => 'checked',
+    'checked' => true,
 ])
 @section('content-page')
     <div class="content-page">
@@ -62,22 +62,23 @@
                             </div>
                         </div>
                     </div>
-                    <table id="my_table_id" class="text-center" data-toggle="table" data-editable="true"
+                    <table id="my_table_id" class="text-center table" data-toggle="table" data-editable="true"
                         data-editable-pk="id" data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR"
                         data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true"
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
                         data-search-accent-neutralise="true" data-editable-url="#"
-                        data-url="{{ route('proposta-tema.show', 1) }}"
-                        data-response-handler="responseHandler">
+                        data-url="{{ route('proposta-tema.show', 1) }}" data-response-handler="responseHandler">
                         <thead>
                             <tr>
-                                <th data-field="id" class="col-1">ID</th>
-                                <th data-field="nome" class="col-3" aria-required="true">NOME</th>
-                                <th data-field="descricao" class="col-3" aria-required="true">DESCRIÇÃO</th>
-                                <th data-field="areas_to_string" class="col-3" aria-required="true">ÁREA</th>
-                                <th data-field="link" class="col-3" aria-required="true">LINK</th>
-                                <th data-field="criado.name" class="col-2" aria-required="true">PROPONENTE</th>
+                                <th data-field="nome" class="col-2 truncate-text" aria-required="true"
+                                    data-formatter="nameFormatter">NOME</th>
+                                <th data-field="descricao" class="col-3 truncate-text" aria-required="true"
+                                    data-formatter="nameFormatter">DESCRIÇÃO</th>
+                                <th data-field="areas_to_string" class="col-3 truncate-text" aria-required="true"
+                                    data-formatter="nameFormatter">ÁREA</th>
+                                <th data-field="link" class="col-3" aria-required="true" >LINK</th>
+                                <th data-field="criado.name" class="col-2" aria-required="true" data-formatter="nameFormatter">PROPONENTE</th>
                                 <th data-field="acao" class="col-2" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>
@@ -116,6 +117,7 @@
 @endsection
 
 @push('scripts')
+   
     <script>
         //Ajax TOKEN
         $.ajaxSetup({
@@ -123,7 +125,29 @@
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
         });
+        $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
 
+        function nameFormatter(value, row) {
+            var icon = '';
+            var tooltipText = value;
+            var $temp = $('<div class="truncate-text">' + value + '</div>').appendTo('body');
+
+            // Verificar se o texto está truncado
+            if ($temp.prop('scrollWidth') > $temp.prop('clientWidth')) {
+                icon = 'fa-solid fa-info-circle'; // Ícone para exibir
+                // Definindo o tooltip com o valor completo
+                tooltipText = value;
+            }
+
+            // Remover o elemento temporário do DOM
+            $temp.remove();
+
+            // Retornando o HTML com o ícone e o tooltip
+            return '<div class="truncate-text">' + (icon ? '<i class="icon-show fa ' + icon +
+                '" data-toggle="tooltip" title="' + tooltipText + '"></i>' : '') + ' ' + value + '</div>';
+        }
 
         //Adicionar uma nova linha e lançar via ajax
         $(document).ready(function() {
@@ -200,7 +224,7 @@
         }
 
         function responseHandler(res) {
-            
+
             for (const obj of res) {
                 let nome_areas = [];
                 // Define valores padrão usando operador de coalescência nula (??)
@@ -211,24 +235,6 @@
 
                 // Criar uma string separada por vírgulas
                 obj['areas_to_string'] = nome_areas.join(', ');
-                const limiteCaracteres = 50;
-                if(obj['descricao']){
-                    if (obj['descricao'].length > limiteCaracteres) {
-                        // Substitua a string por uma versão truncada com "..."
-                        obj['descricao'] = obj['descricao'].substring(0, limiteCaracteres) + '...';
-                    } else {
-                        obj['descricao'] = obj['descricao'];
-                    }
-                }
-                if(obj['link']){
-                    if (obj['link'].length > 30) {
-                        // Substitua a string por uma versão truncada com "..."
-                        obj['link'] = obj['link'].substring(0, limiteCaracteres) + '...';
-                    } else {
-                        obj['link'] = obj['link'];
-                    }
-                }
-                
 
             }
             return res;
@@ -289,4 +295,14 @@
             return actions.join('');
         }
     </script>
+@endpush
+@push('css')
+    <style>
+        .truncate-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 250px;
+        }
+    </style>
 @endpush

@@ -66,8 +66,8 @@
                             @endcan
                             
                             @can('read-professor')
-                                <a class="dropdown-item" href="{{ route('professor.index') }}">
-                                    {{ __('Professor') }}
+                                <a class="dropdown-item" href="{{ route('docente.index') }}">
+                                    {{ __('Docente') }}
                                 </a>
                                 
                             @endcan

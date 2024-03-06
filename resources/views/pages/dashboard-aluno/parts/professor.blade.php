@@ -18,7 +18,6 @@
                             data-search-accent-neutralise="true" data-editable-url="#">
                             <thead>
                                 <tr>
-                                    <th data-field="id" class="col-1">ID</th>
                                     <th data-field="nome" class="col-3" aria-required="true">NOME</th>
                                     <th data-field="siape" class="col-3" aria-required="true">SIAPE</th>
                                     <th data-field="area.nome" class="col-3" aria-required="true">ÁREA</th>
@@ -66,7 +65,7 @@
         }
         function init1() {
             $.ajax({
-                url: `{{ route('professor.show',1) }}`,
+                url: `{{ route('docente.show',1) }}`,
                 type: "GET",
                 success: function(response) {
                     $('#orientador_table').bootstrapTable('removeAll');
@@ -93,7 +92,7 @@
                 }
             }
             if(valorSelecionado==null){
-                errorResponse(422, {professor:'Professor é obrigatório'},'Professor vazio');
+                errorResponse(422, {professor:'Docente é obrigatório'},'Docente vazio');
                 
             }else{
                 partialLoader();

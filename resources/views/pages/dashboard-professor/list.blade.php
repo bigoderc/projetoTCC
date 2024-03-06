@@ -41,7 +41,6 @@
                         data-url="{{ route('entrega.list') }}" data-width="1500" data-response-handler="responseHandler">
                         <thead>
                             <tr>
-                                <th data-field="id" data-sortable="true" class="col-1">ID</th>
                                 <th data-field="nome_oc" data-sortable="true" data-editable="false" class="col-2"
                                 aria-required="true">Ordem de Carregamento</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"

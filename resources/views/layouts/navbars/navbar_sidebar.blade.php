@@ -33,7 +33,7 @@
                 <div class="d-flex justify-content-center" role="button">
                     <a class="text-decoration-none text-nowrap text-white" href="#">
                         <i class="lg nc-icon nc-single-copy-04 px-2"></i>
-                        <span class="d-none">Cadastro</span>
+                        <span class="d-none">Cadastro/Visualizar</span>
 
                     </a>
                 </div>
@@ -85,8 +85,8 @@
                     
                     @can('read-professor')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('professor.index') }}">
-                                <span>{{ ('Professor') }}</span>
+                            <a class="text-decoration-none text-dark" href="{{ route('docente.index') }}">
+                                <span>{{ ('Docente') }}</span>
                             </a>
                         </li>
                     @endcan

@@ -46,7 +46,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::resources([
         'proposta-tema' => TemaController::class,
         'area' => AreaController::class,
-        'professor' =>ProfessorController::class,
+        'docente' =>ProfessorController::class,
         'user' =>UserController::class,
         'discente' =>AlunoController::class,
         'tcc'=>ProjetoController::class,
@@ -68,8 +68,8 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('area/toView/{id}',[AreaController::class,'toView'])->name('area.toView');
     Route::put('/discente/update/{id}', [AlunoController::class, 'update'])->name('discente.update');
     Route::get('/discente/findById/{id}', [AlunoController::class, 'findById'])->name('discente.findById');
-    Route::get('/professor/findById/{id}', [ProfessorController::class, 'findById'])->name('professor.findById');
-    Route::put('/professor/update/{id}', [ProfessorController::class, 'update'])->name('professor.update');
+    Route::get('/docente/findById/{id}', [ProfessorController::class, 'findById'])->name('docente.findById');
+    Route::put('/docente/update/{id}', [ProfessorController::class, 'update'])->name('docente.update');
     Route::get('/proposta-tema/findById/{id}', [TemaController::class, 'findById'])->name('proposta-tema.findById');
     Route::post('/proposta-tema/update/{id}', [TemaController::class, 'update'])->name('proposta-tema.update');
     Route::get('/proposta-tema/toView/{id}',[TemaController::class,'toView'])->name('proposta-tema.toView');

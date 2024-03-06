@@ -52,7 +52,6 @@
                         data-url="{{ route('curso.show', 1) }}">
                         <thead>
                             <tr>
-                                <th data-field="id" class="col-1">ID</th>
                                 <th data-field="nome" data-editable="true" class="col-3" aria-required="true">NOME</th>
                                 <th data-field="descricao" data-editable="true" class="col-3" aria-required="true">
                                     DESCRIÇÃO</th>

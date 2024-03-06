@@ -66,7 +66,7 @@
                                     <!-- Adiciona as classes col para definir o tamanho das colunas em diferentes tamanhos de tela -->
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Professor</span>
+                                            <span class="input-group-text">Docente</span>
                                         </div>
                                         <select class="form-control" name="equipe_id" id="equipe_id">
                                             <option value="">Selecione</option>

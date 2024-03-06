@@ -41,7 +41,6 @@
                         data-url="{{ route('entrega.show') }}" data-width="1500" data-response-handler="responseHandler">
                         <thead>
                             <tr>
-                                {{-- <th data-field="id" data-sortable="true" class="col-1">ID</th> --}}
                                 <th data-field="pedido" data-sortable="true" data-editable="false" class="col-2"
                                 aria-required="true">OC</th>
                                 <th data-field="nome" data-sortable="true" data-editable="false" class="col-2"

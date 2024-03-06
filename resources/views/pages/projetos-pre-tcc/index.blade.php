@@ -87,12 +87,11 @@
                         data-response-handler="responseHandler">
                         <thead>
                             <tr>
-                                <th data-field="id" class="col-1">ID</th>
-                                <th data-field="nome" class="col-3" aria-required="true">PROJETO</th>
-                                <th data-field="aluno.nome" class="col-3" aria-required="true">DISCENTE</th>
-                                <th data-field="instituicao" class="col-3" aria-required="true">INSTITUIÇÃO</th>
-                                <th data-field="areas_to_string" class="col-3" aria-required="true">ÁREA</th>
-                                <th data-field="professor.nome" class="col-3" aria-required="true">PROFESSOR</th>
+                                <th data-field="nome" class="col-3 truncate-text" aria-required="true" data-formatter="nameFormatter">PROJETO</th>
+                                <th data-field="aluno.nome" class="col-3 truncate-text" aria-required="true" data-formatter="nameFormatter">DISCENTE</th>
+                                <th data-field="instituicao" class="col-3 truncate-text" aria-required="true">INSTITUIÇÃO</th>
+                                <th data-field="areas_to_string" class="col-3 truncate-text" aria-required="true" data-formatter="nameFormatter">ÁREA</th>
+                                <th data-field="professor.nome" class="col-3 truncate-text" aria-required="true" data-formatter="nameFormatter">DOCENTE</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>
@@ -113,7 +112,29 @@
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
         });
+        $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
 
+        function nameFormatter(value, row) {
+            var icon = '';
+            var tooltipText = value;
+            var $temp = $('<div class="truncate-text">' + value + '</div>').appendTo('body');
+
+            // Verificar se o texto está truncado
+            if ($temp.prop('scrollWidth') > $temp.prop('clientWidth')) {
+                icon = 'fa-solid fa-info-circle'; // Ícone para exibir
+                // Definindo o tooltip com o valor completo
+                tooltipText = value;
+            }
+
+            // Remover o elemento temporário do DOM
+            $temp.remove();
+
+            // Retornando o HTML com o ícone e o tooltip
+            return '<div class="truncate-text">' + (icon ? '<i class="icon-show fa ' + icon +
+                '" data-toggle="tooltip" title="' + tooltipText + '"></i>' : '') + ' ' + value + '</div>';
+        }
         //Adicionar uma nova linha e lançar via ajax
         $(document).ready(function() {
             var forms = document.getElementsByClassName('needs-validation');
@@ -215,7 +236,7 @@
                 url: `{{ url('pre-tcc/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
-                    $(`#titulo`).text(`Editar Professor ${response.nome}`);
+                    $(`#titulo`).text(`Editar Docente ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
                     $(`#aluno`).val(response.aluno);
@@ -272,4 +293,15 @@
             return actions.join('');
         }
     </script>
+@endpush
+@push('css')
+    <style>
+        .truncate-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 250px; 
+        }
+        
+    </style>
 @endpush

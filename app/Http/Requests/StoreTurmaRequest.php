@@ -33,7 +33,8 @@ class StoreTurmaRequest extends FormRequest
             'nome' => ['required','max:255',function ($attribute, $value, $fail) {
                 $existingMatricula = DB::table('turmas')
                     ->where('nome', $value)
-                    ->where('id','<>',$this->id)
+                    ->where('id',$this->id)
+                    ->where('fk_curso_id',$this->fk_curso_id)
                     ->whereNull('deleted_at')
                     ->first();
         

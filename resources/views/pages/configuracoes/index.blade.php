@@ -79,7 +79,6 @@
                     data-editable-url="{{ route('configuracao.update') }}" data-url="{{ route('configuracao.show') }}">
                     <thead>
                         <tr>
-                            <th data-field="id" data-sortable="true" class="col-1">ID</th>
                             <th data-field="nome" data-editable="true" data-sortable="true" class="col-3"
                                 aria-required="true">NOME</th>
                             <th data-field="description" data-editable="true" data-sortable="true" class="col-4"

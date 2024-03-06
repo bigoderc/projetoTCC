@@ -100,7 +100,6 @@
                     data-pagination="true" data-search-accent-neutralise="true" data-editable-url="#" data-url="{{ route('discente.show',1) }}">
                     <thead>
                         <tr>
-                            <th data-field="id" class="col-1">ID</th>
                             <th data-field="nome" data-editable="true" class="col-3" aria-required="true">NOME</th>
                             <th data-field="matricula" data-editable="true" class="col-3" aria-required="true">MÁTRICULA</th>
                             <th data-field="matriculado_desc" data-editable="true" class="col-3" aria-required="true">MATRICULADO</th>
