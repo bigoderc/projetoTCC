@@ -77,7 +77,7 @@
                                     data-formatter="nameFormatter">DESCRIÇÃO</th>
                                 <th data-field="areas_to_string" class="col-3 truncate-text" aria-required="true"
                                     data-formatter="nameFormatter">ÁREA</th>
-                                <th data-field="link" class="col-3" aria-required="true" >LINK</th>
+                                <th data-field="link" class="col-3" aria-required="true" data-formatter="nameFormatter" >LINK</th>
                                 <th data-field="criado.name" class="col-2" aria-required="true" data-formatter="nameFormatter">PROPONENTE</th>
                                 <th data-field="acao" class="col-2" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
