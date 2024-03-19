@@ -4,6 +4,11 @@
 <div class="container-fluid d-flex align-items-center justify-content-center">
     <div class="col-lg-3  rounded text-center p-3" style="background-color: rgba(255, 255, 255, 0.6);">
         <span class="h2">SAT-TCC</span>
+        @if (session('status'))
+            <div class="alert alert-success" role="alert">
+                {{ session('status') }}
+            </div>
+        @endif
         <form method="POST" action="{{ route('password.email') }}">
             @csrf
            
