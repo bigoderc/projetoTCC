@@ -8,7 +8,7 @@
             @csrf
             <input type="hidden" name="token" value="{{ $token }}">
             <div class="">
-                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Email" autofocus>
+                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
                 
                 @error('email')
                 <span class="invalid-feedback" role="alert">
@@ -21,23 +21,17 @@
                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror mt-2" name="password" required autocomplete="current-password" placeholder="Senha">
                         <i onclick="showPassword(event)" id="eyeIcon" class="fa fa-eye mt-2"></i>
                     </div>
+                    <div class="password-icon password">
+                        <input id="password_confirmation" type="password" class="form-control @error('password_confirmation') is-invalid @enderror mt-2" name="password_confirmation" required autocomplete="current-password" placeholder="Confirmar Senha">
+                        <i onclick="showPassword(event)" id="eyeIcon" class="fa fa-eye mt-2"></i>
+                    </div>
                 </div>
                 @error('password')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
                 @enderror
-                <div class="form-group">
-                    <div class="password-icon password">
-                        <input id="password_confirmation" type="password" class="form-control @error('password_confirmation') is-invalid @enderror mt-2" name="password_confirmation" required autocomplete="current-password" placeholder="Confirmar Senha">
-                        <i onclick="showPassword(event)" id="eyeIcon" class="fa fa-eye mt-2"></i>
-                    </div>
-                </div>
-                @error('password_confirmation')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
+                
             </div>
             <button type="submit" class="btn btn-gold w-50 my-2">
                 {{ __('Entrar') }}
