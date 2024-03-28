@@ -107,6 +107,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     });
     Route::prefix('dashboardProfessor')->group(function () {
         Route::get('/index', [DashboardProfessorController::class, 'index'])->name('dashboardProfessor.index');
+        Route::get('/notification', [DashboardProfessorController::class, 'notification'])->name('dashboardProfessor.notification');
         Route::get('/findById/{id}', [DashboardProfessorController::class, 'findById'])->name('dashboardProfessor.findById');
         Route::post('/store', [DashboardProfessorController::class, 'store'])->name('dashboardProfessor.store');
         Route::post('/deferir', [DashboardProfessorController::class, 'deferir'])->name('dashboardProfessor.deferir');

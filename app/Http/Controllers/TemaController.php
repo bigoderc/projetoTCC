@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTemaRequest;
+use App\Models\Aluno;
+use App\Models\AlunoTema;
 use App\Models\Area;
+use App\Models\Professor;
 use App\Models\Tema;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,7 +28,14 @@ class TemaController extends Controller
         //
         Gate::authorize('read-proposta_tema');
         $areas = Area::all();
-        return view('pages.temas.index',['areas'=>$areas]);
+        $professores = Professor::all();
+        $data = User::with('roles')->find(auth()->user()->id);
+
+        return view('pages.temas.index',[
+            'areas'=>$areas,
+            'professores' =>$professores,
+            'aluno' => $data->roles->first()->nome =='aluno'
+        ]);
     }
 
     /**
@@ -62,6 +72,18 @@ class TemaController extends Controller
             $tema =Tema::create($request->all());
             $tema = Tema::with(['areas'])->find($tema->id);
             $tema->areas()->sync($request->areas);
+            $data = User::with('roles')->find(auth()->user()->id);
+            if($data->roles->first()->nome =='aluno' && $request->professor_id){
+                $aluno = Aluno::where('fk_user_id',$data->id)->first();
+                AlunoTema::create(
+                    [
+                        'fk_alunos_id'=>$aluno->id,
+                        'fk_tema_id'=>$tema->id,
+                        'fk_professores_id'=>$request->professor_id
+                    ]
+                );
+            }
+            
             DB::commit();
             return response()->json(Tema::with(['areas'])->find($tema->id));
         } catch (\Throwable $th) {

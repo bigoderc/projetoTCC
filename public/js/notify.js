@@ -242,3 +242,28 @@ async function justifyAlert() {
         focusCancel: true
     })
 }
+async function notification(icon, title, text) {
+
+    Swal.isVisible() && Swal.close();
+
+    return Swal.fire({
+        customClass: {
+            title: "fs-6",
+            htmlContainer: "fs-6",
+            confirmButton: 'btn btn-secondary mx-1',
+            cancelButton: 'btn btn-gold mx-1 text-white'
+        },
+        position: 'bottom-right',
+        icon: icon,
+        title: title,
+        text: text,       
+        buttonsStyling: false,
+        reverseButtons: false,
+        showConfirmButton: true,
+        confirmButtonText: 'Acessar Temas',
+        showCancelButton: true,
+        cancelButtonText: 'Fechar',
+        toast: true,
+        
+    });
+}

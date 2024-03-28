@@ -99,6 +99,7 @@
         //Adicionar uma nova linha e lançar via ajax
         $(document).ready(function() {
             getAll()
+            
         });
         $("#searchCaminhao").submit(function(event) {
             event.preventDefault();
@@ -107,14 +108,19 @@
         })
         //Excluir uma nova linha
         function getAll() {
+            const query_params = new URLSearchParams(window.location.search);
             partialLoader();
             $.ajax({
-                url: `{{ route('dashboardProfessor.linkThemeCheck') }}`,
+                url: query_params.has('todos') ? `{{ url('dashboardProfessor/linkThemeCheck?todos=true') }}` :`{{ route('dashboardProfessor.linkThemeCheck') }}`,
                 type: "GET",
                 dataType: "json",
                 success: function(response) {
                     renderizarCards(response);
                     partialLoader(false);
+                    if(!query_params.has('todos')){
+                        getNotification()
+                    }
+                    
                 },
                 error: function(xhr, status, error) {
                     partialLoader(false);
@@ -122,7 +128,30 @@
                 }
             });
         }
+        function getNotification() {
+            $.ajax({
+                url: `{{ route('dashboardProfessor.notification') }}`,
+                type: "GET",
+                dataType: "json",
+                success: function(response) {
+                    console.log(response);
+                    if(response > 0){
+                        var s = response > 1 ? 's' : '';
+                        notification('info',  'Proposta de tema', `Você possui ${response} novo${s} tema${s} para avaliação!`).then((result) => {
+                            if(result.isConfirmed){
+                                // Redirecionamento para a página atual com um parâmetro 'todos=true'
+                                window.location.href = window.location.href + '?todos=true';
 
+                            }
+                        });
+                    }
+                    
+                },
+                error: function(xhr, status, error) {
+                    errorResponse(xhr.status, xhr.responseJSON.data, xhr.responseText);
+                }
+            });
+        }
 
         function fecharModal() {
             $('#searchCaminhao').modal('hide');
@@ -165,7 +194,7 @@
                 card.innerHTML = `
                 <div class="card styled-border placeholder-glow shadow-sm mb-2">
                     <div class="card-body pb-0">
-                        <div class="card-title text-white fw-bold mb-1"><span class="ml-1 mt-2 texto-limitado big">${item.nome}</span></div>
+                        <div class="card-title text-white fw-bold mb-1"><span class="ml-1 mt-2  big">${item.nome}</span></div>
                         <div>
                             <span class="small fw-bold">Descrição: </span>
                             <span class=" small">${item.descricao ?? ''}</span>
@@ -180,21 +209,28 @@
                             <span class="small">${item.tema_aluno?.aluno?.nome ?? ''}</span>
                         </div>
                         <div>
+                            <span class="small fw-bold">Lançado por: </span>
+                            <span class="small">${item.criado?.name ?? ''}</span>
+                        </div>
+                        <div>
                             <span class="small fw-bold">Lançado em: </span>
                             <span class="small">${item.created_at ?? ''}</span>
                         </div>
-                            
-                            <button type="button" title="Exibir detalhes" class="btn btn-primary btn-sm mb-3" onclick="showDetails(${item.id})">
-                                <i class="fa fa-info"></i>
-                            </button>
-                            <a href="mailto:${item.criado?.email}" title="Enviar e-mail" class="btn btn-success btn-sm mb-3">
-                                <i class="fa fa-envelope"></i>
-                            </a>
-                            
-                            ${item.tema_aluno?.deferido !=true ? `
-                                    <button type="button" title=Aceitar tema" class="btn btn-warning btn-sm mb-3" onclick="showDeferido(${item.id})">
-                                        <i class="fa fa-check-square"></i>
-                                    </button>`:``}
+                        <div>
+                            <span class="small fw-bold">Status: </span>
+                            <span class="small">${item.tema_aluno?.deferido ==true ? 'Deferido':(item.tema_aluno?.deferido ==false ? 'Indeferido' : 'Aguardando')}</span>
+                        </div>    
+                        <button type="button" title="Exibir detalhes" class="btn btn-primary btn-sm mb-3" onclick="showDetails(${item.id})">
+                            <i class="fa fa-info"></i>
+                        </button>
+                        <a href="mailto:${item.criado?.email}" title="Enviar e-mail" class="btn btn-success btn-sm mb-3">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                        
+                        ${item.tema_aluno?.deferido !=true ? `
+                                <button type="button" title=Aceitar tema" class="btn btn-warning btn-sm mb-3" onclick="showDeferido(${item.id})">
+                                    <i class="fa fa-check-square"></i>
+                                </button>`:``}
                             
                         </div>
 

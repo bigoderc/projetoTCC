@@ -87,11 +87,10 @@
                         data-response-handler="responseHandler">
                         <thead>
                             <tr>
-                                <th data-field="nome" class="col-3 truncate-text" aria-required="true" data-formatter="nameFormatter">PROJETO</th>
-                                <th data-field="aluno.nome" class="col-3 truncate-text" aria-required="true" data-formatter="nameFormatter">DISCENTE</th>
-                                <th data-field="instituicao" class="col-3 truncate-text" aria-required="true">INSTITUIÇÃO</th>
-                                <th data-field="areas_to_string" class="col-3 truncate-text" aria-required="true" data-formatter="nameFormatter">ÁREA</th>
-                                <th data-field="professor.nome" class="col-3 truncate-text" aria-required="true" data-formatter="nameFormatter">DOCENTE</th>
+                                <th data-field="nome" class="col-6" aria-required="true" data-formatter="nameFormatter">TITULO</th>
+                                <th data-field="aluno.nome" class="col-4" aria-required="true" >DISCENTE</th>
+                                <th data-field="areas_to_string" class="truncate-text" aria-required="true" data-formatter="nameFormatter">ÁREA</th>
+                                <th data-field="professor.nome" class="col-4" aria-required="true" >DOCENTE</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>

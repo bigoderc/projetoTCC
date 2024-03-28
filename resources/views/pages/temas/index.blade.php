@@ -46,6 +46,16 @@
                                                     <option value="{{ $area->id }}">{{ $area->nome }}</option>
                                                 @endforeach
                                             </select>
+                                            @if($aluno)
+                                                <label for="professor" class="my-2">Professor</label>
+                                                <select class="form-control" id="professor_id" name="professor_id" 
+                                                    required>
+                                                    <option value="">Selecione</option>
+                                                    @foreach ($professores as $professor)
+                                                        <option value="{{ $professor->id }}">{{ $professor->nome }}</option>
+                                                    @endforeach
+                                                </select>
+                                            @endif
                                             <label for="nome">Link</label>
                                             <input type="text" class="form-control" id="link" name="link">
                                             <label for="nome" class="my-2">Arquivo</label>
@@ -71,15 +81,13 @@
                         data-url="{{ route('proposta-tema.show', 1) }}" data-response-handler="responseHandler">
                         <thead>
                             <tr>
-                                <th data-field="nome" class="col-2 truncate-text" aria-required="true"
-                                    data-formatter="nameFormatter">NOME</th>
-                                <th data-field="descricao" class="col-3 truncate-text" aria-required="true"
+                                <th data-field="nome" class="col-12" aria-required="true">NOME</th>
+                                <th data-field="descricao" class=" truncate-text" aria-required="true"
                                     data-formatter="nameFormatter">DESCRIÇÃO</th>
-                                <th data-field="areas_to_string" class="col-3 truncate-text" aria-required="true"
+                                <th data-field="areas_to_string" class="truncate-text" aria-required="true"
                                     data-formatter="nameFormatter">ÁREA</th>
-                                <th data-field="link" class="col-3" aria-required="true" data-formatter="nameFormatter" >LINK</th>
-                                <th data-field="criado.name" class="col-2" aria-required="true" data-formatter="nameFormatter">PROPONENTE</th>
-                                <th data-field="acao" class="col-2" data-formatter="acaoFormatter"
+                                <th data-field="criado.name" class="" aria-required="true">PROPONENTE</th>
+                                <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>
                         </thead>

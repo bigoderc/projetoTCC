@@ -80,7 +80,8 @@ return [
     |
     */
 
-    'locale' => 'en',
+    // Altere Linha 85 do arquivo config/app.php para:
+    'locale' => 'pt-BR',
 
     /*
     |--------------------------------------------------------------------------

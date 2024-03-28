@@ -84,17 +84,42 @@ class DashboardProfessorController extends Controller
      * @param  \App\Models\Tema  $tema
      * @return \Illuminate\Http\Response
      */
-    public function linkThemeCheck(Tema $tema)
+    public function linkThemeCheck(Request $request)
+    {
+        //
+        $professor = auth()->user()->professor;
+        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor','temaAluno.aluno'])->whereHas('temaAluno',function($query) use($professor, $request){
+            $query->where('fk_professores_id',$professor->id);
+            if($request->todos =='true'){
+                $query->where(function ($query) {
+                    $query->whereNull('deferido');
+                });
+            }else{
+                $query->where(function ($query) {
+                    $query->where('deferido', '<>', false)
+                        ->orWhereNull('deferido');
+                });
+            }
+            
+        })->get();
+        return response()->json($dados);
+               
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function notification()
     {
         //
         $professor = auth()->user()->professor;
         $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor','temaAluno.aluno'])->whereHas('temaAluno',function($query) use($professor){
             $query->where('fk_professores_id',$professor->id);
             $query->where(function ($query) {
-                $query->where('deferido', '<>', false)
-                    ->orWhereNull('deferido');
+                $query->whereNull('deferido');
             });
-        })->get();
+        })->count();
         return response()->json($dados);
                
     }
