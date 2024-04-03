@@ -8,7 +8,7 @@
 
             <div class="container mt-3 py-5">
                 <div class="row">
-                    <div class="col-md-6 my-1">
+                    <div class="col-md-12 my-1">
                         <h2>Principais funcionalidades</h2>
                         <div class="card">
                             <div class="card-body">
