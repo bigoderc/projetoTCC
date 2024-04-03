@@ -2,12 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aluno;
 use App\Models\AlunoTema;
+use App\Models\Area;
+use App\Models\Professor;
 use App\Models\Tema;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardProfessorController extends Controller
 {
+
+    protected $model,$user,$professor,$area,$tema;
+    public function __construct(Aluno $aluno,User $user,Professor $professor,Area $area,Tema $tema)
+    {
+        $this->model = $aluno;   
+        $this->user = $user;   
+        $this->professor = $professor;
+        $this->area = $area;
+        $this->tema = $tema;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +30,10 @@ class DashboardProfessorController extends Controller
     public function index()
     {
         //
-        return view('pages.dashboard-professor.index');
+        
+        return view('pages.dashboard-professor.index',[
+            'areas' => Area::all()
+        ]);
     }
 
     /**
@@ -77,6 +94,49 @@ class DashboardProfessorController extends Controller
     public function show($id)
     {
         //
+    }
+     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        //
+        $query = $this->tema->query();
+        
+        $query->with(['areas'=>function($query) use($request){
+            if($request->input('areas')){
+                $query->whereIn('areas.id',$request->input('areas'));
+            }
+        },'criado','temaAluno'=>function($query) use($request){
+            switch ($request->status) {
+                case 0:
+                    # code...
+                    $query->whereNull('deferido');
+                    break;
+                case 1:
+                        $query->where('deferido', true);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        },'temaAluno.professor'])
+        ->whereHas('areas',function($query) use($request){
+            if ($request->input('areas')) {
+                $query->whereIn('areas.id',$request->input('areas'));
+            }
+            
+        });
+        
+        $query->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$request->data_inicio, $request->data_fim]);
+                    
+        $data = $query->orderBy('id','desc')->get();
+        return response()->json($data);
+       
+        
     }
     /**
      * Display the specified resource.

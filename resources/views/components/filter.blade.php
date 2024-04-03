@@ -44,22 +44,24 @@
                                 </div>
                             @endisset
                             @isset($areas)
-                                <div class="col mb-2">
-                                    <!-- Adiciona as classes col para definir o tamanho das colunas em diferentes tamanhos de tela -->
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Área</span>
-                                        </div>
-                                        <select class="form-control" id="area_id" name="areas[]" multiple
-                                            multiselect-hide-x="true" multiselect-search="true"
-                                            multiselect-max-items="5" required>
-
-                                            @foreach ($areas as $area)
-                                                <option value="{{ $area->id }}">{{ $area->nome }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                            <div class="col mb-2" >
+                                <div class="input-group">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text">Área</span>
+                                  </div>
+                                  <div class="form-control ">
+                                    <select class="select-custom" id="area_id" name="areas[]" multiple
+                                      multiselect-hide-x="true" multiselect-search="true"
+                                      multiselect-max-items="5" required>
+                                      @foreach ($areas as $area)
+                                        <option value="{{ $area->id }}">{{ $area->nome }}</option>
+                                      @endforeach
+                                    </select>
+                                    
+                                  </div>
                                 </div>
+                            </div>
+                            
                             @endisset
                             @isset($professores)
                                 <div class="col mb-2">
@@ -177,6 +179,9 @@
                     fecharModalFilter();
                     $(`#${table}`).bootstrapTable('removeAll');
                     $(`#${table}`).bootstrapTable('prepend', response)
+                    if(table =='dashboard_professor'){
+                        renderizarCards(response);
+                    }
                     partialLoader(false);
 
                 },

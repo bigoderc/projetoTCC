@@ -5,7 +5,7 @@
     [
         'action' => 'dashboardAluno/search', // Define a rota para submissão do formulário
         'id' =>'filter_dashboard_aluno', // Define a rota para submissão do formulário
-        'table' => 'my_table_id', // Define a rota para submissão do formulário
+        'table' => 'dashboard_professor', // Define a rota para submissão do formulário
         'name' => 'Valor Padrão do Nome', // Defina aqui o valor padrão para o campo "name"
         'areas' =>$areas, // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
         'professores' =>$professores, // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo

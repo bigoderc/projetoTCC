@@ -97,9 +97,29 @@ class DashboardAlunoController extends Controller
     {
         //
         $query = $this->tema->query();
-        $query->with(['areas','criado','temaAluno','temaAluno.professor'])
+        
+        $query->with(['areas'=>function($query) use($request){
+            if($request->input('areas')){
+                $query->whereIn('areas.id',$request->input('areas'));
+            }
+        },'criado','temaAluno'=>function($query) use($request){
+            switch ($request->status) {
+                case 0:
+                    # code...
+                    $query->whereNull('deferido');
+                    break;
+                case 1:
+                        $query->where('deferido', true);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        },'temaAluno.professor'])
         ->whereHas('areas',function($query) use($request){
-            $query->whereIn('areas.id',$request->areas);
+            if($request->input('areas')){
+                $query->whereIn('areas.id',$request->input('areas'));
+            }
         });
         $query->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$request->data_inicio, $request->data_fim]);
         // if (!empty($request->area_id)) {
@@ -109,16 +129,7 @@ class DashboardAlunoController extends Controller
             $query->where('user_id_created',$request->professor_id);
         }        
         $data = $query->orderBy('id','desc')->get();
-        $aluno = auth()->user()->aluno;
-        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
-            $query->where('fk_alunos_id',$aluno->id);
-        })->get();
-        
-        if(count($dados)>0){
-            return response()->json($dados);
-        }else{
-            return response()->json($data);
-        }
+        return response()->json($data);
         
     }
     /**

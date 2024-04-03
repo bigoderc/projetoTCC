@@ -3,12 +3,12 @@
 @section('content-page')
     @component('components.filter',
     [
-        'action' => 'dashboardAluno/search', // Define a rota para submissão do formulário
-        'id' =>'filter_dashboard_aluno', // Define a rota para submissão do formulário
-        'table' => 'my_table_id', // Define a rota para submissão do formulário
+        'action' => 'dashboardProfessor/search', // Define a rota para submissão do formulário
+        'id' =>'filter_dashboard_professor', // Define a rota para submissão do formulário
+        'table' => 'dashboard_professor', // Define a rota para submissão do formulário
         'name' => 'Valor Padrão do Nome', // Defina aqui o valor padrão para o campo "name"
-        'areas' =>[], // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
-        'professores' =>[], // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
+        'areas' =>$areas, // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
+        'status' =>[['id'=>0,'nome' =>'Aguardando'],['id'=>1,'nome' =>'Deferido']], // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
     ])
     @endcomponent
     <div class="content-page">
@@ -134,7 +134,7 @@
                 type: "GET",
                 dataType: "json",
                 success: function(response) {
-                    console.log(response);
+                    
                     if(response > 0){
                         var s = response > 1 ? 's' : '';
                         notification('info',  'Proposta de tema', `Você possui ${response} novo${s} tema${s} para avaliação!`).then((result) => {
