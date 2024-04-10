@@ -13,7 +13,7 @@
             <div class="card-body">
                 <div id="toolbar">
                     @can('insert-discente')
-                        <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i class="fa fa-plus"></i> Adicionar nova linha</button>
+                        <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i class="fa fa-plus"></i> Adicionar novo discente</button>
                     @endcan
                     <div class="modal fade" id="novalinha" tabindex="-1" aria-labelledby="novalinha" aria-hidden="true">
                         <div class="modal-dialog">

@@ -13,7 +13,7 @@
                     <div id="toolbar">
                         @can('insert-professor')
                             <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
-                                class="fa fa-plus"></i> Adicionar nova linha</button>
+                                class="fa fa-plus"></i> Adicionar novo docente</button>
                         @endcan
 
                         <div class="modal fade" id="novalinha" tabindex="-1" aria-labelledby="novalinha"
@@ -21,7 +21,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="titulo">Adicionar Docente</h5>
+                                        <h5 class="modal-title" id="titulo">Adicionar</h5>
                                         <button type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
