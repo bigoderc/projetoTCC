@@ -8,7 +8,7 @@
         'table' => 'dashboard_professor', // Define a rota para submissão do formulário
         'name' => 'Valor Padrão do Nome', // Defina aqui o valor padrão para o campo "name"
         'areas' =>$areas, // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
-        'status' =>[['id'=>0,'nome' =>'Aguardando'],['id'=>1,'nome' =>'Deferido']], // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
+        'status' =>[['id'=>1,'nome' =>'Aguardando'],['id'=>2,'nome' =>'Deferido']], // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
     ])
     @endcomponent
     <div class="content-page">

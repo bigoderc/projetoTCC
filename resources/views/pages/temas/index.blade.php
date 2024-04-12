@@ -48,8 +48,7 @@
                                             </select>
                                             @if($aluno)
                                                 <label for="professor" class="my-2">Professor</label>
-                                                <select class="form-control" id="professor_id" name="professor_id" 
-                                                    required>
+                                                <select class="form-control" id="professor_id" name="professor_id" >
                                                     <option value="">Selecione</option>
                                                     @foreach ($professores as $professor)
                                                         <option value="{{ $professor->id }}">{{ $professor->nome }}</option>
@@ -63,7 +62,7 @@
                                                 id="file" name="file">
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
+                                            <button type="button" onclick="clearForm('addLinha','novalinha')" class="btn btn-secondary"
                                                 data-dismiss="modal">Fechar</button>
                                             <button type="submit" id="salvar" class="btn btn-primary">Adicionar</button>
                                         </div>
@@ -78,14 +77,14 @@
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
                         data-search-accent-neutralise="true" data-editable-url="#"
-                        data-url="{{ route('proposta-tema.show', 1) }}" data-response-handler="responseHandler">
+                        data-url="{{ route('proposta-tema.show', 1) }}">
                         <thead>
                             <tr>
                                 <th data-field="nome" class="col-12" aria-required="true">NOME</th>
-                                <th data-field="descricao" class=" truncate-text" aria-required="true"
-                                    data-formatter="nameFormatter">DESCRIÇÃO</th>
-                                <th data-field="areas_to_string" class="truncate-text" aria-required="true"
-                                    data-formatter="nameFormatter">ÁREA</th>
+                                {{-- <th data-field="descricao" class=" truncate-text" aria-required="true"
+                                    data-formatter="nameFormatter">DESCRIÇÃO</th> --}}
+                                <th data-field="areas_desc"  aria-required="true"
+                                >ÁREA</th>
                                 <th data-field="criado.name" class="" aria-required="true">PROPONENTE</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
@@ -231,22 +230,7 @@
             }
         }
 
-        function responseHandler(res) {
-
-            for (const obj of res) {
-                let nome_areas = [];
-                // Define valores padrão usando operador de coalescência nula (??)
-                for (const area of obj['areas']) {
-                    nome_areas.push(area?.nome ?? '');
-                }
-                nome_areas = [...new Set(nome_areas)];
-
-                // Criar uma string separada por vírgulas
-                obj['areas_to_string'] = nome_areas.join(', ');
-
-            }
-            return res;
-        }
+        
 
         function setIdModal(id) {
             partialLoader();

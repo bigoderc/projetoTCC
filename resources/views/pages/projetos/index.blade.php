@@ -68,7 +68,7 @@
                                             </select>
                                             <label for="arquivo" class="my-2">Arquivo</label>
                                             <input type="file" class="form-control" accept=".png,.jpeg,.pdf"
-                                                id="arquivo" name="arquivo" required>
+                                                id="arquivo" name="arquivo">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
@@ -86,12 +86,12 @@
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
                         data-search-accent-neutralise="true" data-editable-url="#" data-url="{{ route('tcc.show', 1) }}"
-                        data-response-handler="responseHandler">
+                        >
                         <thead>
                             <tr>
                                 <th data-field="nome" class="col-6" aria-required="true">TITULO</th>
                                 <th data-field="aluno.nome" class="col-3" aria-required="true">DISCENTE</th>
-                                <th data-field="areas_to_string" class="truncate-text" aria-required="true" data-formatter="nameFormatter">ÁREA</th>
+                                <th data-field="areas_desc"  aria-required="true">ÁREA</th>
                                 <th data-field="professor.nome" class="col-3" aria-required="true" >DOCENTE</th>
                                 <th data-field="apresentado_desc" class="truncate-text" aria-required="true">APRESENTADO</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
@@ -137,22 +137,7 @@
             return '<div class="truncate-text">' + (icon ? '<i class="icon-show fa ' + icon +
                 '" data-toggle="tooltip" title="' + tooltipText + '"></i>' : '') + ' ' + value + '</div>';
         }
-        function responseHandler(res) {
-            
-            for (const obj of res) {
-                let nome_areas = [];
-                // Define valores padrão usando operador de coalescência nula (??)
-                for (const area of obj['areas']) {
-                    nome_areas.push(area?.nome ?? '');
-                }
-                nome_areas = [...new Set(nome_areas)];
-
-                // Criar uma string separada por vírgulas
-                obj['areas_to_string'] = nome_areas.join(', ');
-
-            }
-            return res;
-        }
+        
         //Adicionar uma nova linha e lançar via ajax
         $(document).ready(function() {
             var forms = document.getElementsByClassName('needs-validation');

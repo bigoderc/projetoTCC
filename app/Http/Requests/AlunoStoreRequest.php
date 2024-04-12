@@ -32,7 +32,7 @@ class AlunoStoreRequest extends FormRequest
             //
             'matricula' => [
                 'required',
-                'max:255',
+                'max:30',
                 function ($attribute, $value, $fail) {
                     $existingMatricula = DB::table('alunos')
                         ->where('matricula', $value)
@@ -44,7 +44,8 @@ class AlunoStoreRequest extends FormRequest
                         $fail('a matricula já está em uso.');
                     }
                 }
-            ],
+            ],          
+            'nome' => ['required', 'max:60'],
             'email' => [
                 'required',
                 'max:255',

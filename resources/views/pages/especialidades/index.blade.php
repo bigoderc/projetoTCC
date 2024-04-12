@@ -29,7 +29,7 @@
                                         @csrf
                                         <div class="modal-body" class="my-2">
                                             <label for="nome">Nome</label>
-                                            <input type="text" class="form-control" id="nome" name="nome" required>
+                                            <input type="text" class="form-control" maxlength="60" id="nome" name="nome" required>
                                             <label for="nome">Descrição</label>
                                             <input type="text" class="form-control" id="nome" name="descricao">
                                         </div>

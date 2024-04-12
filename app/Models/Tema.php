@@ -71,6 +71,30 @@ class Tema extends Model
         // Use $path se estiver definido e não vazio, caso contrário, use $name
         return $this->attributes['storage'] = $caminho . $path;
     }
-    protected $appends = ['storage'];
+    /**
+     * Retorna uma descrição do campo ativo
+     */
+    public function getAreasDescAttribute()
+    {
+        $areas_desc = '';
+        $areas_nome = '';
+
+        // Oculta temporariamente o relacionamento setores
+        $this->makeVisible(['setores']);
+        // Acesso ao relacionamento setores sem carregamento automático
+        $areas = $this->areas()->get();
+
+        // Restaura a visibilidade do relacionamento setore
+
+        foreach ($areas as $area) {
+            $areas_nome .= $area->nome . ',';
+        }
+
+        $areas_nome = rtrim($areas_nome, ', '); // Remover a última vírgula e espaço
+
+        $areas_desc = $areas_nome;
+        return $areas_desc;
+    }
+    protected $appends = ['storage','areas_desc'];
     
 }

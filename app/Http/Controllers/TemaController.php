@@ -73,8 +73,13 @@ class TemaController extends Controller
             $tema = Tema::with(['areas'])->find($tema->id);
             $tema->areas()->sync($request->areas);
             $data = User::with('roles')->find(auth()->user()->id);
+            $aluno = Aluno::where('fk_user_id',$data->id)->first();
+            $aluno_tema = AlunoTema::where('fk_alunos_id',$aluno->id);
+            if($aluno_tema->count()>0 && $request->professor_id){
+                return response()->json(['data'=>'Você já tem uma proposta vinculada, desvincule o professor da proposta, por favor'],426);
+            }
             if($data->roles->first()->nome =='aluno' && $request->professor_id){
-                $aluno = Aluno::where('fk_user_id',$data->id)->first();
+                
                 AlunoTema::create(
                     [
                         'fk_alunos_id'=>$aluno->id,

@@ -133,6 +133,10 @@ function errorResponse(status,data,text) {
             msg = 'Erro interno do servidor';
             // Trate o erro interno do servidor conforme necessário
             break;
+        case 426:
+            msg = data;
+            // Trate o erro interno do servidor conforme necessário
+            break;
         default:
             msg = 'Erro desconhecido';
             

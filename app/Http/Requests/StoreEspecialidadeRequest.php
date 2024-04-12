@@ -30,7 +30,7 @@ class StoreEspecialidadeRequest extends FormRequest
         $id = $this->segment(2) ?? 0;
         return [
             //
-            'nome' => ['required','max:255',function ($attribute, $value, $fail) {
+            'nome' => ['required','max:60',function ($attribute, $value, $fail) {
                 $existingMatricula = DB::table('especialidades')
                     ->where('nome', $value)
                     ->where('id','<>',$this->id)

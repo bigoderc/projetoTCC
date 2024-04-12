@@ -22,11 +22,12 @@
                 
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="link_tema">Mais informações em</label>
+                            <label for="link_tema">Link do tema</label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text" id="link_tema"></span>
+                                    <span class="input-group-text" id="">URL</span>
                                 </div>
+                                <input type="text" class="form-control" disabled id="link_tema" placeholder="Enter URL">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -59,8 +60,9 @@
                 type: "GET",
                 success: function(response) {
 
-                  
-                    viewPDFTema(response.storage);
+                    if(response.arquivo){
+                        viewPDFTema(response.storage);
+                    }
                     partialLoader(false);
                     $(`#tema`).val(response.nome);
                     $(`#descricao`).val(response.descricao);

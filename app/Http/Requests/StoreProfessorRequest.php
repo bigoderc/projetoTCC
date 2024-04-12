@@ -30,7 +30,7 @@ class StoreProfessorRequest extends FormRequest
         $id = $this->segment(2) ?? 0;
         return [
             //
-            'siape' => ['required','max:255',
+            'siape' => ['required','max:30',
                 function ($attribute, $value, $fail) {
                     $existingMatricula = DB::table('professores')
                         ->where('siape', $value)
@@ -43,6 +43,7 @@ class StoreProfessorRequest extends FormRequest
                     }
                 }
             ],
+            'nome' => ['required', 'max:60'],
             'email' => [
                 'required',
                 'max:255',

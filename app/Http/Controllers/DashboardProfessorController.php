@@ -104,31 +104,33 @@ class DashboardProfessorController extends Controller
     public function search(Request $request)
     {
         //
+        $professor = auth()->user()->professor;
         $query = $this->tema->query();
         
         $query->with(['areas'=>function($query) use($request){
             if($request->input('areas')){
                 $query->whereIn('areas.id',$request->input('areas'));
             }
-        },'criado','temaAluno'=>function($query) use($request){
-            switch ($request->status) {
-                case 0:
-                    # code...
-                    $query->whereNull('deferido');
-                    break;
-                case 1:
-                        $query->where('deferido', true);
-                    break;
-                default:
-                    # code...
-                    break;
-            }
-        },'temaAluno.professor'])
+        },'criado','temaAluno','temaAluno.professor'])
         ->whereHas('areas',function($query) use($request){
             if ($request->input('areas')) {
                 $query->whereIn('areas.id',$request->input('areas'));
             }
             
+        })->whereHas('temaAluno',function($query) use($professor, $request){
+            $query->where('fk_professores_id',$professor->id);
+            switch ($request->status) {
+                case 1:
+                    # code...
+                    $query->whereNull('deferido');
+                    break;
+                case 2:
+                        $query->where('deferido', true);
+                    break;
+                default:
+                    
+                    break;
+            }
         });
         
         $query->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$request->data_inicio, $request->data_fim]);

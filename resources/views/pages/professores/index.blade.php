@@ -191,7 +191,7 @@
             partialLoader();
             document.getElementById('id').value = id;
             $.ajax({
-                url: `{{ url('professor/findById/${id}') }}`,
+                url: `{{ url('docente/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
                     $(`#titulo`).text(`Editar Docente ${response.nome}`);

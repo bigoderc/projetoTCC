@@ -32,11 +32,11 @@
                                         @csrf
                                         <div class="modal-body" class="my-2">
                                             <label for="nome">Nome</label>
-                                            <input type="text" class="form-control" id="nome" name="nome"
+                                            <input type="text" class="form-control" maxlength="60" id="nome" name="nome"
                                                 required>
                                             <label for="nome">Descrição</label>
                                             <input type="text" class="form-control" id="descricao" name="descricao"
-                                                required>
+                                                >
                                             <label for="nome">Link</label>
                                             <input type="text" class="form-control" id="link" name="link">
                                             <label for="nome" class="my-2">Arquivo</label>

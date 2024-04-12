@@ -8,7 +8,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-class StoreGrauRequest extends FormRequest
+class StoreProjetoPreTCCRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,24 +30,28 @@ class StoreGrauRequest extends FormRequest
         $id = $this->segment(2) ?? 0;
         return [
             //
-            'nome' => ['required','max:60',function ($attribute, $value, $fail) {
-                $existingMatricula = DB::table('graus')
+            'nome' => ['required','max:255',function ($attribute, $value, $fail) {
+                $existingMatricula = DB::table('projeto_pre_tccs')
                     ->where('nome', $value)
                     ->where('id','<>',$this->id)
                     ->whereNull('deleted_at')
                     ->first();
         
                 if ($existingMatricula) {
-                    $fail('o grau já está em uso.');
+                    $fail('o projeto já está em uso.');
                 }
             }],
+            'fk_professores_id' => ['required'],
         ];
     }
     public function messages()
     {
         return [
-            'nome.required' => 'É obrigatorio o grau',
-            'nome.unique' => 'Já existe esse grau',
+            'nome.required' => 'É obrigatorio o nome do projeto',
+            'nome.unique' => 'O projeto já existe',
+            'nome.unique' => 'Já existe esse projeto',
+            'fk_areas_id.required' => 'É obrigatorio a área',
+            'fk_grau_id.required' => 'É obrigatorio o professor',
         ];
     }
     public function failedValidation(Validator $validator)

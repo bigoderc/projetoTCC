@@ -167,12 +167,12 @@ class DashboardAlunoController extends Controller
         $aluno = auth()->user()->aluno;
         $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
             $query->where('fk_alunos_id',$aluno->id ??0);
-        })->get();
+        })->orderBy('created_at','desc')->get();
         
         if(count($dados)>0){
             return response()->json($dados);
         }else{
-            return response()->json(Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->doesntHave('temaAluno')->get());
+            return response()->json(Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->orderBy('created_at','desc')->doesntHave('temaAluno')->get());
         }
        
     }

@@ -61,5 +61,26 @@ class ProjetoPreTcc extends Model
     public function areas(){
         return $this->belongsToMany(Area::class,'projeto_pre_tcc_areas','fk_projeto_pre_tcc_id','fk_area_id')->withTrashed();
     }
-    protected $appends = ['storage'];
+    public function getAreasDescAttribute()
+    {
+        $areas_desc = '';
+        $areas_nome = '';
+
+        // Oculta temporariamente o relacionamento setores
+        $this->makeVisible(['setores']);
+        // Acesso ao relacionamento setores sem carregamento automático
+        $areas = $this->areas()->get();
+
+        // Restaura a visibilidade do relacionamento setore
+
+        foreach ($areas as $area) {
+            $areas_nome .= $area->nome . ',';
+        }
+
+        $areas_nome = rtrim($areas_nome, ', '); // Remover a última vírgula e espaço
+
+        $areas_desc = $areas_nome;
+        return $areas_desc;
+    }
+    protected $appends = ['storage','areas_desc'];
 }

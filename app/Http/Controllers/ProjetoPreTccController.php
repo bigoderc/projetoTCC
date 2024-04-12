@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProjetoPreTCCRequest;
 use App\Models\ProjetoPreTcc;
 use App\Http\Requests\StoreProjetoRequest;
 use App\Models\Aluno;
@@ -58,7 +59,7 @@ class ProjetoPreTccController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProjetoPreTCCRequest $request)
     {
         //
         Gate::authorize('insert-pre_tcc');

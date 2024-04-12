@@ -30,7 +30,7 @@ class StoreAreaRequest extends FormRequest
         $id = $this->segment(2) ?? 0;
         return [
             //
-            'nome' => ['required','max:255',
+            'nome' => ['required','max:60',
             function ($attribute, $value, $fail) {
                 $existingMatricula = DB::table('areas')
                     ->where('nome', $value)

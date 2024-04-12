@@ -1,31 +1,29 @@
-<div class="card-body">
-    <div class="modal fade" id="trabalhos" tabindex="-1" aria-labelledby="trabalhos" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="titulo">Informações</h5>
-                    <button type="button" class="close" onclick="fecharModalinfo()" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="row">
-                    <input type="hidden" class="form-control" id="carregamento_id" name="carregamento_id">
-                    <div class="col-12">
-                        <div class="col">
-                            <div class="modal-body" class="my-2">
-                                <div class="container pe-0">
-                                    <div class="main-timeline" id="timeline-container2">
-                                        <!-- Os cards serão renderizados aqui -->
-                                    </div>
-                                </div>                                
-                            </div>
+<div class="modal fade" id="trabalhos" tabindex="-1" aria-labelledby="trabalhos" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titulo">Informações</h5>
+                <button type="button" class="close" onclick="fecharModalinfo()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="row">
+                <input type="hidden" class="form-control" id="carregamento_id" name="carregamento_id">
+                <div class="col-12">
+                    <div class="col">
+                        <div class="modal-body" class="my-2">
+                            <div class="container pe-0">
+                                <div class="main-timeline" id="timeline-container2">
+                                    <!-- Os cards serão renderizados aqui -->
+                                </div>
+                            </div>                                
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="fecharModalinfo()">Fechar</button>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="fecharModalinfo()">Fechar</button>
             </div>
         </div>
     </div>
