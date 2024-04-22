@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class StoreTemaRequest extends FormRequest
@@ -29,9 +30,18 @@ class StoreTemaRequest extends FormRequest
         $id = $this->segment(2) ?? 0;
         return [
             //
-            'nome' => ['required','max:255',Rule::unique('temas')->ignore($this->id)],
-            'fk_areas_id' => ['required'],
-            'arquivo' => 'mimes:pdf',
+            'nome' => ['required','max:255',function ($attribute, $value, $fail) {
+                $existingMatricula = DB::table('temas')
+                    ->where('nome', $value)
+                    ->where('id','<>',$this->id)
+                    ->whereNull('deleted_at')
+                    ->first();
+        
+                if ($existingMatricula) {
+                    $fail('o tema já está em uso.');
+                }
+            }],
+            
         ];
     }
     public function messages()
@@ -39,8 +49,8 @@ class StoreTemaRequest extends FormRequest
         return [
             'nome.required' => 'É obrigatorio o nome do tema',
             'nome.unique' => 'Já existe esse tema',
-            'fk_areas_id.required' => 'É obrigatorio a área',
-            'arquivo.mimes' => 'O arquivo do projeto deve ser um PDF.'
+            'nome.max' => 'Nome não pode passar de 255 caracteres',
+            
         ];
     }
     public function failedValidation(Validator $validator)

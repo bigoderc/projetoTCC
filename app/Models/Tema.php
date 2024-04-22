@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\Helper;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,9 +27,8 @@ class Tema extends Model
         'link',
         'arquivo'
     ];
-    public $timestamps = false;
-    public function area(){
-        return $this->hasOne(Area::class,'id','fk_areas_id')->withTrashed();
+    public function areas(){
+        return $this->belongsToMany(Area::class,'tema_areas','fk_tema_id','fk_area_id')->withTrashed();
     }
     protected static function boot()
     {
@@ -45,4 +46,55 @@ class Tema extends Model
             }
         });
     }
+    public function criado(){
+        return $this->hasOne(User::class,'id','user_id_created')->withTrashed();
+    }
+    public function temaAluno(){
+        return $this->hasOne(AlunoTema::class,'fk_tema_id','id');
+    }
+    public function getCreatedAtAttribute()
+    {
+        $created = Carbon::parse($this->attributes['created_at']);
+        $created->setTimezone('America/Sao_Paulo');
+        return $created->format('d/m/Y');
+    }
+    /**
+     * Determine if the user is an administrator.
+     *
+     * @return bool
+     */
+    public function getStorageAttribute()
+    {
+        $caminho = Helper::url('temas');
+        $path = $this->attributes['arquivo'];
+
+        // Use $path se estiver definido e não vazio, caso contrário, use $name
+        return $this->attributes['storage'] = $caminho . $path;
+    }
+    /**
+     * Retorna uma descrição do campo ativo
+     */
+    public function getAreasDescAttribute()
+    {
+        $areas_desc = '';
+        $areas_nome = '';
+
+        // Oculta temporariamente o relacionamento setores
+        $this->makeVisible(['setores']);
+        // Acesso ao relacionamento setores sem carregamento automático
+        $areas = $this->areas()->get();
+
+        // Restaura a visibilidade do relacionamento setore
+
+        foreach ($areas as $area) {
+            $areas_nome .= $area->nome . ',';
+        }
+
+        $areas_nome = rtrim($areas_nome, ', '); // Remover a última vírgula e espaço
+
+        $areas_desc = $areas_nome;
+        return $areas_desc;
+    }
+    protected $appends = ['storage','areas_desc'];
+    
 }

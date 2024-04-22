@@ -28,7 +28,7 @@ class ConfiguracaoController extends Controller
     public function index()
     {
         //
-        Gate::authorize('configuracoes');
+        Gate::authorize('read-configuracao');
         return view('pages.configuracoes.index');
     }
 
@@ -36,7 +36,7 @@ class ConfiguracaoController extends Controller
     {
         //
        
-        Gate::authorize('configuracoes');
+        Gate::authorize('insert-configuracao') ||  Gate::authorize('update-configuracao');
 
         $roles = new role;
         
@@ -63,6 +63,7 @@ class ConfiguracaoController extends Controller
     public function store(Request $request)
     {
         //
+        Gate::authorize('insert-configuracao');
         $dados['dados']=Role::create([
             'nome' => $request['name'],
             'description' => $request['description'],
@@ -82,19 +83,20 @@ class ConfiguracaoController extends Controller
      */
     public function getPermission(Request $request,$id)
     {
+        Gate::authorize('insert-configuracao') ||  Gate::authorize('update-configuracao');
+
+        $permissions = new Permission; 
         
-        $permissions = new Permission;
-        $permissionProperty = new PermissionProperty;
-         
         $permissions = $permissions->get();
-        $properties = DB::select("select pp.* from permission_properties pp
-        inner join permissions p on (pp.fk_permission_id = p.id)
-        inner join permission_roles pr on (pr.fk_permission_id = p.id)
+        $properties = DB::select("select pr.* from  permission_roles pr
+        inner join permissions p on (pr.fk_permission_id = p.id)
         where pr.fk_roles_id = {$id}");
         //return $properties;
+       
         foreach ($permissions as $permission) {
             foreach ($properties as $property) {
                 if($permission->id == $property->fk_permission_id){
+                    
                     $permission[$property->acao] = true;
                 }
             }
@@ -113,29 +115,30 @@ class ConfiguracaoController extends Controller
      */
     public function setPermission(Request $request)
     {   
-        
-        PermissionProperty::where("fk_permission_id", $request->permission)->delete();
+        Gate::authorize('insert-configuracao') ||  Gate::authorize('update-configuracao');
+
+        PermissionRole::where("fk_permission_id", $request->permission)->where('fk_roles_id',$request->role)->delete();
 
         if (!empty($request->acao)){
             foreach ($request->acao as $value) {
-                PermissionProperty::create([
+                PermissionRole::create([
                     'fk_permission_id' => $request->permission,
-                    'fk_role_id' => $request->role,
+                    'fk_roles_id' => $request->role,
                     'acao' => $value
                 ]);
             }
         }
 
-        if(empty($request->acao)){
-            PermissionRole::where('fk_roles_id', $request->role)->where("fk_permission_id", $request->permission)->delete();
-        } else {
-            if(!empty(PermissionRole::where('fk_roles_id', $request->role)->where("fk_permission_id", $request->permission))){
-                PermissionRole::create([
-                    'fk_roles_id' => $request->role,
-                    'fk_permission_id' => $request->permission
-                ]);
-            }
-        }
+        // if(empty($request->acao)){
+        //     PermissionRole::where('fk_roles_id', $request->role)->where("fk_permission_id", $request->permission)->delete();
+        // } else {
+        //     if(!empty(PermissionRole::where('fk_roles_id', $request->role)->where("fk_permission_id", $request->permission))){
+        //         PermissionRole::create([
+        //             'fk_roles_id' => $request->role,
+        //             'fk_permission_id' => $request->permission
+        //         ]);
+        //     }
+        // }
         
         $dados['success'] = true;
         return json_encode($dados);
@@ -169,11 +172,11 @@ class ConfiguracaoController extends Controller
      * @param  \App\Models\Configuracao  $configuracao
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $configuracao)
+    public function show()
     {
         //
 
-        return response()->json($configuracao->all());
+        return response()->json(Role::all());
         
     }
 
@@ -198,6 +201,7 @@ class ConfiguracaoController extends Controller
     public function update(Request $request)
     {
         //
+        Gate::authorize('update-configuracao');
         if($request->ajax()){
             Role::find($request->input('pk'))->update([
                 $request->input('name') => $request->input('value')
@@ -212,9 +216,12 @@ class ConfiguracaoController extends Controller
      * @param  \App\Models\Configuracao  $configuracao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Configuracao $configuracao)
+    public function destroy($id)
     {
         //
+        Gate::authorize('delete-configuracao');
+        Role::find($id)->delete();
+        return response()->json(true);
     }
 
     

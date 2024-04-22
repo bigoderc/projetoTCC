@@ -1,15 +1,13 @@
-<div class="position-absolute bg-primary overflow-hidden sidebar p-2" style="
+<div class="position-absolute bg-primary extended sidebar p-2" style="
     z-index: 1;">
     <div class="d-flex justify-content-center align-items-center text-white my-3">
         <div class="img" >
-			<span class="h2">GRC</span>
+			<span class="h2">SAT-TCC</span>
       	</div>
-      	<div class="proj-name  d-none">
-            <img src="{{ asset('img/marca-if-baiano-horizontal.png') }}" alt="Logo da empresa" width="200" height="55">
-      	</div>
+      
     </div>
 
-    <div>
+    <div id="navbar">
         <ul class="nav flex-column">
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
                 <div class="d-flex justify-content-center">
@@ -20,91 +18,110 @@
                 </div>
             </li>
 
-            @if(Gate::check('usuario') || Gate::check('professor') || Gate::check('aluno') || Gate::check('areas')|| Gate::check('tema')||Gate::check('projeto')||Gate::check('cursp'))
+            @if(Gate::check('read-usuario') || 
+                Gate::check('read-professor') || 
+                Gate::check('read-discente') || 
+                Gate::check('read-area')|| 
+                Gate::check('read-proposta_tema')||
+                Gate::check('read-tcc')||
+                Gate::check('read-pre_tcc')||
+                Gate::check('read-turma')||
+                Gate::check('read-especialidade')||
+                Gate::check('read-grau')||
+                Gate::check('read-curso'))
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
                 <div class="d-flex justify-content-center" role="button">
                     <a class="text-decoration-none text-nowrap text-white" href="#">
                         <i class="lg nc-icon nc-single-copy-04 px-2"></i>
-                        <span class="d-none">Cadastro</span>
+                        <span class="d-none">Cadastro/Visualizar</span>
 
                     </a>
                 </div>
-                <ul class="list-group text-left d-none">
-                    @can('aluno')
+                <ul class="list-group text-left @empty($checked) d-none @endempty">
+                    @can('read-curso')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('alunos.index') }}">
-                                <span>{{ ('Alunos') }}</span>
+                            <a class="text-decoration-none text-dark" href="{{ route('curso.index') }}">
+                                <span>{{ ('Curso') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('read-turma')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('turma.index') }}">
+                                <span>{{ ('Turma') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('read-area')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('area.index') }}">
+                                <span>{{ ('Área') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    
+                    @can('read-especialidade')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('especialidade.index') }}">
+                                <span>{{ ('Especialidade') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('read-grau')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('grau.index') }}">
+                                <span>{{ ('Grau') }}</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('read-discente')
+                        <li class="list-group-item bg-white py-1">
+                            <a class="text-decoration-none text-dark" href="{{ route('discente.index') }}">
+                                <span>{{ ('Discente') }}</span>
 
                             </a>
                         </li>
                     @endcan
-                    @can('area')
+                    
+                    @can('read-professor')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('areas.index') }}">
-                                <span>{{ ('Áreas') }}</span>
+                            <a class="text-decoration-none text-dark" href="{{ route('docente.index') }}">
+                                <span>{{ ('Docente') }}</span>
                             </a>
                         </li>
                     @endcan
-                    @can('curso')
+                    @can('read-proposta_tema')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('cargos.index') }}">
-                                <span>{{ ('Cargos') }}</span>
+                            <a class="text-decoration-none text-dark" href="{{ route('proposta-tema.index') }}">
+                                <span>{{ ('Proposta de Tema') }}</span>
                             </a>
                         </li>
                     @endcan
-                    @can('curso')
+                    @can('read-pre_tcc')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('cursos.index') }}">
-                                <span>{{ ('Cursos') }}</span>
+                            <a class="text-decoration-none text-dark" href="{{ route('pre-tcc.index')}}">
+                                <span>{{('Pré-TCC')}}</span>
                             </a>
                         </li>
                     @endcan
-                    @can('curso')
+                    @can('read-tcc')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('especialidades.index') }}">
-                                <span>{{ ('Especialidades') }}</span>
+                            <a class="text-decoration-none text-dark" href="{{ route('tcc.index')}}">
+                                <span>{{('TCC')}}</span>
                             </a>
                         </li>
-                    @endcan
-                    @can('curso')
+                    @endcan 
+                    @can('read-biblioteca')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('graus.index') }}">
-                                <span>{{ ('Graus') }}</span>
+                            <a class="text-decoration-none text-dark" href="{{ route('biblioteca.index')}}">
+                                <span>{{('Link Biblioteca')}}</span>
                             </a>
                         </li>
-                    @endcan
-                    @can('professor')
+                    @endcan                   
+                    @can('read-usuario')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('professores.index') }}">
-                                <span>{{ ('Professores') }}</span>
-                            </a>
-                        </li>
-                    @endcan
-                    @can('projeto')
-                    <li class="list-group-item bg-white py-1">
-                        <a class="text-decoration-none text-dark" href="{{ route('projetos.index')}}">
-                            <span>{{('Projetos')}}</span>
-                        </a>
-                    </li>
-                    @endcan
-                    @can('tema')
-                        <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('temas.index') }}">
-                                <span>{{ ('Temas') }}</span>
-                            </a>
-                        </li>
-                    @endcan
-                    @can('turma')
-                        <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('turmas.index') }}">
-                                <span>{{ ('Turmas') }}</span>
-                            </a>
-                        </li>
-                    @endcan
-                    @can('usuario')
-                        <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('users.index') }}">
-                                <span>{{ ('Usuários') }}</span>
+                            <a class="text-decoration-none text-dark" href="{{ route('user.index') }}">
+                                <span>{{ ('Usuário') }}</span>
                             </a>
                         </li>
                     @endcan
@@ -112,16 +129,24 @@
             </li>
             @endif
             
-            @can('configuracoes')
+            @can('read-configuracao')
+                <li class="bg-gold border-gold rounded my-1 overflow-hidden">
+                    <div class="d-flex justify-content-center">
+                        <a class="text-decoration-none text-nowrap text-white" href="{{ route('configuracao.index') }}">
+                            <i class="px-2 fa fa-solid fa-lg fa-cog"></i>
+                            <span class="d-none">{{ ('Configuração') }}</span>
+                        </a>
+                    </div>
+                </li>
+            @endcan
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
                 <div class="d-flex justify-content-center">
-                    <a class="text-decoration-none text-nowrap text-white" href="{{ route('configuracoes.index') }}">
-                        <i class="px-2 fa fa-solid fa-lg fa-cog"></i>
-                        <span class="d-none">{{ ('Configurações') }}</span>
+                    <a class="text-decoration-none text-nowrap text-white" href="{{ route('profile.index') }}">
+                        <i class="px-2 fa fa-solid fa-lg fa-user"></i>
+                        <span class="d-none">{{ 'Perfil' }}</span>
                     </a>
                 </div>
             </li>
-            @endcan
             <li class="bg-gold border-gold rounded my-1 overflow-hidden">
                 <div class="d-flex justify-content-center">
                     <a class="text-decoration-none text-nowrap text-white" href="{{ route('login') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -145,7 +170,7 @@
             </div>
             <div class="version">
                 <div class="d-flex align-items-center version">
-                    <i>v1.0.6</i>
+                    <i>v2.0.0</i>
                 </div>
             </div>
         </div>
@@ -184,7 +209,7 @@
 @push('scripts')
     <script>
         let $sidebar = $(".sidebar");
-        let $button = $(".sidebar >  div > ul > li");
+        let $button = $(".sidebar > div > ul > li");
         let $buttonDiv = $(".sidebar > div > ul > li > div");
         let $buttonSpan = $(".sidebar > div > ul > li > div > a > span");
         let $dropdown = $(".sidebar > div > ul > li > ul");
@@ -208,33 +233,9 @@
             show($(".proj-name"));
             show($(".user"));
             hide($(".version"));
-            hide($(".img"));
         }
-
-        function close() {
-            hide($dropdown);
-            $sidebar.removeClass("extended");
-
-            $buttonDiv.addClass("justify-content-center");
-            hide($buttonSpan);
-            $dropdown.prev().children("a").removeClass("dropdown-toggle")
-
-            hide($(".proj-name"));
-            hide($(".user"));
-            show($(".version"));
-            show($(".img"));
-        }
-
         $(document).ready(function() {
-
-            $sidebar.on("mouseover", function() {
-                open();
-            });
-
-            $sidebar.on("mouseleave", function() {
-                close()
-            });
-
+            open();
             $button.on("click", function() {
 
                 var $thisDropdown = $(this).children("ul");

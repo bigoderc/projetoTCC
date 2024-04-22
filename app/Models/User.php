@@ -11,9 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
-    use SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
  
     /**
      * Opcional, informar a coluna deleted_at como um Mutator de data
@@ -50,23 +48,22 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    public function hasPermission(Permission $permissao){
-        return $this->hasAnyRoles($permissao->roles);
+    public function hasPermission(Permission $permission)
+    {
+        return $this->hasAnyRoles($permission->roles);
     }
 
-    public function hasAnyRoles($regras){
-        //dd($regras);
-        if(is_array($regras) || is_object($regras)){
-
-            return !! $regras->intersect($this->roles)->count();
+    public function hasAnyRoles($roles)
+    {
+        if (is_array($roles) || is_object($roles)) {
+            return !!$roles->intersect($this->roles)->count();
         }
-        //dd('sdfsdf');
-        //checar se tem um usuario com uma regra so
-        return $this->roles->contains('nome', $regras);
+
+        return $this->roles->contains('nome', $roles);
     }
     public function roles()
     {
-        return $this->belongsToMany(\App\Models\Role::class,'role_users', 'fk_users_id', 'fk_roles_id');
+        return $this->belongsToMany(\App\Models\Role::class,'role_users', 'fk_users_id', 'fk_roles_id')->withPivot(['id']);
     }
 
     protected static function boot()
@@ -84,5 +81,11 @@ class User extends Authenticatable
                 $model->user_id_updated = auth()->user()->id;
             }
         });
+    }
+    public function aluno(){
+        return $this->hasOne(Aluno::class,'fk_user_id','id')->withTrashed();
+    }
+    public function professor(){
+        return $this->hasOne(Professor::class,'fk_user_id','id')->withTrashed();
     }
 }

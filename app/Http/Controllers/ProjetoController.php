@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjetoRequest;
+use App\Models\Aluno;
 use App\Models\Area;
 use App\Models\Professor;
 use App\Models\Projeto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Ramsey\Uuid\Uuid;
 
 class ProjetoController extends Controller
 {
@@ -15,13 +19,14 @@ class ProjetoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected $professor,$model,$area;
+    protected $professor,$model,$area,$aluno;
 
     public function __construct()
     {
         $this->professor = new Professor();
         $this->model = new Projeto();
         $this->area = new Area();
+        $this->aluno = new Aluno();
     }
     /**
      * Display a listing of the resource.
@@ -31,8 +36,9 @@ class ProjetoController extends Controller
     public function index(Projeto $projetos)
     {
         //
+        Gate::authorize('read-tcc');
         //dd($projetos->get());
-        return view('pages.projetos.index',['areas'=>$this->area->get(),'professores'=>$this->professor->get()]);
+        return view('pages.projetos.index',['alunos'=>$this->aluno->get(),'areas'=>$this->area->get(),'professores'=>$this->professor->get()]);
     }
 
     /**
@@ -54,24 +60,29 @@ class ProjetoController extends Controller
     public function store(StoreProjetoRequest $request)
     {
         //
-        if($request->hasFile('arquivo')){
-            // Get filename with the extension
-            $filenameWithExt = $request->file('arquivo')->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            // Get just ext
-           
-            $extension = $request->file('arquivo')->getClientOriginalExtension();
-            // Filename to store
-            $fileNameToStore= $filename.'.'.$extension;
-            // Upload Image
-            $fileNameToStore = str_replace(" ", "",  $fileNameToStore);
-            $path = $request->file('arquivo')->storeAs('projeto', $fileNameToStore,'public');
-            $request['projeto'] = $fileNameToStore;
+        Gate::authorize('insert-tcc');
+        DB::beginTransaction();
+        try {
+            //code...
+            if($request->hasFile('arquivo')){
+                $file = $request->file('arquivo');
+                $imageUuid = Uuid::uuid4()->toString();
+                $extension = $file->getClientOriginalExtension();
+                $path = $imageUuid.'.'.$extension;
+                $file->storeAs('projetos', strtolower($path), 'public');
+                $request['projeto'] = strtolower($path);
+            }
+            $dados=$this->model->create($request->all());
+            $projeto = $this->model->with(['aluno','professor','areas'])->find($dados->id);
+            $projeto->areas()->sync($request->areas);
+            DB::commit();
+            return response()->json($this->model->with(['aluno','professor','areas'])->find($dados->id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json($th->getMessage(),500);
         }
-        $dados=Projeto::create($request->all());
-       
-        return response()->json($this->model->with(['professor','area'])->find($dados->id));
+        
     }
 
     /**
@@ -83,7 +94,8 @@ class ProjetoController extends Controller
     public function show(Projeto $projeto)
     {
         //
-        return response()->json($this->model->with(['professor','area'])->get());
+        Gate::authorize('read-tcc');
+        return response()->json($this->model->with(['aluno','professor','areas'])->get());
     }
     /**
      * Display the specified resource.
@@ -94,7 +106,18 @@ class ProjetoController extends Controller
     public function findById($id)
     {
         //
-        return response()->json($this->model->with(['professor','area'])->find($id));
+        return response()->json($this->model->with(['aluno','professor','areas'])->find($id));
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Projeto  $projeto
+     * @return \Illuminate\Http\Response
+     */
+    public function findByProfessor($id)
+    {
+        //
+        return response()->json($this->model->with(['aluno','professor','areas'])->where('fk_professores_id',$id)->get());
     }
     /**
      * Show the form for editing the specified resource.
@@ -117,23 +140,29 @@ class ProjetoController extends Controller
     public function update(StoreProjetoRequest $request, $id)
     {
         //
-        if($request->hasFile('arquivo')){
-            // Get filename with the extension
-            $filenameWithExt = $request->file('arquivo')->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            // Get just ext
-           
-            $extension = $request->file('arquivo')->getClientOriginalExtension();
-            // Filename to store
-            $fileNameToStore= $filename.'.'.$extension;
-            // Upload Image
-            $fileNameToStore = str_replace(" ", "",  $fileNameToStore);
-            $path = $request->file('arquivo')->storeAs('projeto', $fileNameToStore,'public');
-            $request['projeto'] = $fileNameToStore;
+        Gate::authorize('update-tcc');
+        DB::beginTransaction();
+        try {
+            //code...
+            if($request->hasFile('arquivo')){
+                $file = $request->file('arquivo');
+                $imageUuid = Uuid::uuid4()->toString();
+                $extension = $file->getClientOriginalExtension();
+                $path = $imageUuid.'.'.$extension;
+                $file->storeAs('projetos', strtolower($path), 'public');
+                $request['projeto'] = strtolower($path);
+            }
+            $this->model->find($id)->update($request->all());
+            $projeto = $this->model->find($id);
+            $projeto->areas()->sync($request->areas);
+            DB::commit();
+            return response()->json($this->model->with(['aluno','professor','areas'])->find($id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json($th->getMessage(),500);
         }
-        $this->model->find($id)->update($request->all());
-        return response()->json($this->model->with(['professor','area'])->find($id));
+        
     }
 
     /**
@@ -145,6 +174,7 @@ class ProjetoController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-tcc');
         $this->model->find($id)->delete();
         return response()->json(true);
     }

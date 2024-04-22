@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCursoRequest;
 use App\Models\Curso;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CursoController extends Controller
 {
@@ -16,6 +17,7 @@ class CursoController extends Controller
     public function index()
     {
         //
+        Gate::authorize('read-curso');
         return view('pages.cursos.index');
     }
 
@@ -38,6 +40,7 @@ class CursoController extends Controller
     public function store(StoreCursoRequest $request)
     {
         //
+        Gate::authorize('insert-curso');
         $dados =Curso::create($request->all());
        
         return response()->json($dados);
@@ -52,6 +55,7 @@ class CursoController extends Controller
     public function show(Curso $curso)
     {
         //
+        Gate::authorize('read-curso');
         return response()->json($curso->all());
     }
 
@@ -76,6 +80,7 @@ class CursoController extends Controller
     public function update(Request $request, Curso $curso)
     {
         //
+        Gate::authorize('update-curso');
         if($request->ajax()){
             $curso->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
             return response()->json(['success' => true]);
@@ -91,6 +96,7 @@ class CursoController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-curso');
         Curso::find($id)->delete();
         return response()->json(['success' => true]);
     }

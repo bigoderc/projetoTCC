@@ -4,22 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Cargo extends Model
+class AlunoTema extends Model
 {
     use HasFactory;
-    use SoftDeletes;
- 
-    /**
-     * Opcional, informar a coluna deleted_at como um Mutator de data
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
+    protected $table = 'alunos_tema';
     protected $fillable = [
-        'nome',
-        'descricao'
+        'fk_alunos_id',
+        'fk_tema_id',
+        'fk_professores_id',
+        'deferido',
+        'justificativa'
     ];
     protected static function boot()
     {
@@ -36,5 +31,11 @@ class Cargo extends Model
                 $model->user_id_updated = auth()->user()->id;
             }
         });
+    }
+    public function professor(){
+        return $this->hasOne(Professor::class,'id','fk_professores_id')->withTrashed();
+    }
+    public function aluno(){
+        return $this->hasOne(Aluno::class,'id','fk_alunos_id')->withTrashed();
     }
 }

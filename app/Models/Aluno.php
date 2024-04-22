@@ -29,7 +29,8 @@ class Aluno extends Model
         'fk_turma_id',
         'ingresso', 
         'email',
-        'fk_user_id'
+        'fk_user_id',
+        'formado'
     ];
     public function curso(){
         return $this->hasOne(Curso::class,'id','fk_curso_id')->withTrashed();
@@ -57,5 +58,8 @@ class Aluno extends Model
                 $model->user_id_updated = auth()->user()->id;
             }
         });
+    }
+    public function user(){
+        return $this->hasOne(User::class,'id','fk_user_id')->withTrashed();
     }
 }

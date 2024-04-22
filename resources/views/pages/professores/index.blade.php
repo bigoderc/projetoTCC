@@ -1,23 +1,27 @@
-@extends('layouts.pages.dashboard')
-
+@extends('layouts.pages.dashboard',[
+    'title'=>'checked',
+    'checked'=>true
+])
 @section('content-page')
     <div class="content-page">
         <div class="card-body">
             <div class="card">
                 <div class="card-header card-title text-white bg-transparent border-0 m-3">
-                    <span class="h4">Professores</span>
+                    <span class="h4">Docente</span>
                 </div>
                 <div class="card-body">
                     <div id="toolbar">
-                        <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
-                                class="fa fa-plus"></i> Adicionar nova linha</button>
+                        @can('insert-professor')
+                            <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
+                                class="fa fa-plus"></i> Adicionar novo docente</button>
+                        @endcan
 
                         <div class="modal fade" id="novalinha" tabindex="-1" aria-labelledby="novalinha"
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="titulo">Adicionar Professor</h5>
+                                        <h5 class="modal-title" id="titulo">Adicionar</h5>
                                         <button type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -35,14 +39,7 @@
                                             <label for="email">Email</label>
                                             <input type="email" class="form-control" id="email" name="email"
                                                 required>
-                                            <label for="cargo">Cargo</label>
-                                            <select class="form-control" name="fk_cargo_id" id="fk_cargo_id"
-                                                aria-label="Default select example" required>
-                                                <option value="" selected>Selecione o Cargo</option>
-                                                @foreach ($cargos as $cargo)
-                                                    <option value="{{ $cargo->id }}">{{ $cargo->nome }}</option>
-                                                @endforeach
-                                            </select>
+                                            
                                             <label for="nome" class="my-2">Área</label>
                                             <select class="form-control" name="fk_areas_id" id="fk_areas_id"
                                                 aria-label="Default select example" required>
@@ -85,17 +82,15 @@
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
                         data-search-accent-neutralise="true" data-editable-url="#"
-                        data-url="{{ route('professores.show', 1) }}">
+                        data-url="{{ route('docente.show',1) }}">
                         <thead>
                             <tr>
-                                <th data-field="id" class="col-1">ID</th>
                                 <th data-field="nome" class="col-3" aria-required="true">NOME</th>
                                 <th data-field="siape" class="col-3" aria-required="true">SIAPE</th>
-                                <th data-field="areas.nome" class="col-3" aria-required="true">ÁREA</th>
+                                <th data-field="area.nome" class="col-3" aria-required="true">ÁREA</th>
                                 <th data-field="especialidade.nome" class="col-3" aria-required="true">ESPECIALIDADE
                                 </th>
-                                <th data-field="graus.nome" class="col-3" aria-required="true">GRAU</th>
-                                <th data-field="cargo.nome" class="col-3" aria-required="true">CARGO</th>
+                                <th data-field="grau.nome" class="col-3" aria-required="true">GRAU</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>
@@ -131,8 +126,8 @@
                         partialLoader();
                         let id = document.getElementById('id').value;
                         $.ajax({
-                            url: id > 0 ? `{{ url('professores/update/${id}') }}` :
-                                "{{ route('professores.store') }}",
+                            url: id > 0 ? `{{ url('docente/update/${id}') }}` :
+                                "{{ route('docente.store') }}",
                             type: id > 0 ? "PUT" : "POST",
                             data: $("#addLinha").serialize(),
                             dataType: "json",
@@ -170,7 +165,7 @@
                     if (result.isConfirmed) {
                         partialLoader();
                         $.ajax({
-                            url: "professores/" + row.id,
+                            url: "professor/" + row.id,
                             type: "DELETE",
                             dataType: "json",
                             success: function(response) {
@@ -196,10 +191,10 @@
             partialLoader();
             document.getElementById('id').value = id;
             $.ajax({
-                url: `{{ url('professores/findById/${id}') }}`,
+                url: `{{ url('docente/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
-                    $(`#titulo`).text(`Editar Professor ${response.nome}`);
+                    $(`#titulo`).text(`Editar Docente ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
                     $(`#siape`).val(response.siape);
@@ -207,8 +202,7 @@
                     if (response.user) {
                         $(`#email`).prop('disabled', true);
                     }
-                    $(`#fk_cargo_id option[value=${response.fk_cargo_id}]`).prop('selected', 'selected')
-                    .change();
+                   
                     $(`#fk_areas_id option[value=${response.fk_areas_id}]`).prop('selected', 'selected')
                     .change();
                     $(`#fk_especialidade_id option[value=${response.fk_especialidade_id}]`).prop('selected',
@@ -231,12 +225,12 @@
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             return [
-                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
+                `@can('update-professor')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
                 `<i class="fa fa-edit"></i>`,
-                `</a>`,
-                '<a class="remove" href="javascript:void(0)" title="Remove">',
+                `</a>@endcan`,
+                '@can('delete-professor')<a class="remove" href="javascript:void(0)" title="Remove">',
                 '<i class="fa fa-trash"></i>',
-                '</a>'
+                '</a>@endcan'
             ].join('');
         }
     </script>

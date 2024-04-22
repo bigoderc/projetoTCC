@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="{{ url('/img/LSMais_colored.svg') }}" />
+    <link rel="shortcut icon" href="#" />
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -42,6 +42,7 @@
     <script src="{{ url('js/notify.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Chart JS -->
+    <script src="{{ url('js/multiselect-dropdown.js') }}"></script>
     @stack('scripts')
 
 </body>

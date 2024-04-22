@@ -8,8 +8,10 @@
             </div>
             <div class="card-body">
                 <div id="toolbar">
-                    <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i class="fa fa-plus"></i>
-                        Adicionar</button>
+                    @can('insert-configuracao')
+                        <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i class="fa fa-plus"></i>
+                            Adicionar</button>
+                    @endcan
                     {{-- <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="modalCenter" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="bg-white modal-content">
@@ -77,7 +79,6 @@
                     data-editable-url="{{ route('configuracao.update') }}" data-url="{{ route('configuracao.show') }}">
                     <thead>
                         <tr>
-                            <th data-field="id" data-sortable="true" class="col-1">ID</th>
                             <th data-field="nome" data-editable="true" data-sortable="true" class="col-3"
                                 aria-required="true">NOME</th>
                             <th data-field="description" data-editable="true" data-sortable="true" class="col-4"
@@ -182,12 +183,13 @@
         //Criar colunar ação
         function acaoFormatter(value, row, index, field) {
             return [
-                '<a class="remove" href="javascript:void(0)" title="Remove">',
+                '@can('delete-configuracao')
+                <a class="remove" href="javascript:void(0)" title="Remove">',
                 '<i class="fa fa-trash"></i>',
-                '</a>',
-                `<a class="text-info p-1 add" href="configuracao/permission/${row['id']}" title="Atribuir Permissão">`,
+                '</a>@endcan',
+                `@if(Gate::check('insert-configuracao') || Gate::check('update-configuracao')) <a class="text-info p-1 add" href="configuracao/permission/${row['id']}" title="Atribuir Permissão">`,
                 `<i class="fa fa-plus" aria-hidden="true"></i>`,
-                `</a>`
+                `</a>@endif`
             ].join('');
         }
     </script>

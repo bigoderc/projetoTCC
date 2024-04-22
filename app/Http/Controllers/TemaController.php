@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTemaRequest;
+use App\Models\Aluno;
+use App\Models\AlunoTema;
 use App\Models\Area;
+use App\Models\Professor;
 use App\Models\Tema;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Guid\Guid;
+use Ramsey\Uuid\Uuid;
 
 class TemaController extends Controller
 {
@@ -17,8 +26,16 @@ class TemaController extends Controller
     public function index(Tema $tema)
     {
         //
+        Gate::authorize('read-proposta_tema');
         $areas = Area::all();
-        return view('pages.temas.index',['areas'=>$areas]);
+        $professores = Professor::all();
+        $data = User::with('roles')->find(auth()->user()->id);
+
+        return view('pages.temas.index',[
+            'areas'=>$areas,
+            'professores' =>$professores,
+            'aluno' => $data->roles->first()->nome =='aluno'
+        ]);
     }
 
     /**
@@ -37,17 +54,50 @@ class TemaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTemaRequest $request)
     {
         //
-        if($request->hasFile('file')){
-            $value = $request->file('file');
-            $name = $request->nome.'-'.$value->getClientOriginalName();
-            Storage::disk('public')->putFileAs('temas',$value,$name);
-           $request['arquivo'] = $name;
+        Gate::authorize('insert-proposta_tema');
+        DB::beginTransaction();
+        try {
+            //code...
+            if($request->hasFile('file')){
+                $file = $request->file('file');
+                $imageUuid = Uuid::uuid4()->toString();
+                $extension = $file->getClientOriginalExtension();
+                $path = $imageUuid.'.'.$extension;
+                $file->storeAs('temas', strtolower($path), 'public');
+                $request['arquivo'] = strtolower($path);
+            }
+            $tema =Tema::create($request->all());
+            $tema = Tema::with(['areas'])->find($tema->id);
+            $tema->areas()->sync($request->areas);
+            $data = User::with('roles')->find(auth()->user()->id);
+            $aluno = Aluno::where('fk_user_id',$data->id)->first();
+            $aluno_tema = AlunoTema::where('fk_alunos_id',$aluno->id);
+            if($aluno_tema->count()>0 && $request->professor_id){
+                return response()->json(['data'=>'Você já tem uma proposta vinculada, desvincule o professor da proposta, por favor'],426);
+            }
+            if($data->roles->first()->nome =='aluno' && $request->professor_id){
+                
+                AlunoTema::create(
+                    [
+                        'fk_alunos_id'=>$aluno->id,
+                        'fk_tema_id'=>$tema->id,
+                        'fk_professores_id'=>$request->professor_id
+                    ]
+                );
+            }
+            
+            DB::commit();
+            return response()->json(Tema::with(['areas'])->find($tema->id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json($th->getMessage(),500);
+            
         }
-        $dados =Tema::create($request->all());
-        return response()->json(Tema::with(['area'])->find($dados->id));
+        
     }
 
     /**
@@ -59,9 +109,22 @@ class TemaController extends Controller
     public function show(Tema $tema)
     {
         //
-        return response()->json(Tema::with(['area'])->get());
+        Gate::authorize('read-proposta_tema');
+        $user = request()->user();
+        $data = User::with('roles')->find($user->id);
+
+        if ($data) {
+            $data->role = $data->roles->first();
+        }
+        if($data->role->nome =='aluno'){
+            return response()->json(Tema::with(['areas','criado'])->where('user_id_created',$user->id)->get());
+        }else{
+            return response()->json(Tema::with(['areas','criado'])->get());
+        }
+        
     }
 
+    
     /**
      * Show the form for editing the specified resource.
      *
@@ -83,14 +146,30 @@ class TemaController extends Controller
     public function update(Request $request, Tema $tema,$id)
     {
         //
-        if($request->hasFile('file')){
-            $value = $request->file('file');
-            $name = $request->nome.'-'.$value->getClientOriginalName();
-            Storage::disk('public')->putFileAs('temas',$value,$name);
-            $request['arquivo'] = $name;
+        Gate::authorize('update-proposta_tema');
+        DB::beginTransaction();
+        try {
+            //code...
+            if($request->hasFile('file')){
+                $file = $request->file('file');
+                $imageUuid = Uuid::uuid4()->toString();
+                $extension = $file->getClientOriginalExtension();
+                $path = $imageUuid.'.'.$extension;
+                $file->storeAs('temas', strtolower($path), 'public');
+                $request['arquivo'] = strtolower($path);
+            }
+            $tema->find($id)->update($request->all());
+            $tema = Tema::find($id);
+            
+            $tema->areas()->sync($request->areas);
+            DB::commit();
+            return response()->json($tema->with(['areas'])->find($id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json($th->getMessage(),500);
         }
-        $tema->find($id)->update($request->all());
-        return response()->json($tema->with(['area'])->find($id));
+        
     }
 
     /**
@@ -102,6 +181,7 @@ class TemaController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-proposta_tema');
         Tema::find($id)->delete();
         return response()->json(['success' => true]);
     }
@@ -112,7 +192,7 @@ class TemaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function findById($id){
-        return response()->json(Tema::with(['area'])->find($id));
+        return response()->json(Tema::with(['areas'])->find($id));
     }
     public function toView(Tema $tema,$id){
         $tema = $tema->find($id);

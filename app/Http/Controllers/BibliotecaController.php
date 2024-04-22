@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCargoRequest;
-use App\Models\Cargo;
+use App\Models\Biblioteca;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
-class CargoController extends Controller
+class BibliotecaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,8 @@ class CargoController extends Controller
     public function index()
     {
         //
-        return view('pages.cargos.index');
+        Gate::authorize('read-biblioteca');
+        return view('pages.bibliotecas.index');
     }
 
     /**
@@ -35,32 +36,35 @@ class CargoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCargoRequest $request)
+    public function store(Request $request)
     {
         //
-        $dados = Cargo::create($request->all());
+        Gate::authorize('insert-biblioteca');
+        $dados =Biblioteca::create($request->all());
+       
         return response()->json($dados);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Cargo  $cargo
+     * @param  \App\Models\Biblioteca  $biblioteca
      * @return \Illuminate\Http\Response
      */
     public function show()
     {
         //
-        return response()->json(Cargo::all());
+        Gate::authorize('read-biblioteca');
+        return response()->json(Biblioteca::all());
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Cargo  $cargo
+     * @param  \App\Models\Biblioteca  $biblioteca
      * @return \Illuminate\Http\Response
      */
-    public function edit(Cargo $cargo)
+    public function edit(Biblioteca $biblioteca)
     {
         //
     }
@@ -69,14 +73,15 @@ class CargoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Cargo  $cargo
+     * @param  \App\Models\Biblioteca  $biblioteca
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cargo $cargo)
+    public function update(Request $request, Biblioteca $biblioteca)
     {
         //
+        Gate::authorize('update-biblioteca');
         if($request->ajax()){
-            $cargo->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
+            $biblioteca->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
             return response()->json(['success' => true]);
         }
     }
@@ -84,13 +89,14 @@ class CargoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Cargo  $cargo
+     * @param  \App\Models\Biblioteca  $biblioteca
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         //
-        Cargo::find($id)->delete();
-        return response()->json(true);
+        Gate::authorize('delete-biblioteca');
+        Biblioteca::find($id)->delete();
+        return response()->json(['success' => true]);
     }
 }

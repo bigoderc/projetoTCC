@@ -1,5 +1,7 @@
-@extends('layouts.pages.dashboard')
-
+@extends('layouts.pages.dashboard',[
+    'title'=>'checked',
+    'checked'=>true
+])
 @section('content-page')
 <div class="content-page">
     <div class="card-body">
@@ -22,13 +24,14 @@
                             @endforeach
                         </select>
                     </div>
-                    <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i class="fa fa-plus"></i> Adicionar nova linha</button>
-
+                    @can('insert-turma')
+                        <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i class="fa fa-plus"></i> Adicionar nova turma</button>
+                    @endcan
                     <div class="modal fade" id="novalinha" tabindex="-1" aria-labelledby="novalinha" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Adicionar nova linha</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Adicionar</h5>
                                     <button type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -40,7 +43,7 @@
                                         <input type="text" class="form-control" id="nome" name="nome" required>
                                         <label for="nome">Descrição</label>
                                         <input type="text" class="form-control" id="descricao" name="descricao">
-                                        <input type="hidden" class="form-control" id="fk_curso_id" name="fk_curso_id">
+                                        <input type="hidden" class="form-control fk_curso_id" name="fk_curso_id">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" onclick="clearForm('addLinha','novalinha')">Fechar</button>
@@ -51,10 +54,9 @@
                         </div>
                     </div>
                 </div>
-                <table id="my_table_id" class="text-center" data-toggle="table" data-editable="true" data-editable-pk="id" data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR" data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25" data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true" data-search-accent-neutralise="true" data-editable-url="{{ route('turmas.update1') }}">
+                <table id="my_table_id" class="text-center" data-toggle="table" data-editable="true" data-editable-pk="id" data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR" data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25" data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true" data-search-accent-neutralise="true" data-editable-url="{{ route('turma.update1') }}">
                     <thead>
                         <tr>
-                            <th data-field="id" class="col-1">ID</th>
                             <th data-field="nome" data-editable="true" class="col-3" aria-required="true">NOME</th>
                             <th data-field="descricao" data-editable="true" class="col-3" aria-required="true">DESCRIÇÃO</th>
                             <th data-field="curso.nome" data-editable="false" class="col-3" aria-required="true">CURSO</th>
@@ -80,18 +82,15 @@
     
 
     function getNewCurso() {
+        $('#my_table_id').bootstrapTable('removeAll');
         partialLoader();
         let id_curso = `${document.getElementById('cursoSelect').value}`;
-        document.getElementById('fk_curso_id').value = id_curso;
+        $(`.fk_curso_id`).val(id_curso);
         $.ajax({
-            url:`{{ url('turmas/${id_curso}') }}`,
+            url:`{{ url('turma/${id_curso}') }}`,
             type: "GET",
             success: function(response) {
-                if(response.length >0){
-                    $('#my_table_id').bootstrapTable('append', response);
-                }else{
-                    $('#my_table_id').bootstrapTable('removeAll');
-                }
+                $('#my_table_id').bootstrapTable('append', response);
                 partialLoader(false);
             },
             error: function(result) {
@@ -112,7 +111,7 @@
 
             } else {
                 $.ajax({
-                    url: "{{ route('turmas.store') }}",
+                    url: "{{ route('turma.store') }}",
                     type: "POST",
                     data: $("#addLinha").serialize(),
                     dataType: "json",
@@ -142,7 +141,7 @@
             if (result.isConfirmed) {
                 partialLoader();
                 $.ajax({
-                    url: "turmas/" + row.id,
+                    url: "turma/" + row.id,
                     type: "DELETE",
                     dataType: "json",
                     success: function(response) {
@@ -170,9 +169,9 @@
     //Criar colunar ação
     function acaoFormatter(value, row, index) {
         return [
-            '<a class="remove" href="javascript:void(0)" title="Remove">',
+            '@can('update-turma')<a class="remove" href="javascript:void(0)" title="Remove">',
             '<i class="fa fa-trash"></i>',
-            '</a>'
+            '</a>@endcan'
         ].join('');
     }
 </script>

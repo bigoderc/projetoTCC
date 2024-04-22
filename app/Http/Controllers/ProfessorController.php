@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProfessorRequest;
 use App\Models\Area;
-use App\Models\Cargo;
+
 use App\Models\Especialidade;
 use App\Models\Grau;
 use App\Models\Professor;
+use App\Models\Role;
+use App\Models\RoleUser;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class ProfessorController extends Controller
@@ -20,12 +24,11 @@ class ProfessorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected $professor,$area,$cargo,$especialidade,$grau,$user;
+    protected $professor, $area, $especialidade, $grau, $user;
 
     public function __construct()
     {
         $this->area = new Area();
-        $this->cargo = new Cargo();
         $this->especialidade = new Especialidade();
         $this->grau = new Grau();
         $this->professor = new Professor();
@@ -39,11 +42,11 @@ class ProfessorController extends Controller
     public function index(Professor $professor)
     {
         //
-        return view('pages.professores.index',[
-            'areas'=>$this->area->get(),
-            'cargos'=>$this->cargo->get(),
-            'especialidades'=>$this->especialidade->get(),
-            'graus'=>$this->grau->get()
+        Gate::authorize('read-professor');
+        return view('pages.professores.index', [
+            'areas' => $this->area->get(),
+            'especialidades' => $this->especialidade->get(),
+            'graus' => $this->grau->get()
         ]);
     }
 
@@ -66,16 +69,45 @@ class ProfessorController extends Controller
     public function store(StoreProfessorRequest $request)
     {
         //
-        $user = $this->user->create(
-            [
-                "name" =>$request->nome,
-                "email" =>$request->email,
-                "password" => Hash::make('alterar123'),
-            ]
-        );
-        $request['fk_user_id'] = $user->id;
-        $dados = Professor::create($request->all());
-        return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->find($dados->id));
+        Gate::authorize('insert-professor');
+        DB::beginTransaction();
+        try {
+            //code...
+            $user = $this->user->withTrashed()->where('email', $request->email)->whereNotNull('deleted_at')->first();
+
+            if (!empty($user)) {
+                $user->restore();
+                $user->update(
+                    [
+                        "name" => $request->nome,
+                        "password" => Hash::make('alterar123'),
+                        "deleted_at" => null
+                    ]
+                );
+            } else {
+                $user = $this->user->create(
+                    [
+                        "name" => $request->nome,
+                        "email" => $request->email,
+                        "password" => Hash::make('alterar123'),
+                    ]
+                );
+            }
+
+            $role = Role::where('nome', 'professor')->first();
+            RoleUser::create([
+                'fk_roles_id' => $role->id,
+                'fk_users_id' => $user->id
+            ]);
+            $request['fk_user_id'] = $user->id;
+            $dados = Professor::create($request->all());
+            DB::commit();
+            return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->find($dados->id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json('Erro Interno',500);
+        }
     }
 
     /**
@@ -84,12 +116,12 @@ class ProfessorController extends Controller
      * @param  \App\Models\Professor  $professor
      * @return \Illuminate\Http\Response
      */
-    public function show(Professor $professor)
+    public function show()
     {
         //
-        return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->get());
+        return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->get());
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -99,7 +131,7 @@ class ProfessorController extends Controller
     public function findById($id)
     {
         //
-        return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->find($id));
+        return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->find($id));
     }
 
     /**
@@ -120,11 +152,22 @@ class ProfessorController extends Controller
      * @param  \App\Models\Professor  $professor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Professor $professor,$id)
+    public function update(Request $request, Professor $professor, $id)
     {
         //
-        $professor->find($id)->update($request->all());
-        return response()->json($this->professor->with(['areas','especialidade','cargo','graus','user'])->find($id));
+        Gate::authorize('update-professor');
+        DB::beginTransaction();
+        try {
+            //code...
+            $professor->find($id)->update($request->all());
+            DB::commit();
+            return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->find($id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json('Erro Interno',500);
+        }
+        
     }
 
     /**
@@ -142,7 +185,16 @@ class ProfessorController extends Controller
     public function destroy($id)
     {
         //
-        $this->professor->find($id)->delete();
+        Gate::authorize('delete-professor');
+        $professor = $this->professor->find($id);
+        try {
+            //code...
+            $this->user->find($professor->fk_user_id)->delete();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
+        $professor->delete();
         return response()->json(true);
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\DB;
 
 class AlunoStoreRequest extends FormRequest
 {
@@ -29,8 +30,36 @@ class AlunoStoreRequest extends FormRequest
         $id = $this->segment(2) ?? 0;
         return [
             //
-            'matricula' => ['required','max:255',Rule::unique('alunos')->ignore($this->id)],
-            'email' => ['required','max:255',Rule::unique('alunos')->ignore($this->id)],
+            'matricula' => [
+                'required',
+                'max:30',
+                function ($attribute, $value, $fail) {
+                    $existingMatricula = DB::table('alunos')
+                        ->where('matricula', $value)
+                        ->where('id','<>',$this->id)
+                        ->whereNull('deleted_at')
+                        ->first();
+            
+                    if ($existingMatricula) {
+                        $fail('a matricula já está em uso.');
+                    }
+                }
+            ],          
+            'nome' => ['required', 'max:60'],
+            'email' => [
+                'required',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    $existingUser = DB::table('users')
+                        ->where('email', $value)
+                        ->whereNull('deleted_at')
+                        ->first();
+            
+                    if ($existingUser) {
+                        $fail('O e-mail já está em uso.');
+                    }
+                },
+            ],
         ];
     }
     public function messages()

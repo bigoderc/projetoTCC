@@ -24,7 +24,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Adicionar nova linha</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">Adicionar</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -54,9 +54,7 @@
                     data-url="{{ route('configuracao.getPermission',request()->role ) }}">
                     <thead>
                         <tr>
-                            <th data-field="id" data-sortable="true" class="col-1">ID</th>
-                            <th data-field="acao" data-sortable="true" class="col-3">NOME</th>
-                            <th data-field="description" data-sortable="true" class="col-3">DESCRIÇÂO</th>
+                            <th data-field="description" data-sortable="true" class="col-3">PERMISSÃO</th>
                             <th data-field="permission" data-formatter="permissionFormatter" class="col-auto">PROPRIEDADES
                             </th>
                         </tr>

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAreaRequest;
 use App\Models\Area;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
 
 class AreaController extends Controller
 {
@@ -22,6 +24,7 @@ class AreaController extends Controller
     public function index()
     {
         //
+        Gate::authorize('read-area');
         return view('pages.areas.index');
     }
 
@@ -44,12 +47,16 @@ class AreaController extends Controller
     public function store(StoreAreaRequest $request)
     {
         //
+        Gate::authorize('insert-area');
         if($request->hasFile('file')){
-            $value = $request->file('file');
-            $name = $request->nome.'-'.$value->getClientOriginalName();
-            Storage::disk('public')->putFileAs('areas',$value,$name);
-           $request['arquivo'] = $name;
+            $file = $request->file('file');
+            $imageUuid = Uuid::uuid4()->toString();
+            $extension = $file->getClientOriginalExtension();
+            $path = $imageUuid.'.'.$extension;
+            $file->storeAs('areas', strtolower($path), 'public');
+            $request['arquivo'] = strtolower($path);
         }
+        
         $dados=Area::create($request->all());
         return response()->json($dados);
     }
@@ -87,6 +94,7 @@ class AreaController extends Controller
     public function update(Request $request, Area $area)
     {
         //
+        Gate::authorize('update-area');
         if($request->ajax()){
             $area->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
              return response()->json(['success' => true]);
@@ -102,6 +110,7 @@ class AreaController extends Controller
     public function destroy($id)
     {
         //
+        Gate::authorize('delete-area');
         Area::find($id)->delete();
         return response()->json(['success' => true]);
     }
@@ -116,10 +125,12 @@ class AreaController extends Controller
         //
         //dd('merda');
         if($request->hasFile('file')){
-            $value = $request->file('file');
-            $name = $request->nome.'-'.$value->getClientOriginalName();
-            Storage::disk('public')->putFileAs('areas',$value,$name);
-           $request['arquivo'] = $name;
+            $file = $request->file('file');
+            $imageUuid = Uuid::uuid4()->toString();
+            $extension = $file->getClientOriginalExtension();
+            $path = $imageUuid.'.'.$extension;
+            $file->storeAs('areas', strtolower($path), 'public');
+            $request['arquivo'] = strtolower($path);
         }
         $area->find($request->id)->update($request->all());
         return response()->json(['success' => true]);

@@ -1,5 +1,7 @@
-@extends('layouts.pages.dashboard')
-
+@extends('layouts.pages.dashboard',[
+    'title'=>'checked',
+    'checked'=>true
+])
 @section('content-page')
     <div class="content-page">
         <div class="card-body">
@@ -9,15 +11,16 @@
                 </div>
                 <div class="card-body">
                     <div id="toolbar">
-                        <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
-                                class="fa fa-plus"></i> Adicionar nova linha</button>
-
+                        @can('insert-especialidade')
+                            <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
+                                class="fa fa-plus"></i> Adicionar nova especialidade</button>
+                        @endcan
                         <div class="modal fade" id="novalinha" tabindex="-1" aria-labelledby="novalinha"
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Adicionar nova linha</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Adicionar</h5>
                                         <button type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -26,7 +29,7 @@
                                         @csrf
                                         <div class="modal-body" class="my-2">
                                             <label for="nome">Nome</label>
-                                            <input type="text" class="form-control" id="nome" name="nome" required>
+                                            <input type="text" class="form-control" maxlength="60" id="nome" name="nome" required>
                                             <label for="nome">Descrição</label>
                                             <input type="text" class="form-control" id="nome" name="descricao">
                                         </div>
@@ -45,11 +48,10 @@
                         data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true"
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
-                        data-search-accent-neutralise="true" data-editable-url="{{ route('especialidades.update1') }}"
-                        data-url="{{ route('especialidades.show', 1) }}">
+                        data-search-accent-neutralise="true" data-editable-url="{{ route('especialidade.update1') }}"
+                        data-url="{{ route('especialidade.show', 1) }}">
                         <thead>
                             <tr>
-                                <th data-field="id" class="col-1">ID</th>
                                 <th data-field="nome" data-editable="true" class="col-3" aria-required="true">NOME</th>
                                 <th data-field="descricao" data-editable="true" class="col-3" aria-required="true">
                                     DESCRIÇÃO</th>
@@ -86,7 +88,7 @@
                         partialLoader();
                         var formdata = new FormData($("form[name='addLinha']")[0]);
                         $.ajax({
-                            url: "{{ route('especialidades.store') }}",
+                            url: "{{ route('especialidade.store') }}",
                             type: "POST",
                             data: $('#addLinha').serialize(),
                             dataType: "json",
@@ -115,7 +117,7 @@
                     if (result.isConfirmed) {
                         partialLoader();
                         $.ajax({
-                            url: "especialidades/" + row.id,
+                            url: "especialidade/" + row.id,
                             type: "DELETE",
                             dataType: "json",
                             success: function(response) {
@@ -143,9 +145,9 @@
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             return [
-                '<a class="remove" href="javascript:void(0)" title="Remove">',
+                '@can('delete-especialidade')<a class="remove" href="javascript:void(0)" title="Remove">',
                 '<i class="fa fa-trash"></i>',
-                '</a>'
+                '</a>@endcan'
             ].join('');
         }
     </script>

@@ -4,18 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AlunoStoreRequest;
 use App\Models\Aluno;
+use App\Models\AlunoTema;
 use App\Models\Curso;
+use App\Models\Role;
+use App\Models\RoleUser;
+use App\Models\Tema;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class AlunoController extends Controller
 {
-    protected $model,$user;
-    public function __construct(Aluno $aluno,User $user)
+    protected $model,$user,$aluno_tema;
+    public function __construct(Aluno $aluno,User $user,AlunoTema $aluno_tema)
     {
         $this->model = $aluno;   
         $this->user = $user;   
+        $this->aluno_tema = $aluno_tema;   
     }
 
     /**
@@ -26,6 +33,7 @@ class AlunoController extends Controller
     public function index(Aluno $alunos)
     {
         //
+        Gate::authorize('read-discente');
         return view('pages.alunos.index',['cursos'=>Curso::all()]);
     }
 
@@ -49,16 +57,50 @@ class AlunoController extends Controller
     public function store(AlunoStoreRequest $request)
     {
         //
-        $user = $this->user->create(
-            [
-                "name" =>$request->nome,
-                "email" =>$request->email,
-                "password" => Hash::make('alterar123'),
-            ]
-        );
-        $request['fk_user_id'] = $user->id;
-        $dados=Aluno::create($request->all());
-        return response()->json($this->model->with(['curso','turma'])->find($dados->id));
+        Gate::authorize('insert-discente');
+        DB::beginTransaction();
+        try {
+            //code...
+            if(isset($request->formado)){
+                $request['formado']= true;
+            }else{
+                $request['formado']= false;
+            }
+            $user = $this->user->withTrashed()->where('email',$request->email)->whereNotNull('deleted_at')->first();
+            
+            if(!empty($user)){
+                $user->restore();
+                $user->update(
+                    [
+                        "name" =>$request->nome,
+                        "password" => Hash::make('alterar123')
+                    ] 
+                );
+            }else{
+                $user = $this->user->create(
+                    [
+                        "name" =>$request->nome,
+                        "email" =>$request->email,
+                        "password" => Hash::make('alterar123'),
+                    ]
+                );
+            }
+            
+            $role = Role::where('nome','aluno')->first();
+            RoleUser::create([
+                'fk_roles_id'=>$role->id,
+                'fk_users_id'=>$user->id
+            ]);
+            $request['fk_user_id'] = $user->id;
+            $dados=Aluno::create($request->all());
+            DB::commit();
+            return response()->json($this->model->with(['user','curso','turma'])->find($dados->id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json('Erro Interno',500);
+        }
+        
     }
 
     /**
@@ -70,7 +112,7 @@ class AlunoController extends Controller
     public function show()
     {
         //
-        return response()->json($this->model->with(['curso','turma'])->get());
+        return response()->json($this->model->with(['user','curso','turma'])->get());
     }
 
     /**
@@ -91,12 +133,27 @@ class AlunoController extends Controller
      * @param  \App\Models\Aluno  $aluno
      * @return \Illuminate\Http\Response
      */
-    public function update(AlunoStoreRequest $request, Aluno $aluno,$id)
+    public function update(Request $request, Aluno $aluno,$id)
     {
         //
+        Gate::authorize('update-discente');
+        DB::beginTransaction();
+        try {
+            //code...
+            if(isset($request->formado)){
+                $request['formado']= true;
+            }else{
+                $request['formado']= false;
+            }
+            $aluno->find($id)->update($request->all());
+            DB::commit();
+            return response()->json($aluno->with(['user','curso','turma'])->find($id));
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json('Erro Interno',500);
+        }
         
-        $aluno->find($id)->update($request->all());
-        return response()->json($aluno->with(['curso','turma'])->find($id));
     }
 
     /**
@@ -108,8 +165,17 @@ class AlunoController extends Controller
     public function destroy($id)
     {
         //
-        Aluno::find($id)->delete();
-        return response()->json(['success' => true]);
+        Gate::authorize('delete-discente');
+        $aluno = Aluno::find($id);
+        try {
+            //code...
+            User::find($aluno->fk_user_id)->delete();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
+        $aluno->delete();
+        return response()->json(true);
     }
     /**
      * Display the specified resource.
@@ -118,6 +184,42 @@ class AlunoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function findById($id){
-        return response()->json($this->model->with(['curso','turma'])->find($id));
+        return response()->json($this->model->with(['user','curso','turma'])->find($id));
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function linkTheme(Request $request)
+    {
+        //
+        $aluno = Aluno::where('fk_user_id',auth()->user()->id)->first();
+        $tema = Tema::find($request->tema_id);
+        $user = User::with('professor')->find($tema->user_id_created);
+        if(empty($user->professor)){
+            $this->aluno_tema->create(
+                [
+                    'fk_alunos_id'=>$aluno->id,
+                    'fk_tema_id'=>$request->tema_id,
+                ]
+            );
+        }else{
+            $this->aluno_tema->create(
+                [
+                    'fk_alunos_id'=>$aluno->id,
+                    'fk_tema_id'=>$request->tema_id,
+                    'fk_professores_id'=>$user->professor->id
+                ]
+            );
+        }
+        
+        $aluno = auth()->user()->aluno;
+        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
+            $query->where('fk_alunos_id',$aluno->id);
+        })->get();
+        return response()->json($dados);
+            
     }
 }

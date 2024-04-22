@@ -1,16 +1,20 @@
-@extends('layouts.pages.dashboard')
+@extends('layouts.pages.dashboard',[
+    'title'=>'checked',
+    'checked'=>true
+])
 
 @section('content-page')
 <div class="content-page">
     <div class="card-body">
         <div class="card">
             <div class="card-header card-title text-white bg-transparent border-0 m-3">
-                <span class="h4">Alunos</span>
+                <span class="h4">Discente</span>
             </div>
             <div class="card-body">
                 <div id="toolbar">
-                    <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i class="fa fa-plus"></i> Adicionar nova linha</button>
-
+                    @can('insert-discente')
+                        <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i class="fa fa-plus"></i> Adicionar novo discente</button>
+                    @endcan
                     <div class="modal fade" id="novalinha" tabindex="-1" aria-labelledby="novalinha" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -59,14 +63,24 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row mb-2">
                                             <div class="col">
-                                                <label for="nome">Período</label>
-                                                <input type="text" class="form-control" maxlength="10" id="periodo" name="periodo">
+                                                <label for="nome">Período de Ingresso</label>
+                                                <input type="text" class="form-control" maxlength="2" id="periodo" name="periodo">
                                             </div>
                                             <div class="col">
-                                                <label for="nome">Ingresso</label>
-                                                <input type="month" class="form-control" id="ingresso" maxlength="10" name="ingresso" required>
+                                                <label for="nome">Ano de Ingresso</label>
+                                                <input type="year" class="form-control" id="ingresso" maxlength="4" name="ingresso" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="1" name="formado" id="formado">
+                                                    <label class="form-check-label" for="formado">
+                                                        Formado
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -83,10 +97,9 @@
                     data-editable-mode="inline" data-editable-type="text" data-locale="pt-BR" data-search="true"
                     data-show-columns="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar"
                     data-unique-id="id" data-id-field="id" data-page-size="25" data-page-list="[5, 10, 25, 50, 100, all]"
-                    data-pagination="true" data-search-accent-neutralise="true" data-editable-url="#" data-url="{{ route('alunos.show',1) }}">
+                    data-pagination="true" data-search-accent-neutralise="true" data-editable-url="#" data-url="{{ route('discente.show',1) }}">
                     <thead>
                         <tr>
-                            <th data-field="id" class="col-1">ID</th>
                             <th data-field="nome" data-editable="true" class="col-3" aria-required="true">NOME</th>
                             <th data-field="matricula" data-editable="true" class="col-3" aria-required="true">MÁTRICULA</th>
                             <th data-field="matriculado_desc" data-editable="true" class="col-3" aria-required="true">MATRICULADO</th>
@@ -113,6 +126,7 @@
 
     //Adicionar uma nova linha e lançar via ajax
     $(document).ready(function() {
+        
         var forms = document.getElementsByClassName('needs-validation');
         $("#addLinha").submit(function(event) {
             event.preventDefault();
@@ -125,12 +139,13 @@
                     partialLoader();
                     let id =document.getElementById('id').value;
                     $.ajax({
-                        url: id > 0 ? `{{ url('alunos/update/${id}') }}` : "{{ route('alunos.store') }}",
+                        url: id > 0 ? `{{ url('discente/update/${id}') }}` : "{{ route('discente.store') }}",
                         type: id >0 ? "PUT" : "POST",
                         data: $(`#addLinha`).serialize(),
                         dataType: "json",
                         success: function(response) {
                             partialLoader(false);
+                            $(`#formado`).prop('checked',false);
                             clearForm('addLinha','novalinha');
                             
                             
@@ -156,7 +171,7 @@
                 if (result.isConfirmed) {
                     partialLoader();
                     $.ajax({
-                        url: "alunos/" + row.id,
+                        url: "discente/" + row.id,
                         type: "DELETE",
                         dataType: "json",
                         success: function(response) {
@@ -180,20 +195,20 @@
     //Criar colunar ação
     function acaoFormatter(value, row, index) {
         return [
-            `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})"title="Editar Registro">`,
+            ` @can('update-discente')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})"title="Editar Registro">`,
             `<i class="fa fa-edit"></i>`,
-            `</a>`,
-            '<a class="remove" href="javascript:void(0)" title="Remove">',
+            `</a>@endcan`,
+            ' @can('delete-discente')<a class="remove" href="javascript:void(0)" title="Remove">',
             '<i class="fa fa-trash"></i>',
-            '</a>'
+            '</a>@endcan'
         ].join('');
     }
     $("#fk_curso_id").change(function() {
-        partialLoader();
+        
         $("#turma").find("*").not("label").remove();
         let id_curso = $(this).val();
         $.ajax({
-            url:`{{ url('turmas/${id_curso}') }}`,
+            url:`{{ url('turma/${id_curso}') }}`,
             type: "GET",
             success: function(response) { 
                 let select = document.createElement("select");
@@ -210,33 +225,42 @@
                     select.append(option);
                 }
                 document.getElementById("turma").append(select);
-                partialLoader(false);
+                
             },
             error: function(xhr, status, error) {
-                partialLoader(false);
+               
                 errorResponse(xhr.status,xhr.responseJSON.data,xhr.responseText);
             }
         });
     });
     function setIdModal(id) {
+        partialLoader();
         document.getElementById('id').value = id;
         $.ajax({
-                url: `{{ url('alunos/findById/${id}') }}`,
+                url: `{{ url('discente/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
-                    $(`#titulo`).text(`Editar Aluno ${response.nome}`);
+                    $(`#titulo`).text(`Editar Discente ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
-                    $(`#email`).val(response.email);
+                    
+                    $(`#email`).val(response.user?.email);
+                    if (response.user) {
+                        $(`#email`).prop('disabled', true);
+                    }
                     $(`#instituicao`).val(response.instituicao);
                     $(`#matricula`).val(response.matricula);
                     $(`#matriculado option[value=${response.matriculado}]`).prop('selected','selected').change();
                     $(`#periodo`).val(response.periodo);
                     $(`#ingresso`).val(response.ingresso);
+                    $(`#formado`).prop('checked',response.formado);
                     $(`#fk_curso_id option[value=${response.fk_curso_id}]`).prop('selected','selected').change();
-                    $(`#fk_turma_id option[value=${response.fk_turma_id}]`).prop('selected','selected').change();
-                    $('#novalinha').modal('show');
-                    partialLoader(false);
+                    setTimeout(function () {
+                        $(`#fk_turma_id option[value=${response.fk_turma_id}]`).prop('selected', 'selected').change();
+                        $('#novalinha').modal('show');
+                        partialLoader(false);
+                    }, 1500);
+                    
                 },
                 error: function(xhr, status, error) {
                     partialLoader(false);

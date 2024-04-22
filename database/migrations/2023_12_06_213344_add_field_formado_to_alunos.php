@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSofDeleteToProfessores extends Migration
+class AddFieldFormadoToAlunos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddSofDeleteToProfessores extends Migration
      */
     public function up()
     {
-        Schema::table('professores', function (Blueprint $table) {
+        Schema::table('alunos', function (Blueprint $table) {
             //
-            $table->softDeletes();
+            $table->boolean('formado')->default(false);
         });
     }
 
@@ -26,8 +26,9 @@ class AddSofDeleteToProfessores extends Migration
      */
     public function down()
     {
-        Schema::table('professores', function (Blueprint $table) {
+        Schema::table('alunos', function (Blueprint $table) {
             //
+            $table->dropColumn('formado');
         });
     }
 }

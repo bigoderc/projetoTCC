@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class StoreAreaRequest extends FormRequest
@@ -29,7 +30,18 @@ class StoreAreaRequest extends FormRequest
         $id = $this->segment(2) ?? 0;
         return [
             //
-            'nome' => ['required','max:255',Rule::unique('areas')->ignore($this->id)],
+            'nome' => ['required','max:60',
+            function ($attribute, $value, $fail) {
+                $existingMatricula = DB::table('areas')
+                    ->where('nome', $value)
+                    ->where('id','<>',$this->id)
+                    ->whereNull('deleted_at')
+                    ->first();
+        
+                if ($existingMatricula) {
+                    $fail('a área já está em uso.');
+                }
+            }],
         ];
     }
     public function messages()

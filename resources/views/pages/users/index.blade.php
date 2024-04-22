@@ -1,5 +1,7 @@
-@extends('layouts.pages.dashboard')
-
+@extends('layouts.pages.dashboard',[
+    'title'=>'checked',
+    'checked'=>true
+])
 @section('content-page')
     <div class="content-page">
         <div class="card-body">
@@ -9,15 +11,16 @@
                 </div>
                 <div class="card-body">
                     <div id="toolbar">
-                        <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
-                                class="fa fa-plus"></i> Adicionar nova linha</button>
-
+                        @can('insert-usuario')
+                            <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
+                                class="fa fa-plus"></i> Adicionar novo usuário</button>
+                        @endcan
                         <div class="modal fade" id="novalinha" tabindex="-1" aria-labelledby="novalinha"
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="titulo">Adicionar nova linha</h5>
+                                        <h5 class="modal-title" id="titulo">Adicionar</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -56,10 +59,9 @@
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
                         data-search-accent-neutralise="true" 
-                        data-url="{{ route('users.show', 1) }}">
+                        data-url="{{ route('user.show', 1) }}">
                         <thead>
                             <tr>
-                                <th data-field="id" class="col-1">ID</th>
                                 <th data-field="name" data-editable="true" class="col-3" aria-required="true">NOME</th>
                                 <th data-field="email" data-editable="true" class="col-3" aria-required="true">
                                     EMAIL</th>
@@ -98,8 +100,8 @@
                         partialLoader();
                         let id = document.getElementById('id').value;
                         $.ajax({
-                            url: id > 0 ? `{{ url('users/update/${id}') }}` :
-                                "{{ route('users.store') }}",
+                            url: id > 0 ? `{{ url('user/update/${id}') }}` :
+                                "{{ route('user.store') }}",
                             type: id > 0 ? "PUT" : "POST",
                             data: $("#addLinha").serialize(),
                             dataType: "json",
@@ -137,7 +139,7 @@
                     if (result.isConfirmed) {
                         partialLoader();
                         $.ajax({
-                            url: "users/" + row.id,
+                            url: "user/" + row.id,
                             type: "DELETE",
                             dataType: "json",
                             success: function(response) {
@@ -163,7 +165,7 @@
             partialLoader();
             document.getElementById('id').value = id;
             $.ajax({
-                url: `{{ url('users/findById/${id}') }}`,
+                url: `{{ url('user/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
                     $(`#titulo`).text(`Editar Usuário ${response.name}`);
@@ -188,12 +190,12 @@
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             return [
-                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
+                `@can('update-usuario')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
                 `<i class="fa fa-edit"></i>`,
-                `</a>`,
-                '<a class="remove" href="javascript:void(0)" title="Remove">',
+                `</a>@endcan`,
+                '@can('delete-usuario')<a class="remove" href="javascript:void(0)" title="Remove">',
                 '<i class="fa fa-trash"></i>',
-                '</a>'
+                '</a>@endcan'
             ].join('');
         }
     </script>

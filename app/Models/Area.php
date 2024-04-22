@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -40,4 +41,25 @@ class Area extends Model
             }
         });
     }
+    /**
+     * Determine if the user is an administrator.
+     *
+     * @return bool
+     */
+    public function getStorageAttribute()
+    {
+        try {
+            //code...
+            $caminho = Helper::url('areas');
+            $path = $this->attributes['arquivo'];
+
+            // Use $path se estiver definido e não vazio, caso contrário, use $name
+            return $this->attributes['storage'] = $caminho . $path;
+        } catch (\Throwable $th) {
+            //throw $th;
+            return null;
+        }
+        
+    }
+    protected $appends = ['storage'];
 }

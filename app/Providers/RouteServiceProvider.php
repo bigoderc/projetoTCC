@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -59,5 +60,22 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
+    }
+    public static function redirectTo()
+    {
+        $user = request()->user();
+        $data = User::with('roles')->find($user->id);
+
+        if ($data) {
+            $data->role = $data->roles->first();
+        }
+        switch ($data->role->nome) {
+            case  'admin':
+                return redirect()->route('home.inicio');
+            case  'aluno':
+                return redirect()->route('dashboardAluno.index');
+            case  'professor':
+                return redirect()->route('dashboardProfessor.index');    
+        }
     }
 }

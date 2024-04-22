@@ -5,7 +5,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 
-:root {
+ :root {
     --blue: #243147;
     --indigo: #6574cd;
     --purple: #9561e2;
@@ -4532,7 +4532,10 @@ input[type=button].btn-block {
 .navbar-toggler:focus {
     text-decoration: none;
 }
-
+.custom-swal {
+    width: 150px;
+    height: 75px;
+  }
 .navbar-toggler-icon {
     display: inline-block;
     width: 1.5em;

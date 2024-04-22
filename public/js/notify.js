@@ -100,13 +100,14 @@ function clearForm(formId,modalId) {
         var element = form.elements[i];
 
         // Limpa apenas os campos de input, textarea e select
-        if (element.type !== 'button' && element.type !== 'submit' && element.type !== 'reset') {
+        if (element.type !== 'button' && element.type !== 'submit' && element.type !== 'reset' && element.type !== 'hidden') {
             element.value = '';
         }
     }
     $(`#${modalId}`).modal('hide');
     $(`#titulo`).text(`Adicionar`);
     $(`#salvar`).text(`Adicionar`);
+    $(`#email`).prop('disabled', false);
 }
 
 function errorResponse(status,data,text) {
@@ -130,6 +131,10 @@ function errorResponse(status,data,text) {
             break;
         case 500:
             msg = 'Erro interno do servidor';
+            // Trate o erro interno do servidor conforme necessário
+            break;
+        case 426:
+            msg = data;
             // Trate o erro interno do servidor conforme necessário
             break;
         default:
@@ -240,4 +245,29 @@ async function justifyAlert() {
         cancelButtonText: 'Cancelar',
         focusCancel: true
     })
+}
+async function notification(icon, title, text) {
+
+    Swal.isVisible() && Swal.close();
+
+    return Swal.fire({
+        customClass: {
+            title: "fs-6",
+            htmlContainer: "fs-6",
+            confirmButton: 'btn btn-secondary mx-1',
+            cancelButton: 'btn btn-gold mx-1 text-white'
+        },
+        position: 'bottom-right',
+        icon: icon,
+        title: title,
+        text: text,       
+        buttonsStyling: false,
+        reverseButtons: false,
+        showConfirmButton: true,
+        confirmButtonText: 'Acessar Temas',
+        showCancelButton: true,
+        cancelButtonText: 'Fechar',
+        toast: true,
+        
+    });
 }

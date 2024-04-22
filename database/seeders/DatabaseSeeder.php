@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Permission;
 use Illuminate\Database\Seeder;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\AreaSeeder;
@@ -18,7 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             //UserSeeder::class,
             RoleSeeder::class,
-            AreaSeeder::class
+            AreaSeeder::class,
+            GrausSeeder::class,
+            PermissionsSeeder::class,
+            PermissionBibliotecaSeeder::class
         ]);
     }
 }
