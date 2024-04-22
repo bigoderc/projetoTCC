@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Http\Requests\AlunoStoreRequest;
 use App\Models\Aluno;
 use App\Models\AlunoTema;
@@ -10,6 +11,7 @@ use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\Tema;
 use App\Models\User;
+use App\Notifications\NotificarNovoUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -59,6 +61,7 @@ class AlunoController extends Controller
         //
         Gate::authorize('insert-discente');
         DB::beginTransaction();
+        $senha_temporaria = Helper::gerarSenha();
         try {
             //code...
             if(isset($request->formado)){
@@ -73,7 +76,7 @@ class AlunoController extends Controller
                 $user->update(
                     [
                         "name" =>$request->nome,
-                        "password" => Hash::make('alterar123')
+                        "password" => Hash::make($senha_temporaria)
                     ] 
                 );
             }else{
@@ -81,7 +84,7 @@ class AlunoController extends Controller
                     [
                         "name" =>$request->nome,
                         "email" =>$request->email,
-                        "password" => Hash::make('alterar123'),
+                        "password" => Hash::make($senha_temporaria),
                     ]
                 );
             }
@@ -94,6 +97,11 @@ class AlunoController extends Controller
             $request['fk_user_id'] = $user->id;
             $dados=Aluno::create($request->all());
             DB::commit();
+            try {
+                $user->notify(new NotificarNovoUsuario($senha_temporaria));
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
             return response()->json($this->model->with(['user','curso','turma'])->find($dados->id));
         } catch (\Throwable $th) {
             //throw $th;

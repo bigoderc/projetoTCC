@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Http\Requests\StoreProfessorRequest;
 use App\Models\Area;
 
@@ -11,6 +12,7 @@ use App\Models\Professor;
 use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\User;
+use App\Notifications\NotificarNovoUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -71,6 +73,7 @@ class ProfessorController extends Controller
         //
         Gate::authorize('insert-professor');
         DB::beginTransaction();
+        $senha_temporaria = Helper::gerarSenha();
         try {
             //code...
             $user = $this->user->withTrashed()->where('email', $request->email)->whereNotNull('deleted_at')->first();
@@ -80,7 +83,7 @@ class ProfessorController extends Controller
                 $user->update(
                     [
                         "name" => $request->nome,
-                        "password" => Hash::make('alterar123'),
+                        "password" => Hash::make($senha_temporaria),
                         "deleted_at" => null
                     ]
                 );
@@ -89,7 +92,7 @@ class ProfessorController extends Controller
                     [
                         "name" => $request->nome,
                         "email" => $request->email,
-                        "password" => Hash::make('alterar123'),
+                        "password" => Hash::make($senha_temporaria),
                     ]
                 );
             }
@@ -102,6 +105,11 @@ class ProfessorController extends Controller
             $request['fk_user_id'] = $user->id;
             $dados = Professor::create($request->all());
             DB::commit();
+            try {
+                $user->notify(new NotificarNovoUsuario($senha_temporaria));
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
             return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->find($dados->id));
         } catch (\Throwable $th) {
             //throw $th;

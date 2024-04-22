@@ -17,10 +17,11 @@ class NotificarNovoUsuario extends Notification
      * @return void
      */
 
-    public function __construct()
-    {
-        //
+    protected $senha_temporaria;
 
+    public function __construct($senha_temporaria)
+    {
+        $this->senha_temporaria = $senha_temporaria;
     }
 
     /**
@@ -43,12 +44,13 @@ class NotificarNovoUsuario extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
+            ->subject('Bem-vindo!')
             ->greeting('Olá')
-            ->subject('Seja bem-vindo ao ' . config('app.name'))
-            ->line('Sua senha temporária é alterar123')
-            ->action('Clique aqui para acessar ', url('/'))
-            ->line('Qualquer dúvida, entrar em contato com o suporte!')
-            ->salutation('LS Tecnologia');
+            ->line('Olá ' . $notifiable->name . ', você foi cadastrado com sucesso!')
+            ->line('Sua senha temporária é: ' . $this->senha_temporaria)
+            ->action('Acessar o site', url('/'))
+            ->line('Obrigado por se juntar a nós!')
+            ->salutation('Guilherme Ramos');
     }
 
     /**
