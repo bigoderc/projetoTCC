@@ -50,7 +50,7 @@ class NotificarNovoUsuario extends Notification
             ->line('Sua senha temporária é: ' . $this->senha_temporaria)
             ->action('Acessar o site', url('/'))
             ->line('Obrigado por se juntar a nós!')
-            ->salutation('Guilherme Ramos');
+            ->salutation('Guilherme Ramos Correia');
     }
 
     /**
