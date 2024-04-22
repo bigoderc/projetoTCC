@@ -48,6 +48,7 @@ class NotificarNovoUsuario extends Notification
             ->greeting('Olá')
             ->line('Olá ' . $notifiable->name . ', você foi cadastrado com sucesso!')
             ->line('Sua senha temporária é: ' . $this->senha_temporaria)
+            ->line('Assim que possível, faça a alteração da senha temporária acessando meu perfil e alterando a senha.')
             ->action('Acessar o site', url('/'))
             ->line('Obrigado por se juntar a nós!')
             ->salutation('Guilherme Ramos Correia');
