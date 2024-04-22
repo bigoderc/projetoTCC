@@ -151,4 +151,14 @@ class Helper extends Controller
         $empresa = Empresa::first();
         return $empresa->global;
     }
+    public static function gerarSenha($tamanho =8) {
+        // Defina os caracteres possíveis que você deseja usar na senha
+        $caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        
+        // Embaralhe os caracteres
+        $senha = str_shuffle($caracteres);
+        
+        // Retorne apenas os primeiros $tamanho caracteres
+        return substr($senha, 0, $tamanho);
+    }
 }

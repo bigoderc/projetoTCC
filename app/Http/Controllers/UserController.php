@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Role;
 use App\Models\RoleUser;
+use App\Notifications\NotificarNovoUsuario;
 use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
@@ -49,14 +51,15 @@ class UserController extends Controller
     public function store(StoreUserRequest $data)
     {
         //
+        $senha_temporaria = Helper::gerarSenha();
         Gate::authorize('insert-usuario');
         $dados=User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make('alterar123'),
+            'password' => Hash::make($senha_temporaria),
         ]);
         $user = User::findOrFail($dados->id);
-         // Atualizar os papéis (roles) do usuário usando sync
+        // Atualizar os papéis (roles) do usuário usando sync
         $user->roles()->sync([$data->input('fk_roles_id')]);
 
         // Recarregar o modelo com a relação 'roles'
@@ -67,7 +70,11 @@ class UserController extends Controller
         if ($data) {
             $data->role = $data->roles->first();
         }
-
+        try {
+            $user->notify(new NotificarNovoUsuario($senha_temporaria));
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
         return response()->json($data);
     }
 
