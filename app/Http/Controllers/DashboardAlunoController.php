@@ -102,20 +102,7 @@ class DashboardAlunoController extends Controller
             if($request->input('areas')){
                 $query->whereIn('areas.id',$request->input('areas'));
             }
-        },'criado','temaAluno'=>function($query) use($request){
-            switch ($request->status) {
-                case 0:
-                    # code...
-                    $query->whereNull('deferido');
-                    break;
-                case 1:
-                        $query->where('deferido', true);
-                    break;
-                default:
-                    # code...
-                    break;
-            }
-        },'temaAluno.professor'])
+        },'criado','temaAluno','temaAluno.professor'])
         ->whereHas('areas',function($query) use($request){
             if($request->input('areas')){
                 $query->whereIn('areas.id',$request->input('areas'));
@@ -126,7 +113,8 @@ class DashboardAlunoController extends Controller
         //     $query->where('fk_areas_id',$request->area_id);
         // } 
         if (!empty($request->professor_id)) {
-            $query->where('user_id_created',$request->professor_id);
+            $professor = Professor::find($request->professor_id);
+            $query->where('user_id_created',$professor->fk_user_id);
         }        
         $data = $query->orderBy('id','desc')->get();
         return response()->json($data);

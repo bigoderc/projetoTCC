@@ -76,19 +76,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="row">
-                                        <label class="col-md-3 col-form-label">{{ _('Anexar img. do perfil') }}</label>
-                                        <div class="col-md-9">
-                                            <div class="input-group mb-3">
-                                                <input type="file" class="custom-file-input p-4 bs-custom-file-input"
-                                                    accept=".png,.jpeg,.jpg,.svg" name="arquivo" id="fotoPerfil">
-                                                <label class="custom-file-label text" data-browse="Upload" for="fotoPerfil">Arquivo 300x200, .png .jpeg .jpg ou .svg</label>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
                                 </div>
                                 <div class="card-footer">
                                     <div class="row">

@@ -70,7 +70,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Docente</span>
                                         </div>
-                                        <select class="form-control" name="equipe_id" id="equipe_id">
+                                        <select class="form-control" name="professor_id" id="professor_id">
                                             <option value="">Selecione</option>
                                             @foreach ($professores as $professor)
                                                 <option value="{{ $professor->id }}">{{ $professor->nome }}</option>
