@@ -32,7 +32,7 @@
                                         @csrf
                                         <div class="modal-body" class="my-2">
                                             <input type="hidden" class="form-control" id="id" name="id">
-                                            <label for="nome">Nome</label>
+                                            <label for="nome">Título proposta</label>
                                             <input type="text" class="form-control" id="nome" name="nome"
                                                 required>
                                             <label for="nome">Descrição</label>
@@ -80,7 +80,7 @@
                         data-url="{{ route('proposta-tema.show', 1) }}">
                         <thead>
                             <tr>
-                                <th data-field="nome" class="col-12" aria-required="true">NOME</th>
+                                <th data-field="nome" class="col-12" aria-required="true">TÍTULO PROPOSTA</th>
                                 {{-- <th data-field="descricao" class=" truncate-text" aria-required="true"
                                     data-formatter="nameFormatter">DESCRIÇÃO</th> --}}
                                 <th data-field="areas_desc"  aria-required="true"
