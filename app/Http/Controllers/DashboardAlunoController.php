@@ -96,6 +96,14 @@ class DashboardAlunoController extends Controller
     public function search(Request $request)
     {
         //
+        $aluno = auth()->user()->aluno;
+        $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor'])->whereHas('temaAluno',function($query) use($aluno){
+            $query->where('fk_alunos_id',$aluno->id ??0);
+        })->orderBy('created_at','desc')->get();
+        
+        if(count($dados)>0){
+            return response()->json($dados);
+        }
         $query = $this->tema->query();
         
         $query->with(['areas'=>function($query) use($request){
