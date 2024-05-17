@@ -116,7 +116,7 @@ class DashboardAlunoController extends Controller
             $professor = Professor::find($request->professor_id);
             $query->where('user_id_created',$professor->fk_user_id);
         }        
-        $data = $query->orderBy('id','desc')->get();
+        $data = $query->orderBy('id','desc')->doesntHave('temaAluno')->get();
         return response()->json($data);
         
     }
