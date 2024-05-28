@@ -8,13 +8,13 @@
         <div class="card-body">
             <div class="card">
                 <div class="card-header card-title text-white bg-transparent border-0 m-3">
-                    <span class="h4">Áreas</span>
+                    <span class="h4">Linha de pesquisas</span>
                 </div>
                 <div class="card-body">
                     <div id="toolbar">
                         @can('insert-area')
                             <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
-                                class="fa fa-plus"></i> Adicionar nova área</button>
+                                class="fa fa-plus"></i> Adicionar nova linha de pesquisas</button>
                         @endcan
                         <div class="modal fade" id="novalinha" tabindex="-1" aria-labelledby="novalinha"
                             aria-hidden="true">

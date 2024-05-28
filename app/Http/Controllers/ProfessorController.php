@@ -104,13 +104,15 @@ class ProfessorController extends Controller
             ]);
             $request['fk_user_id'] = $user->id;
             $dados = Professor::create($request->all());
+            $professor = Professor::find($dados->id);
+            $professor->linhaPesquisas()->sync($request->linha_pesquisas);
             DB::commit();
             try {
                 $user->notify(new NotificarNovoUsuario($senha_temporaria));
             } catch (\Throwable $th) {
                 //throw $th;
             }
-            return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->find($dados->id));
+            return response()->json($this->professor->with(['linhaPesquisas', 'especialidade', 'grau', 'user'])->find($dados->id));
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
@@ -127,7 +129,7 @@ class ProfessorController extends Controller
     public function show()
     {
         //
-        return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->get());
+        return response()->json($this->professor->with(['linhaPesquisas', 'especialidade', 'grau', 'user'])->get());
     }
 
     /**
@@ -139,7 +141,7 @@ class ProfessorController extends Controller
     public function findById($id)
     {
         //
-        return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->find($id));
+        return response()->json($this->professor->with(['linhaPesquisas', 'especialidade', 'grau', 'user'])->find($id));
     }
 
     /**
@@ -168,12 +170,14 @@ class ProfessorController extends Controller
         try {
             //code...
             $professor->find($id)->update($request->all());
+            $professor2 = Professor::find($id);
+            $professor2->linhaPesquisas()->sync($request->linha_pesquisas);
             DB::commit();
-            return response()->json($this->professor->with(['area', 'especialidade', 'grau', 'user'])->find($id));
+            return response()->json($this->professor->with(['linhaPesquisas', 'especialidade', 'grau', 'user'])->find($id));
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
-            return response()->json('Erro Interno',500);
+            return response()->json($th->getMessage(),500);
         }
         
     }

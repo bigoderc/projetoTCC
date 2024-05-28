@@ -37,7 +37,7 @@
                                                 required>
                                             <label for="nome">Descrição</label>
                                             <textarea class="form-control" id="descricao" rows="5" name="descricao"></textarea>
-                                            <label for="nome" class="my-2">Área</label>
+                                            <label for="nome" class="my-2">Linha de Pesquisa</label>
                                             <select class="form-control" id="fk_areas_id" name="areas[]" multiple
                                                 multiselect-hide-x="true" multiselect-search="true"
                                                 multiselect-max-items="5" required onchange="limitarSelecao(this,5)">
@@ -84,7 +84,7 @@
                                 {{-- <th data-field="descricao" class=" truncate-text" aria-required="true"
                                     data-formatter="nameFormatter">DESCRIÇÃO</th> --}}
                                 <th data-field="areas_desc"  aria-required="true"
-                                >ÁREA</th>
+                                >LINHA DE PESQUISA</th>
                                 <th data-field="criado.name" class="" aria-required="true">PROPONENTE</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>

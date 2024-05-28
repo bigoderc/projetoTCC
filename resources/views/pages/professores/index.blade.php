@@ -1,6 +1,6 @@
-@extends('layouts.pages.dashboard',[
-    'title'=>'checked',
-    'checked'=>true
+@extends('layouts.pages.dashboard', [
+    'title' => 'checked',
+    'checked' => true,
 ])
 @section('content-page')
     <div class="content-page">
@@ -13,7 +13,7 @@
                     <div id="toolbar">
                         @can('insert-professor')
                             <button class="btn btn-secondary" data-toggle="modal" data-target="#novalinha"><i
-                                class="fa fa-plus"></i> Adicionar novo docente</button>
+                                    class="fa fa-plus"></i> Adicionar novo docente</button>
                         @endcan
 
                         <div class="modal fade" id="novalinha" tabindex="-1" aria-labelledby="novalinha"
@@ -22,7 +22,8 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="titulo">Adicionar</h5>
-                                        <button type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
+                                        <button type="button" class="close" onclick="clearForm('addLinha','novalinha')"
+                                            aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
@@ -39,19 +40,20 @@
                                             <label for="email">Email</label>
                                             <input type="email" class="form-control" id="email" name="email"
                                                 required>
-                                            
-                                            <label for="nome" class="my-2">Área</label>
-                                            <select class="form-control" name="fk_areas_id" id="fk_areas_id"
-                                                aria-label="Default select example" required>
-                                                <option value="" selected>Selecione a Área</option>
+
+                                            <label for="nome" class="my-2">Linha de Pesquisa</label>
+                                            <select class="form-control" id="linha_pesquisa_id" name="linha_pesquisas[]" multiple
+                                                multiselect-hide-x="true" multiselect-search="true"
+                                                required>
+
                                                 @foreach ($areas as $area)
                                                     <option value="{{ $area->id }}">{{ $area->nome }}</option>
                                                 @endforeach
                                             </select>
-                                            <label for="especialidade">Especialidade</label>
+                                            <label for="especialidade">Área</label>
                                             <select class="form-control" name="fk_especialidade_id" id="fk_especialidade_id"
                                                 aria-label="Default select example" required>
-                                                <option value="" selected>Selecione a Especialidade</option>
+                                                <option value="" selected>Selecione a Área</option>
                                                 @foreach ($especialidades as $especialidade)
                                                     <option value="{{ $especialidade->id }}">{{ $especialidade->nome }}
                                                     </option>
@@ -82,13 +84,13 @@
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
                         data-search-accent-neutralise="true" data-editable-url="#"
-                        data-url="{{ route('docente.show',1) }}">
+                        data-url="{{ route('docente.show', 1) }}">
                         <thead>
                             <tr>
                                 <th data-field="nome" class="col-3" aria-required="true">NOME</th>
                                 <th data-field="siape" class="col-3" aria-required="true">SIAPE</th>
-                                <th data-field="area.nome" class="col-3" aria-required="true">ÁREA</th>
-                                <th data-field="especialidade.nome" class="col-3" aria-required="true">ESPECIALIDADE
+                                <th data-field="linha_pesquisa_desc" class="col-3" aria-required="true">LINHA DE PESQUISA</th>
+                                <th data-field="especialidade.nome" class="col-3" aria-required="true">ÁREA
                                 </th>
                                 <th data-field="grau.nome" class="col-3" aria-required="true">GRAU</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
@@ -202,12 +204,21 @@
                     if (response.user) {
                         $(`#email`).prop('disabled', true);
                     }
-                   
-                    $(`#fk_areas_id option[value=${response.fk_areas_id}]`).prop('selected', 'selected')
-                    .change();
+
                     $(`#fk_especialidade_id option[value=${response.fk_especialidade_id}]`).prop('selected',
                         'selected').change();
                     $(`#fk_grau_id option[value=${response.fk_grau_id}]`).prop('selected', 'selected').change();
+                    var select = document.getElementById('linha_pesquisa_id');
+
+                    response.linha_pesquisas.forEach(function(valor) {
+                        // Encontrar a opção pelo valor e defini-la como selecionada
+                        var option = select.querySelector('option[value="' + valor.id + '"]');
+                        if (option) {
+
+                            option.selected = true;
+                        }
+                        select.loadOptions();
+                    });
                     $('#novalinha').modal('show');
                     partialLoader(false);
 
@@ -221,7 +232,7 @@
 
         }
 
-  
+
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             return [
