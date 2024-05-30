@@ -88,7 +88,7 @@ class UserController extends Controller
     {
         //
         Gate::authorize('read-usuario');
-        $data = $this->model->with('roles')->get();
+        $data = $this->model->with('roles')->orderBy('id','desc')->get();
 
         $data->each(function ($item) {
             $item->role = $item->roles->first();

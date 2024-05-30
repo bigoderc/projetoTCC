@@ -45,7 +45,7 @@ Route::group(['middleware' => 'auth:web'], function () {
    
     Route::resources([
         'proposta-tema' => TemaController::class,
-        'area' => AreaController::class,
+        'linha-pesquisa' => AreaController::class,
         'docente' =>ProfessorController::class,
         'user' =>UserController::class,
         'discente' =>AlunoController::class,
@@ -55,17 +55,23 @@ Route::group(['middleware' => 'auth:web'], function () {
         'curso'=>CursoController::class,
         'biblioteca'=>BibliotecaController::class,
         'turma'=>TurmaController::class,
-        'especialidade'=>EspecialidadeController::class,
+        'area'=>EspecialidadeController::class,
         'grau'=>GrauController::class,
     ]);
     Route::post('/area/update', [AreaController::class, 'update'])->name('area.update1');
-    Route::post('/curso/update', [CursoController::class, 'update'])->name('curso.update1');
-    Route::post('/biblioteca/update', [BibliotecaController::class, 'update'])->name('biblioteca.update1');
-    Route::post('/turma/update', [TurmaController::class, 'update'])->name('turma.update1');
-    Route::post('/especialidade/update', [EspecialidadeController::class, 'update'])->name('especialidade.update1');
-    Route::post('/grau/update', [GrauController::class, 'update'])->name('grau.update1');
-    Route::post('/area/upload', [AreaController::class, 'upload'])->name('area.upload');
-    Route::get('area/toView/{id}',[AreaController::class,'toView'])->name('area.toView');
+    Route::put('/curso/update/{id}', [CursoController::class, 'update'])->name('curso.update');
+    Route::get('/curso/findById/{id}', [CursoController::class, 'findById'])->name('curso.findById');
+    Route::get('/biblioteca/findById/{id}', [BibliotecaController::class, 'findById'])->name('biblioteca.findById');
+    Route::get('/grau/findById/{id}', [GrauController::class, 'findById'])->name('grau.findById');
+    Route::get('/area/findById/{id}', [EspecialidadeController::class, 'findById'])->name('area.findById');
+    Route::get('/area/findById/{id}', [EspecialidadeController::class, 'findById'])->name('area.findById');
+    Route::put('/grau/update/{id}', [GrauController::class, 'update'])->name('grau.update');
+    Route::put('/turma/update/{id}', [TurmaController::class, 'update'])->name('turma.update');
+    Route::get('/turma/findById/{id}', [TurmaController::class, 'findById'])->name('turma.findById');
+    Route::put('/area/update/{id}', [EspecialidadeController::class, 'update'])->name('area.update');
+    Route::get('/linha-pesquisa/toView/{id}',[AreaController::class,'toView'])->name('area.toView');
+    Route::get('/linha-pesquisa/findById/{id}', [AreaController::class, 'findById'])->name('area.findById');
+    Route::post('/linha-pesquisa/update/{id}', [AreaController::class, 'update'])->name('linha-pesquisa.update');
     Route::put('/discente/update/{id}', [AlunoController::class, 'update'])->name('discente.update');
     Route::get('/discente/findById/{id}', [AlunoController::class, 'findById'])->name('discente.findById');
     Route::get('/docente/findById/{id}', [ProfessorController::class, 'findById'])->name('docente.findById');
@@ -85,6 +91,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     
     Route::put('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
     
+    Route::put('/biblioteca/update/{id}', [BibliotecaController::class, 'update'])->name('biblioteca.update');
     //configuraçoes
     Route::get('/configuracao', [ConfiguracaoController::class, 'index'])->name('configuracao.index');
     Route::get('/configuracao/permission/{role}', [ConfiguracaoController::class, 'permission'])->name('configuracao.permission');

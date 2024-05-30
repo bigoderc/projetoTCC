@@ -22,7 +22,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="titulo">Adicionar</h5>
-                                        <button type="button" class="close" onclick="clearForm('addLinha','novalinha')"
+                                        <button type="button" id="fechar" class="close" onclick="clearForm('addLinha','novalinha')"
                                             aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -56,13 +56,19 @@
                                                 </select>
                                             @endif
                                             <label for="nome">Link</label>
-                                            <input type="text" class="form-control" id="link" name="link">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="link" name="link">
+                                                <button id="visualizar" class="btn border bg-body-tertiary" onclick="abrirCurriculoLattes('link')"
+                                                    type="button" title="Visualiar">
+                                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
                                             <label for="nome" class="my-2">Arquivo</label>
                                             <input type="file" class="form-control" accept=".png,.jpeg,.pdf"
                                                 id="file" name="file">
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" onclick="clearForm('addLinha','novalinha')" class="btn btn-secondary"
+                                            <button id="fechar" type="button" onclick="clearForm('addLinha','novalinha')" class="btn btn-secondary"
                                                 data-dismiss="modal">Fechar</button>
                                             <button type="submit" id="salvar" class="btn btn-primary">Adicionar</button>
                                         </div>
@@ -80,12 +86,10 @@
                         data-url="{{ route('proposta-tema.show', 1) }}">
                         <thead>
                             <tr>
-                                <th data-field="nome" class="col-12" aria-required="true">TÍTULO DA PROPOSTA</th>
-                                {{-- <th data-field="descricao" class=" truncate-text" aria-required="true"
-                                    data-formatter="nameFormatter">DESCRIÇÃO</th> --}}
+                                <th data-field="nome" class="col-12" aria-required="true">Título da Proposta</th>
                                 <th data-field="areas_desc"  aria-required="true"
-                                >LINHA DE PESQUISA</th>
-                                <th data-field="criado.name" class="" aria-required="true">PROPONENTE</th>
+                                >Linha de Pesquisa</th>
+                                <th data-field="criado.name" class="" aria-required="true">Proponente</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>
@@ -107,7 +111,7 @@
                                         <input type="file" name="file" accept=".pdf,.jpeg,.png" required="" />
                                         <input type="hidden" name="id" id="id_upload" value="" />
                                         <div class="modal-footer">
-                                            <button type="button" class="close"
+                                            <button id="fechar" type="button" class="close"
                                                 onclick="clearForm('addLinha','novalinha')">Fechar</button>
                                             <button type="submit" id="btnAnexo"
                                                 class="btn btn-primary ml-2">Importar</button>
@@ -232,7 +236,7 @@
 
         
 
-        function setIdModal(id) {
+        function setIdModal(id, disabled=false) {
             partialLoader();
             document.getElementById('id').value = id;
             $.ajax({
@@ -256,8 +260,13 @@
                         }
                         select.loadOptions();
                     });
-                    // $(`#fk_areas_id option[value=${response.fk_areas_id}]`).prop('selected', 'selected')
-                    // .change();
+                    if (disabled) {
+                        $('#novalinha :input:not(#visualizar, #fechar)').prop('disabled', true);
+                        $('#novalinha select').prop('disabled', true);
+                    }else{
+                        $('#novalinha :input').prop('disabled', false);
+                        $('#novalinha select').prop('disabled', false);
+                    }
                     $('#novalinha').modal('show');
                 },
                 error: function(xhr, status, error) {
@@ -270,7 +279,9 @@
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             const actions = [
-
+                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id},true)">`,
+                `<i class="fa fa-eye" aria-hidden="true"></i>`,
+                `</a>`,
                 `@can('update-proposta_tema')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
                 `<i class="fa fa-edit"></i>`,
                 `</a>@endcan`,

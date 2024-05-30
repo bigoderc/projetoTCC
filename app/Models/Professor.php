@@ -22,7 +22,6 @@ class Professor extends Model
         'id',
         'nome',
         'siape',
-        'fk_areas_id',
         'fk_grau_id',
         'fk_especialidade_id',
         'fk_user_id',

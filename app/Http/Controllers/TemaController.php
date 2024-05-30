@@ -106,7 +106,7 @@ class TemaController extends Controller
      * @param  \App\Models\Tema  $tema
      * @return \Illuminate\Http\Response
      */
-    public function show(Tema $tema)
+    public function show()
     {
         //
         Gate::authorize('read-proposta_tema');
@@ -117,9 +117,9 @@ class TemaController extends Controller
             $data->role = $data->roles->first();
         }
         if($data->role->nome =='aluno'){
-            return response()->json(Tema::with(['areas','criado'])->where('user_id_created',$user->id)->get());
+            return response()->json(Tema::with(['areas','criado'])->where('user_id_created',$user->id)->orderBy('id','desc')->get());
         }else{
-            return response()->json(Tema::with(['areas','criado'])->get());
+            return response()->json(Tema::with(['areas','criado'])->orderBy('id','desc')->get());
         }
         
     }

@@ -51,11 +51,11 @@ class GrauController extends Controller
      * @param  \App\Models\Grau  $grau
      * @return \Illuminate\Http\Response
      */
-    public function show(Grau $grau)
+    public function show()
     {
         //
         Gate::authorize('read-grau');
-        return response()->json(Grau::all());
+        return response()->json(Grau::orderBy('id','desc')->get());
     }
 
     /**
@@ -76,14 +76,12 @@ class GrauController extends Controller
      * @param  \App\Models\Grau  $grau
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Grau $grau)
+    public function update(Request $request, $id)
     {
         //
         Gate::authorize('update-grau');
-        if($request->ajax()){
-            $grau->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
-            return response()->json(['success' => true]);
-        }
+        Grau::find($id)->update($request->all());
+        return response()->json(Grau::find($id));
     }
 
     /**
@@ -98,5 +96,14 @@ class GrauController extends Controller
         Gate::authorize('delete-grau');
         Grau::find($id)->delete();
         return response()->json(['success' => true]);
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Aluno  $aluno
+     * @return \Illuminate\Http\Response
+     */
+    public function findById($id){
+        return response()->json(Grau::find($id));
     }
 }

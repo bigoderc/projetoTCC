@@ -70,7 +70,7 @@ class AreaController extends Controller
     public function show()
     {
         //
-        return response()->json($this->model->all());
+        return response()->json($this->model->orderBy('id','desc')->get());
     }
 
     /**
@@ -91,14 +91,20 @@ class AreaController extends Controller
      * @param  \App\Models\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Area $area)
+    public function update(Request $request, $id)
     {
         //
         Gate::authorize('update-area');
-        if($request->ajax()){
-            $area->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
-             return response()->json(['success' => true]);
+        if($request->hasFile('file')){
+            $file = $request->file('file');
+            $imageUuid = Uuid::uuid4()->toString();
+            $extension = $file->getClientOriginalExtension();
+            $path = $imageUuid.'.'.$extension;
+            $file->storeAs('areas', strtolower($path), 'public');
+            $request['arquivo'] = strtolower($path);
         }
+        Area::find($id)->update($request->all());
+        return response()->json(Area::find($id));
     }
 
     /**
@@ -145,6 +151,15 @@ class AreaController extends Controller
         }else{  
             echo "<iframe src='{$file}' width='100%' height='99%'></iframe>";
         }
+    }
+     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Aluno  $aluno
+     * @return \Illuminate\Http\Response
+     */
+    public function findById($id){
+        return response()->json(Area::find($id));
     }
 
 }

@@ -18,8 +18,8 @@ class PermissionsSeeder extends Seeder
         $arrays = [
             ['name'=>'curso','description'=>'Curso'],
             ['name'=>'turma','description'=>'Turma'],
-            ['name'=>'area','description'=>'Área'],
-            ['name'=>'especialidade','description'=>'Especialidade'],
+            ['name'=>'area','description'=>'Linha de Pesquisa'],
+            ['name'=>'especialidade','description'=>'Área'],
             ['name'=>'grau','description'=>'Grau'],
             ['name'=>'discente','description'=>'Discente'],
             ['name'=>'professor','description'=>'Professor'],

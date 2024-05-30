@@ -21,24 +21,31 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Adicionar</h5>
-                                        <button type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
+                                        <button type="button" id="fechar" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <form id="addLinha" class="needs-validation" novalidate>
                                         @csrf
                                         <div class="modal-body" class="my-2">
+                                            <input type="hidden" class="form-control" id="id" name="id">
                                             <label for="nome">Nome</label>
                                             <input type="text" class="form-control" id="nome" name="nome" required>
                                             <label for="nome">Descrição</label>
-                                            <input type="text" class="form-control" id="nome" name="descricao">
+                                            <input type="text" class="form-control" id="descricao" name="descricao">
                                             <label for="nome">Link</label>
-                                            <input type="text" class="form-control" id="link" name="link">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="link" name="link">
+                                                <button id="visualizar" class="btn border bg-body-tertiary" onclick="abrirCurriculoLattes('link')"
+                                                    type="button" title="Visualiar">
+                                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                onclick="clearForm('addLinha','novalinha')">Fechar</button>
-                                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                                            <button id="fechar" type="button" onclick="clearForm('addLinha','novalinha')" class="btn btn-secondary"
+                                                data-dismiss="modal">Fechar</button>
+                                            <button type="submit" id="salvar" class="btn btn-primary">Adicionar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -50,15 +57,13 @@
                         data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true"
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
-                        data-search-accent-neutralise="true" data-editable-url="{{ route('biblioteca.update1') }}"
+                        data-search-accent-neutralise="true" data-editable-url="#"
                         data-url="{{ route('biblioteca.show', 1) }}">
                         <thead>
                             <tr>
-                                <th data-field="nome" data-editable="true" class="col-3" aria-required="true">NOME</th>
-                                <th data-field="descricao" data-editable="true" class="col-3" aria-required="true">
-                                    DESCRIÇÃO</th>
-                                <th data-field="link" data-editable="true" class="col-3" aria-required="true">
-                                    LINK</th>
+                                <th data-field="nome" data-editable="false" class="col-3" aria-required="true">Nome</th>
+                                <th data-field="descricao" data-editable="false" class="col-3" aria-required="true">
+                                    Descrição</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>
@@ -91,15 +96,25 @@
                     } else {
                         partialLoader();
                         var formdata = new FormData($("form[name='addLinha']")[0]);
+                        let id = document.getElementById('id').value;
                         $.ajax({
-                            url: "{{ route('biblioteca.store') }}",
-                            type: "POST",
-                            data:  $('#addLinha').serialize(),
+                            url: id > 0 ? `{{ url('biblioteca/update/${id}') }}` :
+                                "{{ route('biblioteca.store') }}",
+                            type: id > 0 ? "PUT" : "POST",
+                            data: $("#addLinha").serialize(),
                             dataType: "json",
                             success: function(response) {
+
                                 clearForm('addLinha', 'novalinha')
                                 partialLoader(false);
-                                $('#my_table_id').bootstrapTable('append', response);
+
+                                id > 0 ? $('#my_table_id').bootstrapTable(
+                                    'updateByUniqueId', {
+                                        id: id,
+                                        row: response,
+                                        replace: false
+                                    }) : $('#my_table_id').bootstrapTable('prepend',
+                                    response);
                                 successResponse();
                             },
                             error: function(xhr, status, error) {
@@ -142,12 +157,44 @@
             }
         }
 
-        function setIdModal(id) {
+        function setIdModal(id, disabled=false) {
+            partialLoader();
             document.getElementById('id').value = id;
+            $.ajax({
+                url: `{{ url('biblioteca/findById/${id}') }}`,
+                type: "GET",
+                success: function(response) {
+                    partialLoader(false);
+                    $(`#titulo`).text(`Editar Biblioteca ${response.nome}`);
+                    $(`#salvar`).text(`Salvar`);
+                    $(`#nome`).val(response.nome);
+                    $(`#descricao`).val(response.descricao);
+                    $(`#link`).val(response.link);
+                    if (disabled) {
+                        $('#novalinha :input:not(#visualizar, #fechar)').prop('disabled', true);
+                        $('#novalinha select').prop('disabled', true);
+                    }else{
+                        $('#novalinha :input').prop('disabled', false);
+                        $('#novalinha select').prop('disabled', false);
+                    }
+                    $('#novalinha').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    partialLoader(false);
+                    errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                        .responseText);
+                }
+            });
         }
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             return [
+                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id},true)">`,
+                `<i class="fa fa-eye" aria-hidden="true"></i>`,
+                `</a>`,
+                `@can('update-biblioteca')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
+                `<i class="fa fa-edit"></i>`,
+                `</a>@endcan`,
                 '@can('delete-biblioteca')<a class="remove" href="javascript:void(0)" title="Remove">',
                 '<i class="fa fa-trash"></i>',
                 '</a>@endcan'

@@ -52,11 +52,11 @@ class CursoController extends Controller
      * @param  \App\Models\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function show(Curso $curso)
+    public function show()
     {
         //
         Gate::authorize('read-curso');
-        return response()->json($curso->all());
+        return response()->json(Curso::orderBy('id','desc')->get());
     }
 
     /**
@@ -77,14 +77,12 @@ class CursoController extends Controller
      * @param  \App\Models\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Curso $curso)
+    public function update(Request $request, $id)
     {
         //
         Gate::authorize('update-curso');
-        if($request->ajax()){
-            $curso->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
-            return response()->json(['success' => true]);
-        }
+        Curso::find($id)->update($request->all());
+        return response()->json(Curso::find($id));
     }
 
     /**
@@ -99,5 +97,14 @@ class CursoController extends Controller
         Gate::authorize('delete-curso');
         Curso::find($id)->delete();
         return response()->json(['success' => true]);
+    }
+     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Aluno  $aluno
+     * @return \Illuminate\Http\Response
+     */
+    public function findById($id){
+        return response()->json(Curso::find($id));
     }
 }

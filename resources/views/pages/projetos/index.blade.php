@@ -22,7 +22,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Adicionar</h5>
-                                        <button type="button" class="close" onclick="clearForm('addLinha','novalinha')"
+                                        <button type="button" id="fechar" class="close" onclick="clearForm('addLinha','novalinha')"
                                             aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -71,7 +71,7 @@
                                                 id="arquivo" name="arquivo">
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
+                                            <button id="fechar" type="button" class="btn btn-secondary"
                                                 onclick="clearForm('addLinha','novalinha')">Fechar</button>
                                             <button type="submit" id="salvar" class="btn btn-primary">Adicionar</button>
                                         </div>
@@ -89,11 +89,11 @@
                         >
                         <thead>
                             <tr>
-                                <th data-field="nome" class="col-6" aria-required="true">TITULO</th>
-                                <th data-field="aluno.nome" class="col-3" aria-required="true">DISCENTE</th>
-                                <th data-field="areas_desc"  aria-required="true">ÁREA</th>
-                                <th data-field="professor.nome" class="col-3" aria-required="true" >DOCENTE</th>
-                                <th data-field="apresentado_desc" class="truncate-text" aria-required="true">APRESENTADO</th>
+                                <th data-field="nome" class="col-6" aria-required="true">Título</th>
+                                <th data-field="aluno.nome" class="col-3" aria-required="true">Discente</th>
+                                <th data-field="areas_desc"  aria-required="true">Área</th>
+                                <th data-field="professor.nome" class="col-3" aria-required="true" >Docente</th>
+                                <th data-field="apresentado_desc" class="truncate-text" aria-required="true">Apresentado</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>
@@ -215,7 +215,7 @@
             }
         }
 
-        function setIdModal(id) {
+        function setIdModal(id, disabled= false) {
             partialLoader();
             document.getElementById('id').value = id;
             $.ajax({
@@ -245,6 +245,13 @@
                     $(`#fk_aluno_id option[value=${response.fk_aluno_id}]`).prop('selected', 'selected')
                     .change();
                     $(`#arquivo`).prop('required', false);
+                    if (disabled) {
+                        $('#novalinha :input:not(#visualizar, #fechar)').prop('disabled', true);
+                        $('#novalinha select').prop('disabled', true);
+                    }else{
+                        $('#novalinha :input').prop('disabled', false);
+                        $('#novalinha select').prop('disabled', false);
+                    }
                     $('#novalinha').modal('show');
 
                     partialLoader(false);
@@ -263,6 +270,9 @@
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             const actions = [
+                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id},true)">`,
+                `<i class="fa fa-eye" aria-hidden="true"></i>`,
+                `</a>`,
                 `@can('update-tcc')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
                 `<i class="fa fa-edit"></i>`,
                 `</a>@endcan`,

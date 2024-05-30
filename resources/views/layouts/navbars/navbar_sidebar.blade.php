@@ -54,7 +54,7 @@
                     @endcan
                     @can('read-area')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('area.index') }}">
+                            <a class="text-decoration-none text-dark" href="{{ route('linha-pesquisa.index') }}">
                                 <span>{{ ('Linha de Pesquisa') }}</span>
                             </a>
                         </li>
@@ -62,7 +62,7 @@
                     
                     @can('read-especialidade')
                         <li class="list-group-item bg-white py-1">
-                            <a class="text-decoration-none text-dark" href="{{ route('especialidade.index') }}">
+                            <a class="text-decoration-none text-dark" href="{{ route('area.index') }}">
                                 <span>{{ ('Área') }}</span>
                             </a>
                         </li>

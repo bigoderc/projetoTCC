@@ -43,13 +43,13 @@
                                 </a>
                             @endcan
                             @can('read-area')
-                                <a class="dropdown-item" href="{{ route('area.index') }}">
+                                <a class="dropdown-item" href="{{ route('linha-pesquisa.index') }}">
                                     {{ __('Área') }}
                                 </a>
                             @endcan
 
                             @can('read-especialidade')
-                                <a class="dropdown-item" href="{{ route('especialidade.index') }}">
+                                <a class="dropdown-item" href="{{ route('area.index') }}">
                                     {{ __('Especialidade') }}
                                 </a>
                             @endcan

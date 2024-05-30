@@ -58,7 +58,6 @@ class StoreProfessorRequest extends FormRequest
                     }
                 },
             ],
-            'fk_areas_id' => ['required'],
             'fk_grau_id' => ['required'],
             'fk_especialidade_id' => ['required'],
         ];

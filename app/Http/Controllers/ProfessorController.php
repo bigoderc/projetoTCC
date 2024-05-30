@@ -129,7 +129,7 @@ class ProfessorController extends Controller
     public function show()
     {
         //
-        return response()->json($this->professor->with(['linhaPesquisas', 'especialidade', 'grau', 'user'])->get());
+        return response()->json($this->professor->with(['linhaPesquisas', 'especialidade', 'grau', 'user'])->orderBy('id','desc')->get());
     }
 
     /**

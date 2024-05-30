@@ -93,6 +93,8 @@ function successResponse() {
 }
 function clearForm(formId,modalId) {
     // Obtém o formulário pelo ID
+    $(`#${modalId} :input`).prop('disabled', false);
+    $(`#${modalId} select`).prop('disabled', false);
     var form = document.getElementById(formId);
 
     // Limpa todos os campos do formulário
@@ -104,6 +106,7 @@ function clearForm(formId,modalId) {
             element.value = '';
         }
     }
+    document.getElementById('id').value = '';
     $(`#${modalId}`).modal('hide');
     $(`#titulo`).text(`Adicionar`);
     $(`#salvar`).text(`Adicionar`);
@@ -270,4 +273,34 @@ async function notification(icon, title, text) {
         toast: true,
         
     });
+}
+
+function abrirCurriculoLattes(field) {
+    // Obtém o valor do input
+    var url = document.getElementById(`${field}`).value;
+
+    // Verifica se o valor parece ser uma URL válida
+    if (validarURL(url)) {
+        // Abre a URL em uma nova aba
+        var link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+
+        // Adiciona o link ao corpo do documento (é necessário para o clique funcionar em alguns navegadores)
+        document.body.appendChild(link);
+
+        // Simula o clique no link
+        link.click();
+
+        // Remove o link do corpo do documento (opcional, mas é uma boa prática)
+        document.body.removeChild(link);
+    } else {
+        alert("Por favor, insira uma URL válida para o Currículo Lattes.");
+    }
+}
+
+function validarURL(url) {
+    // Expressão regular para validar URLs
+    var regex = /^(ftp|http|https):\/\/[^ "]+$/;
+    return regex.test(url);
 }

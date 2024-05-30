@@ -55,7 +55,7 @@ class BibliotecaController extends Controller
     {
         //
         Gate::authorize('read-biblioteca');
-        return response()->json(Biblioteca::all());
+        return response()->json(Biblioteca::orderBy('id','desc')->get());
     }
 
     /**
@@ -76,14 +76,12 @@ class BibliotecaController extends Controller
      * @param  \App\Models\Biblioteca  $biblioteca
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Biblioteca $biblioteca)
+    public function update(Request $request,$id)
     {
         //
         Gate::authorize('update-biblioteca');
-        if($request->ajax()){
-            $biblioteca->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
-            return response()->json(['success' => true]);
-        }
+        Biblioteca::find($id)->update($request->all());
+        return response()->json(Biblioteca::find($id));
     }
 
     /**
@@ -98,5 +96,14 @@ class BibliotecaController extends Controller
         Gate::authorize('delete-biblioteca');
         Biblioteca::find($id)->delete();
         return response()->json(['success' => true]);
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Aluno  $aluno
+     * @return \Illuminate\Http\Response
+     */
+    public function findById($id){
+        return response()->json(Biblioteca::find($id));
     }
 }

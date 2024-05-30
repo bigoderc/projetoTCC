@@ -52,11 +52,11 @@ class EspecialidadeController extends Controller
      * @param  \App\Models\Especialidade  $especialidade
      * @return \Illuminate\Http\Response
      */
-    public function show(Especialidade $especialidade)
+    public function show()
     {
         //
         Gate::authorize('read-especialidade');
-        return response()->json(Especialidade::all());
+        return response()->json(Especialidade::orderBy('id','desc')->get());
     }
 
     /**
@@ -77,14 +77,12 @@ class EspecialidadeController extends Controller
      * @param  \App\Models\Especialidade  $especialidade
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Especialidade $especialidade)
+    public function update(Request $request, $id)
     {
         //
         Gate::authorize('update-especialidade');
-        if($request->ajax()){
-            $especialidade->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
-            return response()->json(['success' => true]);
-        }
+        Especialidade::find($id)->update($request->all());
+        return response()->json(Especialidade::find($id));
     }
 
     /**
@@ -99,5 +97,14 @@ class EspecialidadeController extends Controller
         Gate::authorize('delete-especialidade');
         Especialidade::find($id)->delete();
         return response()->json(['success' => true]);
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Aluno  $aluno
+     * @return \Illuminate\Http\Response
+     */
+    public function findById($id){
+        return response()->json(Especialidade::find($id));
     }
 }

@@ -93,11 +93,11 @@ class ProjetoPreTccController extends Controller
      * @param  \App\Models\Projeto  $projeto
      * @return \Illuminate\Http\Response
      */
-    public function show(Projeto $projeto)
+    public function show()
     {
         //
         Gate::authorize('read-pre_tcc');
-        return response()->json($this->model->with(['aluno','professor','areas'])->get());
+        return response()->json($this->model->with(['aluno','professor','areas'])->orderBy('id','desc')->get());
     }
     /**
      * Display the specified resource.

@@ -21,7 +21,8 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="titulo">Adicionar</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <button type="button" id="fechar" class="close" onclick="clearForm('addLinha','novalinha')"
+                                            aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
@@ -44,9 +45,9 @@
                                             </select>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
+                                            <button id="fechar" type="button" onclick="clearForm('addLinha','novalinha')" class="btn btn-secondary"
                                                 data-dismiss="modal">Fechar</button>
-                                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                                            <button type="submit" id="salvar" class="btn btn-primary">Adicionar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -62,11 +63,11 @@
                         data-url="{{ route('user.show', 1) }}">
                         <thead>
                             <tr>
-                                <th data-field="name" data-editable="true" class="col-3" aria-required="true">NOME</th>
+                                <th data-field="name" data-editable="true" class="col-3" aria-required="true">Nome</th>
                                 <th data-field="email" data-editable="true" class="col-3" aria-required="true">
-                                    EMAIL</th>
+                                    Email</th>
                                 <th data-field="role.nome" data-editable="true" class="col-3" aria-required="true">
-                                    PERFIL</th>
+                                    Perfil</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>
@@ -161,7 +162,7 @@
             }
         }
 
-        function setIdModal(id) {
+        function setIdModal(id, disabled =false) {
             partialLoader();
             document.getElementById('id').value = id;
             $.ajax({
@@ -176,6 +177,13 @@
                     
                     $(`#fk_roles_id option[value=${response.role.id}]`).prop('selected', 'selected')
                     .change();
+                    if (disabled) {
+                        $('#novalinha :input:not(#visualizar, #fechar)').prop('disabled', true);
+                        $('#novalinha select').prop('disabled', true);
+                    }else{
+                        $('#novalinha :input').prop('disabled', false);
+                        $('#novalinha select').prop('disabled', false);
+                    }
                     $('#novalinha').modal('show');
                     partialLoader(false);
 
@@ -190,6 +198,9 @@
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             return [
+                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id},true)">`,
+                `<i class="fa fa-eye" aria-hidden="true"></i>`,
+                `</a>`,
                 `@can('update-usuario')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})">`,
                 `<i class="fa fa-edit"></i>`,
                 `</a>@endcan`,

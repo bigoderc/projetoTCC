@@ -20,7 +20,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="titulo">Adicionar</h5>
-                                    <button type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
+                                    <button id="fechar" type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -85,7 +85,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" onclick="clearForm('addLinha','novalinha')">Fechar</button>
+                                        <button id="fechar" type="button" class="btn btn-secondary" onclick="clearForm('addLinha','novalinha')">Fechar</button>
                                         <button type="submit" id="salvar" class="btn btn-primary">Adicionar</button>
                                     </div>
                                 </form>
@@ -100,11 +100,11 @@
                     data-pagination="true" data-search-accent-neutralise="true" data-editable-url="#" data-url="{{ route('discente.show',1) }}">
                     <thead>
                         <tr>
-                            <th data-field="nome" data-editable="true" class="col-3" aria-required="true">NOME</th>
-                            <th data-field="matricula" data-editable="true" class="col-3" aria-required="true">MÁTRICULA</th>
-                            <th data-field="matriculado_desc" data-editable="true" class="col-3" aria-required="true">MATRICULADO</th>
-                            <th data-field="curso.nome" data-editable="false" class="col-3" aria-required="true">CURSO</th>
-                            <th data-field="turma.nome" data-editable="false" class="col-3" aria-required="true">TURMA</th>
+                            <th data-field="nome" data-editable="true" class="col-3" aria-required="true">Nome</th>
+                            <th data-field="matricula" data-editable="true" class="col-3" aria-required="true">Mátricula</th>
+                            <th data-field="matriculado_desc" data-editable="true" class="col-3" aria-required="true">Matriculado</th>
+                            <th data-field="curso.nome" data-editable="false" class="col-3" aria-required="true">Curso</th>
+                            <th data-field="turma.nome" data-editable="false" class="col-3" aria-required="true">Turma</th>
                             <th data-field="acao" class="col-1" data-formatter="acaoFormatter" data-events="acaoEvents">Ação</th>
                         </tr>
                     </thead>
@@ -195,6 +195,9 @@
     //Criar colunar ação
     function acaoFormatter(value, row, index) {
         return [
+            `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id},true)">`,
+                `<i class="fa fa-eye" aria-hidden="true"></i>`,
+            `</a>`,
             ` @can('update-discente')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})"title="Editar Registro">`,
             `<i class="fa fa-edit"></i>`,
             `</a>@endcan`,
@@ -233,7 +236,7 @@
             }
         });
     });
-    function setIdModal(id) {
+    function setIdModal(id, disabled = false) {
         partialLoader();
         document.getElementById('id').value = id;
         $.ajax({
@@ -255,8 +258,16 @@
                     $(`#ingresso`).val(response.ingresso);
                     $(`#formado`).prop('checked',response.formado);
                     $(`#fk_curso_id option[value=${response.fk_curso_id}]`).prop('selected','selected').change();
+                   
                     setTimeout(function () {
                         $(`#fk_turma_id option[value=${response.fk_turma_id}]`).prop('selected', 'selected').change();
+                        if (disabled) {
+                            $('#novalinha :input:not(#visualizar, #fechar)').prop('disabled', true);
+                            $('#novalinha select').prop('disabled', true);
+                        }else{
+                            $('#novalinha :input').prop('disabled', false);
+                            $('#novalinha select').prop('disabled', false);
+                        }
                         $('#novalinha').modal('show');
                         partialLoader(false);
                     }, 1500);

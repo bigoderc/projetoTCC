@@ -21,20 +21,21 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Adicionar</h5>
-                                        <button type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
+                                        <button id="fechar" type="button" class="close" onclick="clearForm('addLinha','novalinha')" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <form id="addLinha" class="needs-validation" novalidate>
                                         @csrf
                                         <div class="modal-body" class="my-2">
+                                            <input type="hidden" class="form-control" id="id" name="id">
                                             <label for="nome">Nome</label>
                                             <input type="text" class="form-control" id="nome" name="nome" required>
                                             <label for="nome">Descrição</label>
-                                            <input type="text" class="form-control" id="nome" name="descricao">
+                                            <input type="text" class="form-control" id="descricao" name="descricao">
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
+                                            <button id="fechar" type="button" class="btn btn-secondary"
                                                 onclick="clearForm('addLinha','novalinha')">Fechar</button>
                                             <button type="submit" class="btn btn-primary">Adicionar</button>
                                         </div>
@@ -48,7 +49,7 @@
                         data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true"
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
-                        data-search-accent-neutralise="true" data-editable-url="{{ route('curso.update1') }}"
+                        data-search-accent-neutralise="true" data-editable-url="#"
                         data-url="{{ route('curso.show', 1) }}">
                         <thead>
                             <tr>
@@ -87,15 +88,26 @@
                     } else {
                         partialLoader();
                         var formdata = new FormData($("form[name='addLinha']")[0]);
+                        let id = document.getElementById('id').value;
+                        console.log(id);
                         $.ajax({
-                            url: "{{ route('curso.store') }}",
-                            type: "POST",
-                            data:  $('#addLinha').serialize(),
+                            url: id > 0 ? `{{ url('curso/update/${id}') }}` :
+                                "{{ route('curso.store') }}",
+                            type: id > 0 ? "PUT" : "POST",
+                            data: $("#addLinha").serialize(),
                             dataType: "json",
                             success: function(response) {
+
                                 clearForm('addLinha', 'novalinha')
                                 partialLoader(false);
-                                $('#my_table_id').bootstrapTable('append', response);
+
+                                id > 0 ? $('#my_table_id').bootstrapTable(
+                                    'updateByUniqueId', {
+                                        id: id,
+                                        row: response,
+                                        replace: false
+                                    }) : $('#my_table_id').bootstrapTable('prepend',
+                                    response);
                                 successResponse();
                             },
                             error: function(xhr, status, error) {
@@ -138,13 +150,44 @@
             }
         }
 
-        function setIdModal(id) {
+        function setIdModal(id,disabled) {
+            partialLoader();
             document.getElementById('id').value = id;
+            $.ajax({
+                url: `{{ url('curso/findById/${id}') }}`,
+                type: "GET",
+                success: function(response) {
+                    partialLoader(false);
+                    $(`#titulo`).text(`Editar Grau ${response.nome}`);
+                    $(`#salvar`).text(`Salvar`);
+                    $(`#nome`).val(response.nome);
+                    $(`#descricao`).val(response.descricao);
+                    if (disabled) {
+                        $('#novalinha :input:not(#visualizar, #fechar)').prop('disabled', true);
+                        $('#novalinha select').prop('disabled', true);
+                    }else{
+                        $('#novalinha :input').prop('disabled', false);
+                        $('#novalinha select').prop('disabled', false);
+                    }
+                    $('#novalinha').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    partialLoader(false);
+                    errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                        .responseText);
+                }
+            });
         }
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             return [
-                '@can('delete-curso')<a class="remove" href="javascript:void(0)" title="Remove">',
+                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id},true)">`,
+                `<i class="fa fa-eye" aria-hidden="true"></i>`,
+                `</a>`,
+                ` @can('update-curso')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})"title="Editar Registro">`,
+                `<i class="fa fa-edit"></i>`,
+                `</a>@endcan`,
+                '@can('delete-curso')<a class="remove p-1" href="javascript:void(0)" title="Remove">',
                 '<i class="fa fa-trash"></i>',
                 '</a>@endcan'
             ].join('');

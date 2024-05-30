@@ -56,7 +56,7 @@ class TurmaController extends Controller
     {
         //
         Gate::authorize('read-turma');
-        return response()->json(Turma::with('curso')->where('fk_curso_id',$id)->get());
+        return response()->json(Turma::with('curso')->where('fk_curso_id',$id)->orderBy('id','desc')->get());
         
     }
 
@@ -78,14 +78,12 @@ class TurmaController extends Controller
      * @param  \App\Models\Turma  $turma
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Turma $turma)
+    public function update(Request $request, $id)
     {
         //
         Gate::authorize('update-turma');
-        if($request->ajax()){
-            $turma->find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
-            return response()->json(['success' => true]);
-        }
+        Turma::find($id)->update($request->all());
+        return response()->json(Turma::with('curso')->find($id));
     }
 
     /**
@@ -100,5 +98,14 @@ class TurmaController extends Controller
         Gate::authorize('delete-turma');
         Turma::find($id)->delete();
         return response()->json(['success' => true]);
+    }
+     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Aluno  $aluno
+     * @return \Illuminate\Http\Response
+     */
+    public function findById($id){
+        return response()->json(Turma::with('curso')->find($id));
     }
 }

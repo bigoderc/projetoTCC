@@ -22,7 +22,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Adicionar</h5>
-                                        <button type="button" class="close" onclick="clearForm('addLinha','novalinha')"
+                                        <button id="fechar" type="button" class="close" onclick="clearForm('addLinha','novalinha')"
                                             aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -31,6 +31,7 @@
                                         class="needs-validation" novalidate>
                                         @csrf
                                         <div class="modal-body" class="my-2">
+                                            <input type="hidden" class="form-control" id="id" name="id">
                                             <label for="nome">Nome</label>
                                             <input type="text" class="form-control" maxlength="60" id="nome" name="nome"
                                                 required>
@@ -38,13 +39,19 @@
                                             <input type="text" class="form-control" id="descricao" name="descricao"
                                                 >
                                             <label for="nome">Link</label>
-                                            <input type="text" class="form-control" id="link" name="link">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="link" name="link">
+                                                <button id="visualizar" class="btn border bg-body-tertiary" onclick="abrirCurriculoLattes('link')"
+                                                    type="button" title="Visualiar">
+                                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
                                             <label for="nome" class="my-2">Arquivo</label>
                                             <input type="file" class="form-control" accept=".png,.jpeg,.pdf"
                                                 id="file" name="file">
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
+                                            <button id="fechar" type="button" class="btn btn-secondary"
                                                 onclick="clearForm('addLinha','novalinha')">Fechar</button>
                                             <button type="submit" class="btn btn-primary">Adicionar</button>
                                         </div>
@@ -58,14 +65,13 @@
                         data-search="true" data-show-columns="true" data-show-export="true" data-click-to-select="true"
                         data-toolbar="#toolbar" data-unique-id="id" data-id-field="id" data-page-size="25"
                         data-page-list="[5, 10, 25, 50, 100, all]" data-pagination="true"
-                        data-search-accent-neutralise="true" data-editable-url="{{ route('area.update1') }}"
-                        data-url="{{ route('area.show', 1) }}">
+                        data-search-accent-neutralise="true" data-editable-url="#"
+                        data-url="{{ route('linha-pesquisa.show', 1) }}">
                         <thead>
                             <tr>
-                                <th data-field="nome" data-editable="true" class="col-3" aria-required="true">NOME</th>
+                                <th data-field="nome" data-editable="true" class="col-3" aria-required="true">Nome</th>
                                 <th data-field="descricao" data-editable="true" class="col-3" aria-required="true">
-                                    DESCRIÇÃO</th>
-                                <th data-field="link" data-editable="true" class="col-3" aria-required="true">LINK</th>
+                                    Descrição</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>
@@ -124,17 +130,25 @@
                     } else {
                         partialLoader();
                         var formdata = new FormData($("form[name='addLinha']")[0]);
+                        let id = document.getElementById('id').value;
                         $.ajax({
-                            url: "{{ route('area.store') }}",
+                            url: id > 0 ? `{{ url('linha-pesquisa/update/${id}') }}` :
+                                "{{ route('linha-pesquisa.store') }}",
                             type: "POST",
-                            data: formdata,
+                            data: $("#addLinha").serialize(),
                             dataType: "json",
-                            processData: false,
-                            contentType: false,
                             success: function(response) {
+
                                 clearForm('addLinha', 'novalinha')
                                 partialLoader(false);
-                                $('#my_table_id').bootstrapTable('append', response);
+
+                                id > 0 ? $('#my_table_id').bootstrapTable(
+                                    'updateByUniqueId', {
+                                        id: id,
+                                        row: response,
+                                        replace: false
+                                    }) : $('#my_table_id').bootstrapTable('prepend',
+                                    response);
                                 successResponse();
                             },
                             error: function(xhr, status, error) {
@@ -146,28 +160,6 @@
                 });
             });
         });
-        $("#addUpload").submit(function(event) {
-            event.preventDefault();
-            partialLoader();
-            var formdata = new FormData($("form[name='addUpload']")[0]);
-            $.ajax({
-                url: "{{ route('area.upload') }}",
-                type: "POST",
-                data: formdata,
-                dataType: "json",
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    partialLoader(false);
-                    $('#upload').modal('hide');
-                    successResponse();
-                },
-                error: function(xhr, status, error) {
-                    partialLoader(false);
-                    errorResponse(xhr.status,xhr.responseJSON.data,xhr.responseText);
-                }
-            });
-        });
         //Excluir uma nova linha
         window.acaoEvents = {
             'click .remove': function(e, value, row) {
@@ -175,7 +167,7 @@
                     if (result.isConfirmed) {
                         partialLoader();
                         $.ajax({
-                            url: "area/" + row.id,
+                            url: "linha-pesquisa/" + row.id,
                             type: "DELETE",
                             dataType: "json",
                             success: function(response) {
@@ -196,14 +188,43 @@
             }
         }
 
-        function setIdModal(id) {
+        function setIdModal(id,disabled) {
+            partialLoader();
             document.getElementById('id').value = id;
+            $.ajax({
+                url: `{{ url('linha-pesquisa/findById/${id}') }}`,
+                type: "GET",
+                success: function(response) {
+                    partialLoader(false);
+                    $(`#titulo`).text(`Editar Grau ${response.nome}`);
+                    $(`#salvar`).text(`Salvar`);
+                    $(`#nome`).val(response.nome);
+                    $(`#descricao`).val(response.descricao);
+                    $(`#link`).val(response.link);
+                    if (disabled) {
+                        $('#novalinha :input:not(#visualizar, #fechar)').prop('disabled', true);
+                        $('#novalinha select').prop('disabled', true);
+                    }else{
+                        $('#novalinha :input').prop('disabled', false);
+                        $('#novalinha select').prop('disabled', false);
+                    }
+                    $('#novalinha').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    partialLoader(false);
+                    errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                        .responseText);
+                }
+            });
         }
         //Criar colunar ação
         function acaoFormatter(value, row, index) {
             const actions = [
-                `@can('update-area')<a class="text-danger m-1" href="#" onclick="setIdModal(${row.id})" data-toggle="modal" title="Atualizar Anexo" data-target="#upload">`,
-                `<i class="fa fa-upload" aria-hidden="true"></i>`,
+                `<a class="text-info p-1" href="#" onclick="setIdModal(${row.id},true)">`,
+                `<i class="fa fa-eye" aria-hidden="true"></i>`,
+                `</a>`,
+                ` @can('update-area')<a class="text-info p-1" href="#" onclick="setIdModal(${row.id})"title="Editar Registro">`,
+                `<i class="fa fa-edit"></i>`,
                 `</a>@endcan`,
                 // Verificar se row.arquivo é diferente de null antes de adicionar o link
                 row.arquivo !== null ? `<a rel="tooltip" class="text-success p-1 m-1" title="Visualizar Anexo" href="${row.storage}" target="_blank">` +

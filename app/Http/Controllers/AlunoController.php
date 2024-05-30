@@ -120,7 +120,7 @@ class AlunoController extends Controller
     public function show()
     {
         //
-        return response()->json($this->model->with(['user','curso','turma'])->get());
+        return response()->json($this->model->with(['user','curso','turma'])->orderBy('id','desc')->get());
     }
 
     /**
