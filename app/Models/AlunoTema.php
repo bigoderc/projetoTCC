@@ -14,7 +14,8 @@ class AlunoTema extends Model
         'fk_tema_id',
         'fk_professores_id',
         'deferido',
-        'justificativa'
+        'justificativa',
+        'defendido'
     ];
     protected static function boot()
     {

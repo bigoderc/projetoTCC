@@ -118,7 +118,6 @@
         
     } 
     function setOcorrencia(params) {
-            console.log(params);
             deleteAlert().then((result) => {
                 if (result.isConfirmed) {
                     partialLoader();

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Aluno;
 use App\Models\AlunoTema;
 use App\Models\Area;
+use App\Models\Especialidade;
+use App\Models\Grau;
 use App\Models\Professor;
 use App\Models\Tema;
 use App\Models\User;
@@ -12,14 +14,23 @@ use Illuminate\Http\Request;
 
 class DashboardAlunoController extends Controller
 {
-    protected $model,$user,$professor,$area,$tema;
-    public function __construct(Aluno $aluno,User $user,Professor $professor,Area $area,Tema $tema)
+    protected $model,$user,$professor,$area,$tema, $especialidade,$grau;
+    public function __construct(
+        Aluno $aluno,
+        User $user,
+        Professor $professor,
+        Area $area,
+        Tema $tema,
+        Especialidade $especialidade,
+        Grau $grau)
     {
         $this->model = $aluno;   
         $this->user = $user;   
         $this->professor = $professor;
         $this->area = $area;
         $this->tema = $tema;
+        $this->especialidade = $especialidade;
+        $this->grau = $grau;
     }
     /**
      * Display a listing of the resource.
@@ -29,7 +40,12 @@ class DashboardAlunoController extends Controller
     public function index()
     {
         //
-        return view('pages.dashboard-aluno.index',['areas'=>$this->area->all(),'professores'=>$this->professor->all()]);
+        return view('pages.dashboard-aluno.index',[
+            'areas' => $this->area->get(),
+            'especialidades' => $this->especialidade->get(),
+            'graus' => $this->grau->get(),
+            'professores'=>$this->professor->all()
+        ]);
     }
 
     /**

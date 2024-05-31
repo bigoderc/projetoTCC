@@ -13,7 +13,40 @@
     @endcomponent
     <div class="content-page">
         <div class="card-body">
+            
             <div class="card">
+                <div class="col-12">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="card shadow-sm overflow-hidden m-3">
+                                <div class="card-header bg-body-tertiary border-bottom">
+                                    <div class="small text-uppercase text-center" class="placeholder col-12 rounded">
+                                        Orientandos
+                                    </div>
+                                </div>
+                                <div class="card-body bg-body-tertiary">
+                                    <div id="qtd_orientandos" class="text-center fw-bolder" class="placeholder col-12 rounded">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card shadow-sm overflow-hidden m-3">
+                                <div class="card-header bg-body-tertiary border-bottom">
+                                    <div class="small text-uppercase text-center" class="placeholder col-12 rounded">
+                                        Disponibilidade
+                                    </div>
+                                </div>
+                                <div class="card-body bg-body-tertiary">
+                                    <div id="qtd_disponibilidade" class="text-center fw-bolder" class="placeholder col-12 rounded">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-header card-title text-white bg-transparent border-0 m-3">
                     <span class="h4">Temas</span>
                 </div>
@@ -84,6 +117,7 @@
         </div>
         @include('pages.dashboard-professor.parts.info')
         @include('pages.dashboard-professor.parts.deferido')
+        @include('pages.dashboard-professor.parts.defendido')
     </div>
 @endsection
 
@@ -98,8 +132,7 @@
 
         //Adicionar uma nova linha e lançar via ajax
         $(document).ready(function() {
-            getAll()
-            
+            getAll()            
         });
         $("#searchCaminhao").submit(function(event) {
             event.preventDefault();
@@ -174,6 +207,7 @@
         }
 
         function renderizarCards(data) {
+            getDashboard();
             const timelineContainer = document.getElementById('timeline-container');
 
             // Limpe o conteúdo existente (caso haja)
@@ -200,7 +234,7 @@
                             <span class=" small">${item.descricao ?? ''}</span>
                         </div>
                         <div>
-                            <span class="small fw-bold">Área: </span>
+                            <span class="small fw-bold">Linhas de Pesquisa: </span>
                             <span class="small">${areas_to_string ?? ''}</span>
                         </div>
                        
@@ -228,9 +262,13 @@
                         </a>
                         
                         ${item.tema_aluno?.deferido !=true ? `
-                                <button type="button" title=Aceitar tema" class="btn btn-warning btn-sm mb-3" onclick="showDeferido(${item.id})">
+                                <button type="button" title="Aceitar tema" class="btn btn-warning btn-sm mb-3" onclick="showDeferido(${item.id})">
                                     <i class="fa fa-check-square"></i>
                                 </button>`:``}
+                        ${item.tema_aluno?.deferido ==true ? `
+                            <button type="button" title="Tema defendido" class="btn btn-success btn-sm mb-3" onclick="showDefendido(${item.id})">
+                                <i class="fa fa-check-square"></i>
+                            </button>`:``}
                             
                         </div>
 
@@ -270,8 +308,25 @@
         function showDeferido(params) {
             setDeferido(params);
         }
+        function showDefendido(params) {
+            setDefendido(params);
+        }
         function showDetails(params) {
             setInfo(params)
+        }
+        function getDashboard(){
+            $.ajax({
+                url: `{{ route('dashboardProfessor.getDashboard') }}`,
+                type: "GET",
+                dataType: "json",
+                success: function(response) {
+                    $(`#qtd_orientandos`).text(response.qtd_orientandos);
+                    $(`#qtd_disponibilidade`).text(response.disponibilidade);                  
+                },
+                error: function(xhr, status, error) {
+                    errorResponse(xhr.status, xhr.responseJSON.data, xhr.responseText);
+                }
+            });
         }
     </script>
 @endpush

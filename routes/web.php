@@ -116,7 +116,9 @@ Route::group(['middleware' => 'auth:web'], function () {
         Route::get('/index', [DashboardProfessorController::class, 'index'])->name('dashboardProfessor.index');
         Route::get('/notification', [DashboardProfessorController::class, 'notification'])->name('dashboardProfessor.notification');
         Route::get('/findById/{id}', [DashboardProfessorController::class, 'findById'])->name('dashboardProfessor.findById');
+        Route::get('/getDashboard', [DashboardProfessorController::class, 'getDashboard'])->name('dashboardProfessor.getDashboard');
         Route::post('/store', [DashboardProfessorController::class, 'store'])->name('dashboardProfessor.store');
+        Route::post('/defendido', [DashboardProfessorController::class, 'defendido'])->name('dashboardProfessor.defendido');
         Route::post('/deferir', [DashboardProfessorController::class, 'deferir'])->name('dashboardProfessor.deferir');
         Route::post('/search', [DashboardProfessorController::class, 'search'])->name('dashboardProfessor.search');
         Route::get('/linkThemeCheck', [DashboardProfessorController::class, 'linkThemeCheck'])->name('dashboardProfessor.linkThemeCheck');

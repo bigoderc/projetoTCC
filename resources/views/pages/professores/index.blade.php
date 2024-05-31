@@ -104,7 +104,7 @@
                                 <th data-field="especialidade.nome" class="col-3" aria-required="true">Área
                                 </th>
                                 <th data-field="grau.nome" class="col-3" aria-required="true">Grau</th>
-                                <th data-field="disponibilidade" class="col-1" aria-required="true">Disponibilidade Atual</th>
+                                <th data-field="disponibilidade_desc" class="col-1" aria-required="true">Disponibilidade Atual</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>

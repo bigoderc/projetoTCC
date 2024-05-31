@@ -4,7 +4,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="titulo">Informações</h5>
-                    <button type="button" class="close" onclick="fecharModalinfo()" aria-label="Close">
+                    <button type="button" class="close" onclick="fecharModalinfo1()" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -22,11 +22,16 @@
                 
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="link_tema">Mais informações em</label>
+                            <label for="link_tema">Link do tema</label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text" id="link_tema"></span>
+                                    <span class="input-group-text" id="">URL</span>
                                 </div>
+                                <input type="text" class="form-control" disabled id="link_tema" placeholder="Enter URL">
+                                <button id="visualizar" class="btn border bg-body-tertiary" onclick="abrirCurriculoLattes('link_tema')"
+                                    type="button" title="Visualiar">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -35,9 +40,10 @@
                     </div>
                 
                 </div>
+                
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="fecharModalinfo()">Fechar</button>
+                    <button type="button" class="btn btn-secondary" onclick="fecharModalinfo1()">Fechar</button>
                 </div>
             </div>
         </div>
@@ -58,8 +64,9 @@
                 type: "GET",
                 success: function(response) {
 
-                   
-                    viewPDFTema(response.storage);
+                    if(response.arquivo){
+                        viewPDFTema(response.storage);
+                    }
                     partialLoader(false);
                     $(`#tema`).val(response.nome);
                     $(`#descricao`).val(response.descricao);
@@ -74,7 +81,7 @@
             });
         }
 
-        function fecharModalinfo(params) {
+        function fecharModalinfo1(params) {
             $("input[type='radio']").prop('checked', false);
             $('#info').modal('hide');
         }

@@ -31,10 +31,10 @@ class TemaController extends Controller
         $professores = Professor::all();
         $data = User::with('roles')->find(auth()->user()->id);
 
-        return view('pages.temas.index',[
-            'areas'=>$areas,
-            'professores' =>$professores,
-            'aluno' => $data->roles->first()->nome =='aluno'
+        return view('pages.temas.index', [
+            'areas' => $areas,
+            'professores' => $professores,
+            'aluno' => $data->roles->first()->nome == 'aluno'
         ]);
     }
 
@@ -61,43 +61,49 @@ class TemaController extends Controller
         DB::beginTransaction();
         try {
             //code...
-            if($request->hasFile('file')){
+            if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $imageUuid = Uuid::uuid4()->toString();
                 $extension = $file->getClientOriginalExtension();
-                $path = $imageUuid.'.'.$extension;
+                $path = $imageUuid . '.' . $extension;
                 $file->storeAs('temas', strtolower($path), 'public');
                 $request['arquivo'] = strtolower($path);
             }
-            $tema =Tema::create($request->all());
+            $tema = Tema::create($request->all());
             $tema = Tema::with(['areas'])->find($tema->id);
             $tema->areas()->sync($request->areas);
-            $data = User::with('roles')->find(auth()->user()->id);
-            $aluno = Aluno::where('fk_user_id',$data->id)->first();
-            $aluno_tema = AlunoTema::where('fk_alunos_id',$aluno->id);
-            if($aluno_tema->count() > 0 && $request->professor_id){
-                return response()->json(['data'=>'Você já tem uma proposta vinculada, desvincule o professor da proposta, por favor'],426);
+            if ($request->professor_id) {
+                $data = User::with('roles')->find(auth()->user()->id);
+                $aluno = Aluno::where('fk_user_id', $data->id)->first();
+                $aluno_tema = AlunoTema::where('fk_alunos_id', $aluno->id);
+                if ($aluno_tema->count() > 0 && $request->professor_id) {
+                    return response()->json(['data' => 'Você já tem uma proposta vinculada, desvincule o professor da proposta, por favor'], 426);
+                }
+                $qtd_orientandos = AlunoTema::where('fk_professores_id',$request->professor_id)->where('deferido',1)->where('defendido',false)->count();
+                $professor = Professor::find($request->professor_id);
+                if(($professor->disponibilidade - $qtd_orientandos) < 1){
+                    return response()->json(['data' => 'Professor selecionado não possui disponibilidade.'], 426);
+                }
+                if ($data->roles->first()->nome == 'aluno' && $request->professor_id) {
+
+                    AlunoTema::create(
+                        [
+                            'fk_alunos_id' => $aluno->id,
+                            'fk_tema_id' => $tema->id,
+                            'fk_professores_id' => $request->professor_id
+                        ]
+                    );
+                }
             }
-            if($data->roles->first()->nome =='aluno' && $request->professor_id){
-                
-                AlunoTema::create(
-                    [
-                        'fk_alunos_id'=>$aluno->id,
-                        'fk_tema_id'=>$tema->id,
-                        'fk_professores_id'=>$request->professor_id
-                    ]
-                );
-            }
-            
+
+
             DB::commit();
             return response()->json(Tema::with(['areas'])->find($tema->id));
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
-            return response()->json($th->getMessage(),500);
-            
+            return response()->json($th->getMessage(), 500);
         }
-        
     }
 
     /**
@@ -116,15 +122,14 @@ class TemaController extends Controller
         if ($data) {
             $data->role = $data->roles->first();
         }
-        if($data->role->nome =='aluno'){
-            return response()->json(Tema::with(['areas','criado'])->where('user_id_created',$user->id)->orderBy('id','desc')->get());
-        }else{
-            return response()->json(Tema::with(['areas','criado'])->orderBy('id','desc')->get());
+        if ($data->role->nome == 'aluno') {
+            return response()->json(Tema::with(['areas', 'criado'])->where('user_id_created', $user->id)->orderBy('id', 'desc')->get());
+        } else {
+            return response()->json(Tema::with(['areas', 'criado'])->orderBy('id', 'desc')->get());
         }
-        
     }
 
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -143,33 +148,32 @@ class TemaController extends Controller
      * @param  \App\Models\Tema  $tema
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tema $tema,$id)
+    public function update(Request $request, Tema $tema, $id)
     {
         //
         Gate::authorize('update-proposta_tema');
         DB::beginTransaction();
         try {
             //code...
-            if($request->hasFile('file')){
+            if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $imageUuid = Uuid::uuid4()->toString();
                 $extension = $file->getClientOriginalExtension();
-                $path = $imageUuid.'.'.$extension;
+                $path = $imageUuid . '.' . $extension;
                 $file->storeAs('temas', strtolower($path), 'public');
                 $request['arquivo'] = strtolower($path);
             }
             $tema->find($id)->update($request->all());
             $tema = Tema::find($id);
-            
+
             $tema->areas()->sync($request->areas);
             DB::commit();
             return response()->json($tema->with(['areas'])->find($id));
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
-            return response()->json($th->getMessage(),500);
+            return response()->json($th->getMessage(), 500);
         }
-        
     }
 
     /**
@@ -191,16 +195,18 @@ class TemaController extends Controller
      * @param  \App\Models\Aluno  $aluno
      * @return \Illuminate\Http\Response
      */
-    public function findById($id){
+    public function findById($id)
+    {
         return response()->json(Tema::with(['areas'])->find($id));
     }
-    public function toView(Tema $tema,$id){
+    public function toView(Tema $tema, $id)
+    {
         $tema = $tema->find($id);
-        $file =Storage::url("temas/".$tema->arquivo);
+        $file = Storage::url("temas/" . $tema->arquivo);
         $pos = strpos($tema->arquivo, '.pdf');
         if ($pos === false) {
             echo "<img src='{$file}'/>";
-        }else{  
+        } else {
             echo "<iframe src='{$file}' width='100%' height='99%'></iframe>";
         }
     }
@@ -214,11 +220,11 @@ class TemaController extends Controller
     {
         //
         //dd('merda');
-        if($request->hasFile('file')){
+        if ($request->hasFile('file')) {
             $value = $request->file('file');
-            $name = $request->nome.'-'.$value->getClientOriginalName();
-            Storage::disk('public')->putFileAs('temas',$value,$name);
-           $request['arquivo'] = $name;
+            $name = $request->nome . '-' . $value->getClientOriginalName();
+            Storage::disk('public')->putFileAs('temas', $value, $name);
+            $request['arquivo'] = $name;
         }
         $tema->find($request->id)->update($request->all());
         return response()->json(['success' => true]);

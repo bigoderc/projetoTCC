@@ -6,9 +6,13 @@ use App\Models\Aluno;
 use App\Models\AlunoTema;
 use App\Models\Area;
 use App\Models\Professor;
+use App\Models\Projeto;
+use App\Models\ProjetoArea;
 use App\Models\Tema;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 
 class DashboardProfessorController extends Controller
 {
@@ -151,7 +155,8 @@ class DashboardProfessorController extends Controller
         //
         $professor = auth()->user()->professor;
         $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor','temaAluno.aluno'])->whereHas('temaAluno',function($query) use($professor, $request){
-            $query->where('fk_professores_id',$professor->id);
+            $query->where('fk_professores_id',$professor->id)
+            ->where('defendido',false);
             if($request->todos =='true'){
                 $query->where(function ($query) {
                     $query->whereNull('deferido');
@@ -183,6 +188,64 @@ class DashboardProfessorController extends Controller
             });
         })->count();
         return response()->json($dados);
+               
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getDashboard()
+    {
+        //
+        $professor = auth()->user()->professor;
+        $qtd_orientandos = AlunoTema::where('fk_professores_id',$professor->id)->where('deferido',1)->where('defendido',false)->count();
+        $professor = Professor::find($professor->id);
+        return response()->json(['qtd_orientandos'=>$qtd_orientandos, 'disponibilidade' => ($professor->disponibilidade - $qtd_orientandos)]);
+               
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function defendido(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            if($request->hasFile('arquivo')){
+                $file = $request->file('arquivo');
+                $imageUuid = Uuid::uuid4()->toString();
+                $extension = $file->getClientOriginalExtension();
+                $path = $imageUuid.'.'.$extension;
+                $file->storeAs('projetos', strtolower($path), 'public');
+                $request['projeto'] = strtolower($path);
+            }
+            $tema = Tema::with(['temaAluno','areas'])->find($request->tema_id);
+            $dados=Projeto::create([
+                'projeto' => $request->projeto,
+                'instituicao' => 'IF BAIANO',
+                'apresentacao' => $request->apresentacao,
+                'fk_professores_id' => $tema->temaAluno->fk_professores_id,
+                'fk_aluno_id' => $tema->temaAluno->fk_alunos_id,
+                'nome' =>$tema->nome
+            ]);
+            foreach ($tema->areas as $key => $value) {
+                ProjetoArea::create([
+                    'fk_projeto_id' => $dados->id,
+                    'fk_area_id' => $value->id
+                ]);
+            }
+            AlunoTema::find($tema->temaAluno->id)->update(['defendido' =>true]);
+            DB::commit();
+            return $this->linkThemeCheck($request);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json($th->getMessage(),500);
+        }
+        return response()->json($request->all());
                
     }
     /**

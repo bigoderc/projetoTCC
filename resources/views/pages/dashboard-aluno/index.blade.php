@@ -172,7 +172,7 @@
                             <span class="small">${item.descricao ?? ''}</span>
                         </div>
                         <div>
-                            <span class="small fw-bold">Área: </span>
+                            <span class="small fw-bold">Linha de Pesquisas: </span>
                             <span class="small">${areas_to_string ?? ''}</span>
                         </div>
                         <div>

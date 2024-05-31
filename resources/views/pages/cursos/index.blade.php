@@ -89,7 +89,6 @@
                         partialLoader();
                         var formdata = new FormData($("form[name='addLinha']")[0]);
                         let id = document.getElementById('id').value;
-                        console.log(id);
                         $.ajax({
                             url: id > 0 ? `{{ url('curso/update/${id}') }}` :
                                 "{{ route('curso.store') }}",

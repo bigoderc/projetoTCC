@@ -84,5 +84,10 @@ class Professor extends Model
         $areas_desc = $areas_nome;
         return $areas_desc;
     }
-    protected $appends = ['linha_pesquisa_desc'];
+    public function getDisponibilidadeDescAttribute()
+    {
+        $qtd_orientandos = AlunoTema::where('fk_professores_id',$this->id)->where('deferido',1)->where('defendido',false)->count();
+        return ($this->disponibilidade - $qtd_orientandos);
+    }
+    protected $appends = ['linha_pesquisa_desc','disponibilidade_desc'];
 }

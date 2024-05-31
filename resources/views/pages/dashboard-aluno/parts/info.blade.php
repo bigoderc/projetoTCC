@@ -28,6 +28,10 @@
                                     <span class="input-group-text" id="">URL</span>
                                 </div>
                                 <input type="text" class="form-control" disabled id="link_tema" placeholder="Enter URL">
+                                <button id="visualizar" class="btn border bg-body-tertiary" onclick="abrirCurriculoLattes('link_tema')"
+                                    type="button" title="Visualiar">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
                             </div>
                         </div>
                         <div class="col-md-6">
