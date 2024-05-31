@@ -16,13 +16,13 @@ class CreateProfessorLinhaPesquisasTable extends Migration
     {
         Schema::create('professor_linha_pesquisas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('professor_id')->nullable();
+            $table->smallInteger('professor_id')->nullable();
             // Define foreign key constraint
             $table->foreign('professor_id')
                 ->references('id')
                 ->on('professores')
                 ->onDelete('SET NULL');
-            $table->unsignedBigInteger('linha_pesquisa_id')->nullable();
+            $table->smallInteger('linha_pesquisa_id')->nullable();
             // Define foreign key constraint
             $table->foreign('linha_pesquisa_id')
                 ->references('id')
