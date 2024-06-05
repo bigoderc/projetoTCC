@@ -8,6 +8,8 @@ use App\Models\Area;
 use App\Models\Professor;
 use App\Models\Projeto;
 use App\Models\ProjetoArea;
+use App\Models\ProjetoPreTcc;
+use App\Models\ProjetoPreTccArea;
 use App\Models\Tema;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -76,9 +78,27 @@ class DashboardProfessorController extends Controller
         
         if ($request->deferido == 'false') {
             $data['fk_professores_id'] = null;
+        }else{
+            $tema = Tema::with(['temaAluno','areas'])->find($request->tema_id);
+            $dados=ProjetoPreTcc::create([
+                'instituicao' => 'IF BAIANO',
+                'fk_professores_id' => $tema->temaAluno->fk_professores_id,
+                'fk_aluno_id' => $tema->temaAluno->fk_alunos_id,
+                'nome' =>$tema->nome,
+                'tema_id' => $request->tema_id
+            ]);
+            foreach ($tema->areas as $key => $value) {
+                ProjetoPreTccArea::create([
+                    'fk_projeto_pre_tcc_id' => $dados->id,
+                    'fk_area_id' => $value->id
+                ]);
+            }
         }
         AlunoTema::where('fk_tema_id',$request->tema_id)->update($data);
         $professor = auth()->user()->professor;
+        if($request->incrementar == 'true'){
+            Professor::find($professor->id)->update(['disponibilidade' => ($professor->disponibilidade + 1)]);
+        }
         $dados = Tema::with(['areas','criado','temaAluno','temaAluno.professor','temaAluno.aluno'])->whereHas('temaAluno',function($query) use($professor){
             $query->where('fk_professores_id',$professor->id);
             $query->where(function ($query) {
@@ -204,6 +224,18 @@ class DashboardProfessorController extends Controller
         return response()->json(['qtd_orientandos'=>$qtd_orientandos, 'disponibilidade' => ($professor->disponibilidade - $qtd_orientandos)]);
                
     }
+     /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function findByTema($id)
+    {
+        //
+        $projeto_pre_tcc = ProjetoPreTcc::where('tema_id',$id)->first()->apresentacao;
+        return response()->json($projeto_pre_tcc ? true : false);
+               
+    }
     /**
      * Display the specified resource.
      *
@@ -214,30 +246,51 @@ class DashboardProfessorController extends Controller
         DB::beginTransaction();
         try {
             //code...
-            if($request->hasFile('arquivo')){
-                $file = $request->file('arquivo');
-                $imageUuid = Uuid::uuid4()->toString();
-                $extension = $file->getClientOriginalExtension();
-                $path = $imageUuid.'.'.$extension;
-                $file->storeAs('projetos', strtolower($path), 'public');
-                $request['projeto'] = strtolower($path);
-            }
+           
             $tema = Tema::with(['temaAluno','areas'])->find($request->tema_id);
-            $dados=Projeto::create([
-                'projeto' => $request->projeto,
-                'instituicao' => 'IF BAIANO',
-                'apresentacao' => $request->apresentacao,
-                'fk_professores_id' => $tema->temaAluno->fk_professores_id,
-                'fk_aluno_id' => $tema->temaAluno->fk_alunos_id,
-                'nome' =>$tema->nome
-            ]);
-            foreach ($tema->areas as $key => $value) {
-                ProjetoArea::create([
-                    'fk_projeto_id' => $dados->id,
-                    'fk_area_id' => $value->id
+            $projeto_pre_tcc = ProjetoPreTcc::where('tema_id',$request->tema_id)->first()->apresentacao;
+            if($projeto_pre_tcc){
+                if($request->hasFile('arquivo')){
+                    $file = $request->file('arquivo');
+                    $imageUuid = Uuid::uuid4()->toString();
+                    $extension = $file->getClientOriginalExtension();
+                    $path = $imageUuid.'.'.$extension;
+                    $file->storeAs('projetos', strtolower($path), 'public');
+                    $request['projeto'] = strtolower($path);
+                }
+                Projeto::where('tema_id',$tema->id)->update([
+                    'projeto' => $request->projeto,
+                    'apresentacao' => $request->apresentacao,
                 ]);
+                AlunoTema::find($tema->temaAluno->id)->update(['defendido' =>true]);
+            }else{
+                if($request->hasFile('arquivo')){
+                    $file = $request->file('arquivo');
+                    $imageUuid = Uuid::uuid4()->toString();
+                    $extension = $file->getClientOriginalExtension();
+                    $path = $imageUuid.'.'.$extension;
+                    $file->storeAs('projetos-pre-tcc', strtolower($path), 'public');
+                    $request['projeto'] = strtolower($path);
+                }
+                ProjetoPreTcc::where('tema_id',$tema->id)->update([
+                    'projeto' => $request->projeto,
+                    'apresentacao' => $request->apresentacao,
+                ]);
+                $dados=Projeto::create([
+                    'instituicao' => 'IF BAIANO',
+                    'fk_professores_id' => $tema->temaAluno->fk_professores_id,
+                    'fk_aluno_id' => $tema->temaAluno->fk_alunos_id,
+                    'nome' =>$tema->nome,
+                    'tema_id' => $tema->id
+                ]);
+                foreach ($tema->areas as $key => $value) {
+                    ProjetoArea::create([
+                        'fk_projeto_id' => $dados->id,
+                        'fk_area_id' => $value->id
+                    ]);
+                }
             }
-            AlunoTema::find($tema->temaAluno->id)->update(['defendido' =>true]);
+           
             DB::commit();
             return $this->linkThemeCheck($request);
         } catch (\Throwable $th) {

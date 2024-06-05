@@ -3,7 +3,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="titulo">Defendido</h5>
+                    <h5 class="modal-title" id="titulo2">Defendido</h5>
                     <button type="button" class="close" onclick="fecharModalprofessor1()" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -39,8 +39,23 @@
     <script>
         function setDefendido(params) {
             $(`#tema_id2`).val(params);
-            init();
-            $('#defendido').modal('show');
+            $.ajax({
+                url: `{{ url('dashboardProfessor/findByTema/${params}') }}`,
+                type: "GET",
+                success: function(response) {
+                    if(response){
+                        $(`#titulo2`).text(`TCC Defendido`);
+                    }else{
+                        $(`#titulo2`).text(`Pré-TCC Defendido`);
+                    }
+                    
+                    $('#defendido').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                        .responseText);
+                }
+            }); 
         }
 
         function init() {

@@ -91,6 +91,7 @@
                                 <th data-field="aluno.nome" class="col-4" aria-required="true" >Discente</th>
                                 <th data-field="areas_desc"  aria-required="true">Área</th>
                                 <th data-field="professor.nome" class="col-4" aria-required="true" >Docente</th>
+                                <th data-field="status_desc" class="col-4" aria-required="true" >Status</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>

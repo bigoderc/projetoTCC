@@ -26,7 +26,9 @@ class ProjetoPreTcc extends Model
         'fk_professores_id',
         'apresentacao',
         'projeto',
-        'fk_aluno_id'
+        'fk_aluno_id',
+        'apresentacao',
+        'tema_id'
     ];
     public function professor(){
         return $this->hasOne(Professor::class,'id','fk_professores_id')->withTrashed();
@@ -82,5 +84,12 @@ class ProjetoPreTcc extends Model
         $areas_desc = $areas_nome;
         return $areas_desc;
     }
-    protected $appends = ['storage','areas_desc'];
+    public function getStatusDescAttribute(){
+        $status = 'Em Andamento';
+        if($this->attributes['apresentacao']){
+            $status = 'Concluído';
+        }
+        return $status;
+    }
+    protected $appends = ['storage','areas_desc','status_desc'];
 }

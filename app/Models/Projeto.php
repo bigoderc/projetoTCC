@@ -28,7 +28,8 @@ class Projeto extends Model
         'apresentacao',
         'projeto',
         'fk_areas_id',
-        'fk_aluno_id'
+        'fk_aluno_id',
+        'tema_id'
     ];
     public function professor(){
         return $this->hasOne(Professor::class,'id','fk_professores_id')->withTrashed();

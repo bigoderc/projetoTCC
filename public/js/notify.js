@@ -163,13 +163,13 @@ function errorResponse(status,data,text) {
         title: `${msg}`
     });
 }
-function deleteAlert() {
+function deleteAlert(title = 'Tem certeza?', text = 'Você talvez não seja capaz de reverter isso.') {
 
     Swal.isVisible() && Swal.close();
 
     return Swal.fire({
-        title: 'Tem certeza?',
-        text: "Você talvez não seja capaz de reverter isso.",
+        title: title,
+        text: text,
         showCancelButton: true,
         customClass: {
             confirmButton: 'btn btn-secondary text-white mr-1',

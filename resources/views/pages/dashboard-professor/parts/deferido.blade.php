@@ -29,7 +29,7 @@
                                         Indeferido
                                     </label>
                                 </div>
-                                
+
                             </div>
                             <div class="col d-none" id="bloco-justificativa">
                                 <div class="form-group">
@@ -41,8 +41,10 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" onclick="fecharModalprofessor()">Fechar</button>
-                        <button type="button" id="salvar" onclick="defefir()" class="btn btn-primary">Salvar</button>
+                        <button type="button" class="btn btn-secondary"
+                            onclick="fecharModalprofessor()">Fechar</button>
+                        <button type="button" id="salvar" onclick="defefir()"
+                            class="btn btn-primary">Salvar</button>
                     </div>
                 </form>
             </div>
@@ -56,6 +58,7 @@
             init();
             $('#deferido').modal('show');
         }
+
         function init() {
             $.ajax({
                 url: `{{ route('docente.show', 1) }}`,
@@ -74,27 +77,81 @@
 
         function defefir(params) {
 
-            
-            partialLoader();
+            var disponibilidade = 0;
             $.ajax({
-                url: "{{ route('dashboardProfessor.deferir') }}",
-                type: "POST",
-                data:  $('#formDeferido').serialize(),
+                url: `{{ route('dashboardProfessor.getDashboard') }}`,
+                type: "GET",
                 dataType: "json",
+                async: false, // Define a requisição como síncrona
                 success: function(response) {
-                    $('#deferido').modal('hide');
-
-                    partialLoader(false);
-                    successResponse();
-                    fecharModalprofessor();
-                    renderizarCards(response);
+                    disponibilidade = response.disponibilidade;
                 },
                 error: function(xhr, status, error) {
-                                partialLoader(false);
-                                errorResponse(xhr.status, xhr.responseJSON.data, xhr
-                                    .responseText);
-                            }
-            })
+                    errorResponse(xhr.status, xhr.responseJSON.data, xhr.responseText);
+                }
+            });
+            const radios = document.querySelectorAll('input[name="deferido"]');
+            let selectedValue;
+            for (const radio of radios) {
+                if (radio.checked) {
+                    selectedValue = radio.value;
+                    break;
+                }
+            }
+            if (selectedValue && disponibilidade == 0) {
+                var payload = $('#formDeferido').serialize();
+                payload += '&incrementar=true';
+                deleteAlert('Você gostaria de aceitar a proposta?',
+                        'Caso aceite a proposta, será incrementada mais uma disponibilidade de orientação no seu cadastro.')
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            partialLoader();
+                            $.ajax({
+                                url: "{{ route('dashboardProfessor.deferir') }}",
+                                type: "POST",
+                                data: payload,
+                                dataType: "json",
+                                success: function(response) {
+                                    $('#deferido').modal('hide');
+
+
+                                    successResponse();
+                                    fecharModalprofessor();
+                                    renderizarCards(response);
+                                },
+                                error: function(xhr, status, error) {
+                                    partialLoader(false);
+                                    errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                                        .responseText);
+                                }
+                            })
+                        }
+                    });
+            } else {
+                partialLoader();
+                $.ajax({
+                    url: "{{ route('dashboardProfessor.deferir') }}",
+                    type: "POST",
+                    data: $('#formDeferido').serialize(),
+                    dataType: "json",
+                    success: function(response) {
+                        $('#deferido').modal('hide');
+
+
+                        successResponse();
+                        fecharModalprofessor();
+                        renderizarCards(response);
+                    },
+                    error: function(xhr, status, error) {
+                        partialLoader(false);
+                        errorResponse(xhr.status, xhr.responseJSON.data, xhr
+                            .responseText);
+                    }
+                })
+            }
+
+
+
         }
 
         function fecharModalprofessor(params) {
