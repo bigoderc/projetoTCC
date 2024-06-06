@@ -68,6 +68,9 @@ class Projeto extends Model
     {
         try {
             //code...
+            if(!$this->attributes['apresentacao']){
+                return null;
+            }
             $created = Carbon::parse($this->attributes['apresentacao']);
             $created->setTimezone('America/Sao_Paulo');
             return $this->attributes['apresentado_desc'] =  $created->format('d/m/Y');
@@ -99,5 +102,12 @@ class Projeto extends Model
         $areas_desc = $areas_nome;
         return $areas_desc;
     }
-    protected $appends = ['storage','apresentado_desc','areas_desc'];
+    public function getStatusDescAttribute(){
+        $status = 'Em Andamento';
+        if($this->attributes['apresentacao']){
+            $status = 'Concluído';
+        }
+        return $status;
+    }
+    protected $appends = ['storage','apresentado_desc','areas_desc','status_desc'];
 }

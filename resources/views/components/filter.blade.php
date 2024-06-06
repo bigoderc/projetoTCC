@@ -127,6 +127,18 @@
                                     </div>
                                 </div>
                             @endisset
+                            @isset($aluno)
+                                <div class="col mb-2">
+                                    <!-- Adiciona as classes col para definir o tamanho das colunas em diferentes tamanhos de tela -->
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Aluno</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="nome_aluno" id="nome_aluno"/>
+                                        
+                                    </div>
+                                </div>
+                            @endisset
                         </div>
                     </div>
                 </div>

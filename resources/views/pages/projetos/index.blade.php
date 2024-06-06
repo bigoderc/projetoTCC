@@ -94,6 +94,7 @@
                                 <th data-field="areas_desc"  aria-required="true">Área</th>
                                 <th data-field="professor.nome" class="col-3" aria-required="true" >Docente</th>
                                 <th data-field="apresentado_desc" class="truncate-text" aria-required="true">Apresentado</th>
+                                <th data-field="status_desc" class="col-4" aria-required="true" >Status</th>
                                 <th data-field="acao" class="col-1" data-formatter="acaoFormatter"
                                     data-events="acaoEvents">Ação</th>
                             </tr>

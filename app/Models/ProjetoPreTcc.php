@@ -91,5 +91,22 @@ class ProjetoPreTcc extends Model
         }
         return $status;
     }
-    protected $appends = ['storage','areas_desc','status_desc'];
+    public function getApresentadoDescAttribute()
+    {
+        try {
+            //code...
+            if(!$this->attributes['apresentacao']){
+                return null;
+            }
+            $created = Carbon::parse($this->attributes['apresentacao']);
+            $created->setTimezone('America/Sao_Paulo');
+            return $this->attributes['apresentado_desc'] =  $created->format('d/m/Y');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return null;
+        }
+        
+        
+    }
+    protected $appends = ['storage','areas_desc','status_desc','apresentado_desc'];
 }

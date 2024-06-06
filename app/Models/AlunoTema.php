@@ -39,4 +39,16 @@ class AlunoTema extends Model
     public function aluno(){
         return $this->hasOne(Aluno::class,'id','fk_alunos_id')->withTrashed();
     }
+    public function getStatusDescAttribute(){
+        $status = 'Aguardando';
+        if($this->attributes['defendido'] == true){
+            $status = 'Defendido';
+        }elseif($this->attributes['deferido'] == false){
+            $status = 'Indeferido';
+        }elseif($this->attributes['deferido'] == true){
+            $status = 'Deferido';
+        }
+        return $status;
+    }
+    protected $appends = ['status_desc'];
 }

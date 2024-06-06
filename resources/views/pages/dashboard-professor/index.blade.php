@@ -8,7 +8,8 @@
         'table' => 'dashboard_professor', // Define a rota para submissão do formulário
         'name' => 'Valor Padrão do Nome', // Defina aqui o valor padrão para o campo "name"
         'areas' =>$areas, // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
-        'status' =>[['id'=>1,'nome' =>'Aguardando'],['id'=>2,'nome' =>'Deferido']], // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
+        'status' =>[['id'=>1,'nome' =>'Aguardando'],['id'=>2,'nome' =>'Deferido'],['id'=>3,'nome' =>'Defendido']], // Defina aqui o valor para o campo "email" vindo de uma variável, por exemplo
+        'aluno' =>'Valor Padrão do Nome'
     ])
     @endcomponent
     <div class="content-page">
@@ -252,7 +253,7 @@
                         </div>
                         <div>
                             <span class="small fw-bold">Status: </span>
-                            <span class="small">${item.tema_aluno?.deferido ==true ? 'Deferido':(item.tema_aluno?.deferido ==false ? 'Indeferido' : 'Aguardando')}</span>
+                            <span class="small">${item.tema_aluno?.status_desc}</span>
                         </div>    
                         <button type="button" title="Exibir detalhes" class="btn btn-primary btn-sm mb-3" onclick="showDetails(${item.id})">
                             <i class="fa fa-info"></i>
@@ -265,7 +266,7 @@
                                 <button type="button" title="Aceitar tema" class="btn btn-warning btn-sm mb-3" onclick="showDeferido(${item.id})">
                                     <i class="fa fa-check-square"></i>
                                 </button>`:``}
-                        ${item.tema_aluno?.deferido ==true ? `
+                        ${item.tema_aluno?.deferido ==true && item.tema_aluno?.defendido ==false ? `
                             <button type="button" title="Tema defendido" class="btn btn-success btn-sm mb-3" onclick="showDefendido(${item.id})">
                                 <i class="fa fa-check-square"></i>
                             </button>`:``}

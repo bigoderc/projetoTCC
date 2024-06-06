@@ -4,13 +4,14 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="titulo2">Defendido</h5>
-                    <button type="button" class="close" onclick="fecharModalprofessor1()" aria-label="Close">
+                    <button type="button" class="close" onclick="fecharModalprofessor12()" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="formDeferido" class="needs-validation" novalidate  name="addLinha" enctype="multipart/form-data">
+                <form id="formDefender" class="needs-validation" novalidate  name="addLinha" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
+                        <input type="hidden" class="form-control" id="id" name="id">
                         <input type="hidden" class="form-control" id="tema_id2" name="tema_id">
                         <div class="col-12">
                             <div class="col">
@@ -26,7 +27,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"
-                            onclick="fecharModalprofessor1()">Fechar</button>
+                            onclick="fecharModalprofessor12()">Fechar</button>
                         <button type="button" id="salvar" onclick="defendido()"
                             class="btn btn-primary">Salvar</button>
                     </div>
@@ -89,7 +90,7 @@
 
                     partialLoader(false);
                     successResponse();
-                    fecharModalprofessor1();
+                    fecharModalprofessor12();
                     renderizarCards(response);
                 },
                 error: function(xhr, status, error) {
@@ -100,8 +101,9 @@
             })
         }
 
-        function fecharModalprofessor1(params) {
+        function fecharModalprofessor12(params) {
             $('#defendido').modal('hide');
+            clearForm('formDefender','defendido')
         }
     </script>
 @endpush

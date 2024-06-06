@@ -191,7 +191,7 @@
                             </div>` : ''}
                         <div>
                             <span class="small fw-bold">Status: </span>
-                            <span class="small">${item.tema_aluno?.deferido ==true ? 'Deferido':(item.tema_aluno?.deferido ==false ? 'Indeferido' : 'Aguardando')}</span>
+                            <span class="small">${item.tema_aluno?.status_desc}</span>
                         </div>   
                         <div class="mt-3 mb-3">
                             ${item.tema_aluno ? ``:`<button type="button" title="Selecionar tema" class="btn btn-primary btn-sm mb-3" onclick="changeStatus(${item.id},'selecionar')">
