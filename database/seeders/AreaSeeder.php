@@ -53,11 +53,27 @@ class AreaSeeder extends Seeder
             'Sistemas Distribuídos',
             'Sistemas Embarcados',
             'Sistemas de Informação',
-            'Sistemas Operacionais'
+            'Sistemas Operacionais',
+            "Teoria da Computação",
+            "Computabilidade e Modelos de Computação",
+            "Linguagem Formais e Autômatos",
+            "Análise de Algoritmos e Complexidade de Computação",
+            "Lógicas e Semântica de Programas",
+            "Matemática da Computação",
+            "Matemática Simbólica",
+            "Modelos Analíticos e de Simulação",
+            "Metodologia e Técnicas da Computação",
+            "Linguagens de Programação",
+            "Processamento Gráfico (Graphics)",
+            "Sistema de Computação",
+            "Hardware",
+            "Arquitetura de Sistemas de Computação",
+            "Software Básico",
+            "Teleinformática",
         ];
 
-        foreach($areas as $key => $value){
-            Area::updateOrCreate(['nome'=>$value]);
+        foreach ($areas as $key => $value) {
+            Area::updateOrCreate(['nome' => $value]);
         }
     }
 }
