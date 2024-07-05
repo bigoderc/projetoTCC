@@ -253,7 +253,7 @@
                         </div>
                         <div>
                             <span class="small fw-bold">Status: </span>
-                            <span class="small">${item.tema_aluno?.status_desc}</span>
+                            <span class="small">${item.tema_aluno?.status_desc ?? 'Em Aberto'}</span>
                         </div>    
                         <button type="button" title="Exibir detalhes" class="btn btn-primary btn-sm mb-3" onclick="showDetails(${item.id})">
                             <i class="fa fa-info"></i>

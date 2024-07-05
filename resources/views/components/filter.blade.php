@@ -47,7 +47,7 @@
                             <div class="col mb-2" >
                                 <div class="input-group">
                                   <div class="input-group-prepend">
-                                    <span class="input-group-text">Área</span>
+                                    <span class="input-group-text">Linha de Pesquisas</span>
                                   </div>
                                   <div class="form-control ">
                                     <select class="select-custom" id="area_id" name="areas[]" multiple
