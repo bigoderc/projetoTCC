@@ -41,7 +41,9 @@ class AlunoTema extends Model
     }
     public function getStatusDescAttribute(){
         $status = 'Aguardando';
-        if($this->attributes['defendido'] == true){
+        if(empty($this->attributes['deferido'])){
+            $status = 'Aguardando';
+        }elseif($this->attributes['defendido'] == true){
             $status = 'Defendido';
         }elseif($this->attributes['deferido'] == false){
             $status = 'Indeferido';
