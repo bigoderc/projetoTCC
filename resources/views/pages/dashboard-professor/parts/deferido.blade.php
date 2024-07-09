@@ -101,8 +101,8 @@
             if (selectedValue && disponibilidade == 0) {
                 var payload = $('#formDeferido').serialize();
                 payload += '&incrementar=true';
-                deleteAlert('Você gostaria de aceitar a proposta?',
-                        'Caso aceite a proposta, será incrementada mais uma disponibilidade de orientação no seu cadastro.')
+                deleteAlert('Alerta de Disponibilidade Informamos que a disponibilidade do docente está esgotada.',
+                        'Caso aceite a proposta, será incrementada mais uma disponibilidade de orientação no seu cadastro. Deseja prosseguir?')
                     .then((result) => {
                         if (result.isConfirmed) {
                             partialLoader();
