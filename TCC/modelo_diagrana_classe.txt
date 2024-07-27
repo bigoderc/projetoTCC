@@ -1,0 +1,60 @@
+classDiagram
+    class Usuario {
+        <<abstract>>
+        +int id
+        +String nome
+        +String email
+    }
+
+    class Discente {
+        +void cadastrarProposta(Proposta proposta)
+        +void selecionarProposta(Proposta proposta)
+        +void escolherOrientador(Docente docente)
+        +void visualizarTrabalhos()
+    }
+
+    class Docente {
+        +void cadastrarProposta(Proposta proposta)
+        +void cadastrarTrabalhoAnterior(TCC tcc)
+        +void deferirProposta(Proposta proposta)
+        +void indeferirProposta(Proposta proposta)
+        +TCC concluirProposta(Proposta proposta)
+    }
+
+    class Coordenador {
+        +void cadastrarProposta(Proposta proposta)
+        +void manterCrud()
+        +void atribuirPermissoes(Usuario usuario)
+    }
+
+    class Proposta {
+        +int id
+        +String titulo
+        +String descricao
+        +String status
+        +void alterarStatus(String novoStatus)
+        +Discente discente
+        +Docente orientador
+        +Coordenador coordenador
+    }
+
+    class TCC {
+        +int id
+        +String titulo
+        +String resumo
+        +Date dataApresentacao
+    }
+
+    class PreTCC {
+        +int id
+        +String titulo
+        +String resumo
+        +Date dataApresentacao
+    }
+
+    Usuario <|-- Discente
+    Usuario <|-- Docente
+    Usuario <|-- Coordenador
+    Discente --> Proposta : cadastra
+    Docente --> Proposta : orienta
+    Coordenador --> Proposta : coordena

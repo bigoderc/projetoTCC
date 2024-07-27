@@ -31,30 +31,30 @@
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             * Cadastro de informações relevantes para o processo de escolha e gerenciamento
-                                            de um tema de TCC.
+                                            de um tema de TCC já está implementado.
                                         </li>
                                         <li class="nav-item">
-                                            * Estruturar e disponibilizar acesso às propostas de temas já apresentadas no
-                                            Pré-TCC e TCC.
+                                            * Títulos de temas apresentadas no Pré-TCC e TCC estão estruturadas e
+                                            disponíveis para acesso.
                                         </li>
                                         <li class="nav-item">
-                                            * Registrar e apresentar propostas de temas para o Trabalho de Conclusão de
-                                            Curso (TCC)
+                                            * Registro e apresentação de títulos de propostas de temas para o Trabalho de
+                                            Conclusão de Curso (TCC) foram desenvolvidos.
                                         </li>
                                         <li class="nav-item">
-                                            * Disponibilizar esses temas para que os alunos possam escolher com base na área
+                                            * Os temas estão disponíveis para que os alunos possam escolher com base na área
                                             de sua preferência, considerando também a afinidade com o orientador na
                                             respectiva área de escolha.
                                         </li>
                                         <li class="nav-item">
-                                            * Implementar uma seção onde os professores possam visualizar quais alunos os
-                                            escolheram como orientadores, permitindo-lhes verificar se há afinidade para
-                                            ajudar o aluno no tema escolhido. Essa funcionalidade também incluirá a
-                                            capacidade de deferir ou indeferir temas nos quais os professores foram
-                                            selecionados, considerando a possibilidade de falta de afinidade com o tema ou a
-                                            impossibilidade de orientar mais alunos.
+                                            * Foi implementada uma seção onde os professores podem visualizar quais alunos
+                                            os escolheram como orientadores, permitindo verificar a afinidade para ajudar o
+                                            aluno no tema escolhido. Essa funcionalidade inclui a capacidade de deferir ou
+                                            indeferir temas nos quais os professores foram selecionados, levando em conta a
+                                            possibilidade de falta de afinidade com o tema ou a impossibilidade de orientar
+                                            mais alunos.
                                         </li>
-                                        
+
                                     </ul>
                                 </div>
                             </div>
