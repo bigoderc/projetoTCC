@@ -196,7 +196,7 @@
                 type: "GET",
                 success: function(response) {
                     partialLoader(false);
-                    $(`#titulo`).text(`Editar Grau ${response.nome}`);
+                    $(`#titulo`).text(`Editar Área ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
                     $(`#descricao`).val(response.descricao);
