@@ -21,7 +21,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Adicionar</h5>
+                                        <h5 class="modal-title" id="titulo">Adicionar</h5>
                                         <button id="fechar" type="button" class="close" onclick="clearForm('addLinha','novalinha')"
                                             aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
