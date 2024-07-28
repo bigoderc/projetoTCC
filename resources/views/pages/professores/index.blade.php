@@ -208,7 +208,7 @@
                 url: `{{ url('docente/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
-                    $(`#titulo`).text(`Editar Docente ${response.nome}`);
+                    $(`#titulo`).text(`Editar Docente: ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
                     $(`#siape`).val(response.siape);

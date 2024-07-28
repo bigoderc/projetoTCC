@@ -169,7 +169,7 @@
                 url: `{{ url('user/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
-                    $(`#titulo`).text(`Editar Usuário ${response.name}`);
+                    $(`#titulo`).text(`Editar Usuário: ${response.name}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#name`).val(response.name);
 

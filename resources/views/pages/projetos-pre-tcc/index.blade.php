@@ -222,7 +222,7 @@
                 url: `{{ url('pre-tcc/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
-                    $(`#titulo`).text(`Editar Docente ${response.nome}`);
+                    $(`#titulo`).text(`Editar Título de Pré-TCC: ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
                     $(`#aluno`).val(response.aluno);

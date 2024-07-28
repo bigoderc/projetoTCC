@@ -243,7 +243,7 @@
                 url: `{{ url('discente/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
-                    $(`#titulo`).text(`Editar Discente ${response.nome}`);
+                    $(`#titulo`).text(`Editar Discente: ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
                     

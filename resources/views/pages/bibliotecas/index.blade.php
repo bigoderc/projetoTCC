@@ -165,7 +165,7 @@
                 type: "GET",
                 success: function(response) {
                     partialLoader(false);
-                    $(`#titulo`).text(`Editar Biblioteca ${response.nome}`);
+                    $(`#titulo`).text(`Editar Biblioteca: ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
                     $(`#descricao`).val(response.descricao);

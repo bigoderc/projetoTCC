@@ -223,7 +223,7 @@
                 url: `{{ url('tcc/findById/${id}') }}`,
                 type: "GET",
                 success: function(response) {
-                    $(`#titulo`).text(`Editar Docente ${response.nome}`);
+                    $(`#titulo`).text(`Editar Título de TCC: ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
                     $(`#aluno`).val(response.aluno);

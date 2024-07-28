@@ -244,7 +244,7 @@
                 type: "GET",
                 success: function(response) {
                     partialLoader(false);
-                    $(`#titulo`).text(`Editar Tema ${response.nome}`);
+                    $(`#titulo`).text(`Editar Proposta de Tema: ${response.nome}`);
                     $(`#salvar`).text(`Salvar`);
                     $(`#nome`).val(response.nome);
                     $(`#descricao`).val(response.descricao);
